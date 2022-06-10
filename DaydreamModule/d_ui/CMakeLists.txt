@@ -13,4 +13,4 @@ add_library(libdui
 	${libdui_file_src}
 	${libdui_file_include}
 )
-target_link_libraries(libdui libdcore)
+target_link_libraries(libdui libdcore glfw imgui glad opengl32)
