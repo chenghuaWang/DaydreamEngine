@@ -3,10 +3,12 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("DaydreamEngine")
+project ("DaydreamEngine" VERSION 0.0.1)
+message(STATUS "[Project] ${PROJECT_NAME} ${PROJECT_VERSION}")
 
 set(d_module "${PROJECT_SOURCE_DIR}/DaydreamModule/")
 
 # 包含子项目。
+add_subdirectory("3rdparty")
 add_subdirectory ("DaydreamEngine")
 add_subdirectory("DaydreamModule")
