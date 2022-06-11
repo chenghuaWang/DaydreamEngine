@@ -2,15 +2,27 @@
 
 namespace daydream {
 namespace ui {
-    bool generate_glfw_context(){
+    bool generate_glfw_context() {
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit()) return false;
         return true;
     }
 
+    void generate_imgui_context() {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+    }
+
+    void collect_glfw_context() {
+        glfwTerminate();
+    }
+
+    void collect_imgui_context() {
+        ImGui::DestroyContext();
+    }
+
     base_window::base_window(size_t w, size_t h, const std::string &window_name):
         m_W(w), m_H(h), m_window_name(window_name) {
-        ///< init glfw context and imgui context.
         // init glfw context
         generate_glfw_context();
 
@@ -29,7 +41,6 @@ namespace ui {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else
         // GL 3.0 + GLSL 130
-        const char* glsl_version = "#version 330";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -39,14 +50,53 @@ namespace ui {
         if (m_window_handle == NULL) exit(1);
         glfwMakeContextCurrent(m_window_handle);
         glfwSwapInterval(1); // Enable vsync
+
+        // init imgui context
+        generate_imgui_context();
+        this->set_global_style();
     }
 
     void base_window::flush() {
-        ///< TODO flush function for only one frame update. Remember, only for graphics, not event.
+        ///< TODO flush function for render a new frame and update event every loop.
     }
 
     void base_window::exec() {
-        ///< TODO in exec, there is a render loop. Also a event loop. You should overload it.
+        ImGui_ImplGlfw_InitForOpenGL(m_window_handle, true);
+        ImGui_ImplOpenGL3_Init("#version 330");
+        
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        int display_w, display_h;
+
+        while (!glfwWindowShouldClose(m_window_handle)) {
+            glfwPollEvents();
+
+            // Start the Dear ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            {
+                flush(); 
+            }
+
+            ImGui::Render();
+            glfwGetFramebufferSize(m_window_handle, &display_w, &display_h);
+            glViewport(0, 0, display_w, display_h);
+            glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            glfwSwapBuffers(m_window_handle);
+        }
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        collect_imgui_context();
+        glfwDestroyWindow(m_window_handle);
+        collect_glfw_context();
+    }
+
+    void base_window::set_global_style() {
+        ImGui::StyleColorsDark();
     }
 }
 }

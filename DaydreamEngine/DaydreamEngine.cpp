@@ -2,11 +2,18 @@
 //
 
 #include "DaydreamEngine.h"
+#include "d_ui/window/window.hpp"
 
 using namespace std;
+using namespace daydream;
 
-int main()
-{
-	cout << "Hello CMake." << endl;
-	return 0;
+class main_window: public ui::base_window {
+public:
+	main_window(size_t w, size_t h, const std::string& name) : ui::base_window(w, h, name) {}
+
+};
+
+int main() {
+	main_window app_window(1920, 1080, "DreamMaker");
+	app_window.exec();
 }

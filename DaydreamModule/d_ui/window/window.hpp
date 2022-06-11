@@ -21,27 +21,22 @@ namespace ui {
 
 	bool generate_glfw_context();
 	void generate_imgui_context();
-	void generate_gl_context();
+	//void generate_gl_context() {};
 
 	void collect_glfw_context();
 	void collect_imgui_context();
-	void collect_gl_context();
+	//void collect_gl_context() {};
 
-	void pass_glfw_context_to_gl();
+	//void pass_glfw_context_to_gl() {};
 
 	class base_window {
 	public:
-		base_window(size_t w, size_t h, const std::string &window_name);
-		~base_window();
+		base_window(size_t w=1920, size_t h=1080, const std::string &window_name="daydream window");
+		~base_window() = default;
 
-		virtual void update() = 0;
 		virtual void flush();
 		virtual void exec();
-
-	protected:
-		virtual void on_window_resize();
-		virtual void on_window_hide();
-		virtual void on_window_close();
+		virtual void set_global_style();
 
 	private:
 		size_t		m_H, m_W;
