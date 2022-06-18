@@ -21,9 +21,27 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <set>
+
+// For shared lib
+#ifdef _WIN32
+#define D_PLATFORM_WINDOWS
+#define D_DYNAMIC_LINK true
+#endif // !_WIN32
+
+#ifdef D_PLATFORM_WINDOWS
+#if D_DYNAMIC_LINK
+#define D_API_EXPORT __declspec(dllexport)
+#define D_API_IMPORT __declspec(dllimport)
+#else
+#define D_API
+#endif // !D_DYNAMIC_LINK
+#else
+#error Daydream engine only support Windows for now!
+#endif // !D_PLATFORM_WINDOWS
 
 // include self-defined head files.
-//#include "./include/log_sys.hpp"
+#include "./include/log_sys.hpp"
 
 // macros for smart ptr.
 #define REF(x) std::shared_ptr<x>
