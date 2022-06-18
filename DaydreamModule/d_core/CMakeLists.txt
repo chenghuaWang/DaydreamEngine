@@ -14,8 +14,11 @@ project ("libdcore" CXX)
 file(GLOB_RECURSE libcore_file_src src/*.cpp)
 file(GLOB_RECURSE libcore_file_include include/*.hpp)
 
+include_directories(${d_module}/d_core/include)
+
 add_library(libdcore 
 	${libcore_file_src}
 	${libcore_file_include}
 )
+target_link_libraries(libdcore spdlog)
 target_precompile_headers(libdcore PRIVATE pch.hpp)
