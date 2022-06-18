@@ -21,10 +21,15 @@ namespace ui {
         ImGui::DestroyContext();
     }
 
-    base_window::base_window(size_t w, size_t h, const std::string &window_name):
-        m_W(w), m_H(h), m_window_name(window_name) {
+    /********************************************************************/
+    /* under for window_base implementaion */
+    window_base::window_base(size_t w, size_t h, const std::string& window_name) :
+        m_W(w), m_H(h), m_window_name(window_name), m_logger(new p_logger("./info.log")) {
         // init glfw context
-        generate_glfw_context();
+        if (!generate_glfw_context()) {
+            LOG_ERROR("Create glfw context error !!!")
+            exit(1);
+        }
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
         // GL ES 2.0 + GLSL 100
@@ -40,7 +45,7 @@ namespace ui {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else
-        // GL 3.0 + GLSL 130
+        // GL 3.0 + GLSL 330
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -50,53 +55,197 @@ namespace ui {
         if (m_window_handle == NULL) exit(1);
         glfwMakeContextCurrent(m_window_handle);
         glfwSwapInterval(1); // Enable vsync
+    }
 
-        // init imgui context
+    window_base::~window_base() {
+        if (m_window_handle) {
+            glfwDestroyWindow(m_window_handle);
+            collect_glfw_context();
+        }
+    }
+
+    void window_base::hook_glfw_callback() {
+        glfwSetWindowCloseCallback(m_window_handle, on_window_close);
+        glfwSetWindowSizeCallback(m_window_handle, on_window_resize);
+    }
+
+    void window_base::on_window_resize(GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    }
+
+    void window_base::on_window_close(GLFWwindow* window) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+
+    void window_base::exec() {
+        this->hook_glfw_callback();
+        while (!glfwWindowShouldClose(m_window_handle)) {
+            glfwPollEvents();
+            
+            flush_frame();
+            update_event();
+
+            glClearColor(1.0, 0.0, 1.0, 0.3);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glfwSwapBuffers(m_window_handle);
+            glfwDestroyWindow(m_window_handle);
+            collect_glfw_context();
+        }
+    }
+
+    void window_base::flush_frame() {
+
+    }
+
+    void window_base::update_event() {
+
+    }
+
+    size_t window_base::getW() {
+        return m_W;
+    }
+
+    size_t window_base::getH() {
+        return m_H;
+    }
+
+    /********************************************************************/
+    /* under for imgui_window implementaion */
+    imgui_window::imgui_window(size_t w, size_t h, uint16_t flags, const std::string& window_name) : 
+        window_base(w, h, window_name), 
+        m_window_flags(flags) {
         generate_imgui_context();
-        this->set_global_style();
+
+        // LOGGING basic infomation
+        LOG_INFO("Start initialize window with size (w x h)= " + std::to_string(w) + " x " + std::to_string(h));
+        LOG_INFO("Loading dynamic libs...done.");
     }
 
-    void base_window::flush() {
-        ///< TODO flush function for render a new frame and update event every loop.
+    imgui_window::~imgui_window() {
+        LOG_INFO("Exit window...done.");
     }
 
-    void base_window::exec() {
+    void imgui_window::_imgui_start_() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGuizmo::BeginFrame();
+        ImGuizmo::Enable(true);
+
+        static bool p_open = true;
+        static bool opt_fullscreen_persistant = true;
+        bool opt_fullscreen = opt_fullscreen_persistant;
+        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        if (opt_fullscreen) {
+            ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowViewport(viewport->ID);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        }
+
+        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) {
+            window_flags |= ImGuiWindowFlags_NoBackground;
+        }
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("DockSpace", &p_open, window_flags);
+        ImGui::PopStyleVar();
+
+        if (opt_fullscreen) {
+            ImGui::PopStyleVar(2);
+        }
+
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+            ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+        }
+    }
+
+    void imgui_window::_imgui_end_() {
+        /*Docking Space*/
+        ImGui::End();
+
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2((float)m_W, (float)m_H);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
+
+    void imgui_window::set_imgui_style(imgui_color_style style) {
+        switch (style) {
+        case imgui_color_style::CLASSIC_DARK:
+            ImGui::StyleColorsDark();
+            break;
+        case imgui_color_style::CLASSIC_WHITE:
+            ImGui::StyleColorsLight();
+            break;
+        default:
+            ImGui::StyleColorsClassic();
+            break;
+        }
+    }
+
+    void imgui_window::exec() {
+        LOG_INFO("Starting to execute window.")
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        if (m_window_flags & imgui_window_flags::DOCKING) {
+            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        }
+        if ((m_window_flags >> 1) & imgui_window_flags::MULTI_WINDOW) {
+            io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        }
+        this->set_imgui_style(imgui_color_style::CLASSIC_DARK);
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
         ImGui_ImplGlfw_InitForOpenGL(m_window_handle, true);
-        ImGui_ImplOpenGL3_Init("#version 330");
-        
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        int display_w, display_h;
+        ImGui_ImplOpenGL3_Init("#version 410");
 
+        this->hook_glfw_callback();
         while (!glfwWindowShouldClose(m_window_handle)) {
             glfwPollEvents();
 
-            // Start the Dear ImGui frame
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
+            _imgui_start_();
+            flush_frame();
+            _imgui_end_();
 
-            {
-                flush(); 
-            }
+            update_event();
 
-            ImGui::Render();
-            glfwGetFramebufferSize(m_window_handle, &display_w, &display_h);
-            glViewport(0, 0, display_w, display_h);
-            glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+            glClearColor(0.66, 0.66, 0.66, 0.3);
             glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
             glfwSwapBuffers(m_window_handle);
         }
+
+        LOG_INFO("Destroy IMGUI context...done.")
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
-        collect_imgui_context();
-        glfwDestroyWindow(m_window_handle);
-        collect_glfw_context();
+        ImGui::DestroyContext();
     }
 
-    void base_window::set_global_style() {
-        ImGui::StyleColorsDark();
+    void imgui_window::flush_frame() {
     }
+
+    void imgui_window::update_event() {
+    }
+
 }
 }
