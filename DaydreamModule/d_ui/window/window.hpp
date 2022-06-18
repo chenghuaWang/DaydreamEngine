@@ -25,6 +25,9 @@
 namespace daydream {
 namespace ui {
 
+	/*!
+	 * @brief	This fucntion is a callback for opengl error thrower. 
+	 */
 	static void glfw_error_callback(int error, const char* description) {
 		std::cerr << "GLFW Error " << error << ": " << description;
 	}
@@ -81,6 +84,12 @@ namespace ui {
 		REF(p_logger)	m_logger;
 	};
 
+	/*!
+	 * @brief	A enum for windows flags. Only imgui based window support this flag.
+	 * 
+	 * NONE model / Docking / Multi-window / Auto_api is support now. In the imgui 
+	 * window, those flags is all set to true.
+	 */
 	enum D_API_EXPORT imgui_window_flags {
 		NONE = 0,
 		DOCKING = 1,
@@ -88,12 +97,18 @@ namespace ui {
 		AUTO_DPI = 1 << 2,
 	};
 
+	/*!
+	 * @brief	A enum for color style choose. For now, there r just 3 flavors for you. 
+	 */
 	enum class D_API_EXPORT imgui_color_style {
 		NONE = 0,
 		CLASSIC_DARK = 1,
 		CLASSIC_WHITE = 2,
 	};
 
+	/*!
+	 * @brief	Imgui window class. Inherented from window_base class.
+	 */
 	class D_API_EXPORT imgui_window : public window_base {
 	public:
 		imgui_window(
