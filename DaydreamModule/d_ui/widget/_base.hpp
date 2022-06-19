@@ -11,4 +11,14 @@
 #include "d_event/signal_slots/signal_slots.hpp"
 // TODO add other stuff
 
+namespace daydream {
+namespace ui {
+	class ui_object {
+	protected:
+		virtual void update_event() = 0;
+		virtual void impl_imgui_render() = 0;
+	};
+}
+}
+
 #endif // !H_UI_WIDGET_BASE

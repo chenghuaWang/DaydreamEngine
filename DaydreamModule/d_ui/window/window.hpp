@@ -110,6 +110,8 @@ namespace ui {
 	 * @brief	Imgui window class. Inherented from window_base class.
 	 *			You need to use window-flags to init this window class first when you want to
 	 *			start a thread with imgui window.
+	 * 
+	 * For Auto DPI, check the https://github.com/ocornut/imgui/issues/2442.
 	 */
 	class D_API_EXPORT imgui_window : public window_base {
 	public:

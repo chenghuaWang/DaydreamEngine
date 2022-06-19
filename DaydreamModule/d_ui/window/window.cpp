@@ -211,6 +211,7 @@ namespace ui {
         if ((m_window_flags >> 1) & imgui_window_flags::MULTI_WINDOW) {
             io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         }
+
         this->set_imgui_style(imgui_color_style::CLASSIC_DARK);
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -230,8 +231,6 @@ namespace ui {
 
             update_event();
 
-            glClearColor(0.66, 0.66, 0.66, 0.3);
-            glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(m_window_handle);
         }
 
