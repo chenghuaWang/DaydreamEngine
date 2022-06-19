@@ -2,10 +2,10 @@
 //
 
 #include "DaydreamEngine.h"
-
+#include "application/app.hpp"
 using namespace std;
 
 int main() {
-	ui::imgui_window	app_window;
-	app_window.exec();
+	App main_app;
+	main_app.exec();
 }

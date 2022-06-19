@@ -6,6 +6,10 @@ namespace ui {
 	sub_menu::sub_menu(const std::string& name) :m_name(name) {
 	}
 
+	void sub_menu::add_action(const action& rhs) {
+		m_actions.push_back(rhs);
+	}
+
 	void sub_menu::impl_imgui_render() {
 		if (ImGui::BeginMenu(m_name.c_str()))
 		{

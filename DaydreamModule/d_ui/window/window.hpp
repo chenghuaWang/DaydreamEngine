@@ -108,6 +108,8 @@ namespace ui {
 
 	/*!
 	 * @brief	Imgui window class. Inherented from window_base class.
+	 *			You need to use window-flags to init this window class first when you want to
+	 *			start a thread with imgui window.
 	 */
 	class D_API_EXPORT imgui_window : public window_base {
 	public:

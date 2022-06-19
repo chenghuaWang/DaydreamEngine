@@ -24,6 +24,7 @@ namespace ui {
 		sub_menu(const std::string &name);
 
 		const std::string& name() const { return m_name; }
+		void add_action(const action& rhs);
 	
 	public:
 		virtual void update() {};
