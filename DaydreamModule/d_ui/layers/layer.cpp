@@ -5,7 +5,7 @@ namespace ui {
 	base_layer::base_layer(const std::string& name):m_idx(0), m_name(name) {
 	}
 
-	obj_layer::obj_layer(const std::string& name) :base_layer(name), p_open(true) {
+	obj_layer::obj_layer(const std::string& name) :base_layer(name), p_open(true), w_open(true) {
 	}
 
 	obj_layer::~obj_layer() {
@@ -21,15 +21,26 @@ namespace ui {
 	}
 
 	void obj_layer::impl_imgui_render() {
-		ImGui::Begin(m_name.c_str(), &p_open);
-		for (auto item : m_objs) {
-			item->impl_imgui_render();
+		if (w_open) {
+			ImGui::Begin(m_name.c_str(), &p_open);
+			for (auto item : m_objs) {
+				item->impl_imgui_render();
+			}
+			ImGui::End();
+			w_open = p_open;
 		}
-		ImGui::End();
 	}
 
 	void obj_layer::add_obj(ui_object* o) {
 		m_objs.emplace_back(o);
+	}
+
+	void obj_layer::set_opened(bool enable) {
+		p_open = enable;
+	}
+
+	void obj_layer::set_wopened(bool enable) {
+		w_open = enable;
 	}
 
 	menu_layer::menu_layer(const std::string& name) :base_layer(name) {

@@ -124,7 +124,10 @@ namespace ui {
 
 		virtual void _imgui_start_();
 		virtual void _imgui_end_();
+		virtual void _imgui_auto_dpi_();
 		virtual void set_imgui_style(imgui_color_style style);
+
+		static void on_window_resize_dpi_aware(GLFWwindow* window, int width, int height);
 
 	public:
 		void exec()			override;

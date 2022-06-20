@@ -177,6 +177,10 @@ namespace ui {
         io.DisplaySize = ImVec2((float)m_W, (float)m_H);
 
         ImGui::Render();
+
+        glClearColor(0.69, 0.69, 0.69, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -185,6 +189,17 @@ namespace ui {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
+    }
+
+    void imgui_window::_imgui_auto_dpi_() {
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        float xscale, yscale;
+        glfwGetWindowContentScale(m_window_handle, &xscale, &yscale);
+        io.Fonts->Clear();
+        io.Fonts->AddFontFromFileTTF("../Asset/fonts/Arvo-Regular.ttf", xscale * 16.0f);
+        io.Fonts->Build();
+        ImGui_ImplOpenGL3_DestroyFontsTexture();
+        ImGui_ImplOpenGL3_CreateFontsTexture();
     }
 
     void imgui_window::set_imgui_style(imgui_color_style style) {
@@ -199,6 +214,18 @@ namespace ui {
             ImGui::StyleColorsClassic();
             break;
         }
+    }
+
+    void imgui_window::on_window_resize_dpi_aware(GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        float xscale, yscale;
+        glfwGetWindowContentScale(window, &xscale, &yscale);
+        io.Fonts->Clear();
+        io.Fonts->AddFontFromFileTTF("../Asset/fonts/Arvo-Regular.ttf", xscale * 16.0f);
+        io.Fonts->Build();
+        ImGui_ImplOpenGL3_DestroyFontsTexture();
+        ImGui_ImplOpenGL3_CreateFontsTexture();
     }
 
     void imgui_window::exec() {
@@ -220,6 +247,10 @@ namespace ui {
         }
         ImGui_ImplGlfw_InitForOpenGL(m_window_handle, true);
         ImGui_ImplOpenGL3_Init("#version 410");
+
+        // For auto dpi
+        this->_imgui_auto_dpi_();
+        glfwSetWindowSizeCallback(m_window_handle, on_window_resize_dpi_aware);
 
         this->hook_glfw_callback();
         while (!glfwWindowShouldClose(m_window_handle)) {

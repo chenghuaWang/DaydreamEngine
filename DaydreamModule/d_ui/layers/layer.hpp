@@ -34,8 +34,12 @@ namespace ui {
 
 		void add_obj(ui_object* o);
 
+		virtual void set_opened(bool enable);
+		virtual void set_wopened(bool enable);
+
 	private:
 		bool p_open;
+		bool w_open;
 		std::vector<ui_object*>	m_objs;
 	};
 

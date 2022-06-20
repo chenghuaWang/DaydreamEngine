@@ -23,7 +23,7 @@ public:
 private:
 	uis*				m_App_ui;
 	ui::sub_menu		m_window_view;
-	ui::action			m_action_show_log;
+	ui::action			m_action_show_log = ui::action_type::MainTain;
 	ui::menu			m_window_menu;
 	ui::layer_stack		m_layers;
 };

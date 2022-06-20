@@ -12,16 +12,24 @@ using namespace kaleidoscope;
 namespace daydream {
 namespace ui {
 
+	enum class D_API_EXPORT action_type {
+		MainTain = 0,
+		Normal = 1,
+	};
+
 	class D_API_EXPORT action {
 	public:
+		action() = default;
+		action(action_type a);
+
+		bool			m_enabled = true;
+		action_type		m_type = action_type::Normal;
 		std::string		m_name;
 		std::string		m_accelerate_key;
 
 	public:
-		Signal0<> clicked;
-		void click(void) {
-			clicked(); // Emitted.
-		}
+		Signal1<bool> clicked;
+		void click();
 	};
 
 	class D_API_EXPORT sub_menu {

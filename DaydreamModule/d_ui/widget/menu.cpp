@@ -14,9 +14,22 @@ namespace ui {
 		if (ImGui::BeginMenu(m_name.c_str()))
 		{
 			for (auto& item : m_actions) {
-				if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str())) {
-					item.click();
+				switch (item.m_type)
+				{
+				case action_type::Normal:
+					if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str())) {
+						item.click();
+					}
+					break;
+				case action_type::MainTain:
+					if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str(), &item.m_enabled)) {
+						item.click();
+					}
+					break;
+				default:
+					break;
 				}
+				
 			}
 			ImGui::EndMenu();
 		}
@@ -57,6 +70,14 @@ namespace ui {
 			}
 			ImGui::EndMenuBar();
 		}
+	}
+
+	action::action(action_type a) :m_type(a) {
+
+	}
+
+	void action::click() {
+		clicked.Emit(m_enabled); // Emitted.
 	}
 
 } //! namesapce daydream

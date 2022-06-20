@@ -5,13 +5,13 @@ std::shared_ptr<spdlog::logger> p_logger::m_log_ = nullptr;
 
 p_logger::p_logger() {
     m_log_.reset();
-    m_log_ = spdlog::basic_logger_mt("painter_log", "p.log");
+    m_log_ = spdlog::basic_logger_mt("daydream", "p.log");
     m_s_instance = this;
 }
 
 p_logger::p_logger(const std::string& file_path) :m_file_path(file_path) {
     m_log_.reset();
-    m_log_ = spdlog::basic_logger_mt("painter_log", file_path);
+    m_log_ = spdlog::basic_logger_mt("daydream", file_path);
     m_s_instance = this;
 }
 
