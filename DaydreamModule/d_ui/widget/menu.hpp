@@ -7,6 +7,8 @@
 
 #include "_base.hpp"
 
+using namespace kaleidoscope;
+
 namespace daydream {
 namespace ui {
 
@@ -16,7 +18,10 @@ namespace ui {
 		std::string		m_accelerate_key;
 
 	public:
-		void clicked();
+		Signal0<> clicked;
+		void click(void) {
+			clicked(); // Emitted.
+		}
 	};
 
 	class D_API_EXPORT sub_menu {

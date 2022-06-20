@@ -15,7 +15,7 @@ namespace ui {
 		{
 			for (auto& item : m_actions) {
 				if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str())) {
-					emit item.clicked();
+					item.click();
 				}
 			}
 			ImGui::EndMenu();
@@ -57,10 +57,6 @@ namespace ui {
 			}
 			ImGui::EndMenuBar();
 		}
-	}
-
-	void action::clicked() {
-
 	}
 
 } //! namesapce daydream

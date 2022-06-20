@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include "d_core/pch.hpp"
+#include "d_ui/widget/_base.hpp"
 #include "d_ui/widget/menu.hpp"
 
 namespace daydream {
@@ -18,9 +19,24 @@ namespace ui {
 		virtual void update() {}; ///< for event
 		virtual void impl_imgui_render() {}; ///< for imgui frame
 
-	private:
+	protected:
 		unsigned int	m_idx;
 		std::string		m_name;
+	};
+
+	class D_API_EXPORT obj_layer :public base_layer {
+	public:
+		obj_layer(const std::string& name);
+		~obj_layer();
+
+		void update() override;
+		void impl_imgui_render() override;
+
+		void add_obj(ui_object* o);
+
+	private:
+		bool p_open;
+		std::vector<ui_object*>	m_objs;
 	};
 
 	class D_API_EXPORT menu_layer : public base_layer {

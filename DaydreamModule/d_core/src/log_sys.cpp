@@ -21,6 +21,7 @@ p_logger* p_logger::get_instance() {
 
 void p_logger::info(const std::string& rhs) {
     m_log_->info(rhs);
+    m_log_->flush();
 }
 
 void p_logger::debug(const std::string& rhs) {
@@ -29,9 +30,11 @@ void p_logger::debug(const std::string& rhs) {
 
 void p_logger::error(const std::string& rhs) {
     m_log_->error(rhs);
+    m_log_->flush();
 }
 
 void p_logger::warn(const std::string& rhs) {
     m_log_->warn(rhs);
+    m_log_->flush();
 }
 

@@ -10,7 +10,7 @@
 namespace daydream {
 namespace ui {
 	
-	class console : protected ui_object {
+	class D_API_EXPORT console : public ui_object {
 	public:
 		console(const std::string &file_path="info.log");
 		~console();
@@ -26,6 +26,7 @@ namespace ui {
 		bool			m_visible;
 		std::fstream	m_file;
 		std::string		m_s_buffer;
+		std::string		__tmp_a__;
 	};
 
 }

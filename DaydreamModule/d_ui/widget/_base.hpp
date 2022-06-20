@@ -13,10 +13,10 @@
 
 namespace daydream {
 namespace ui {
-	class ui_object {
-	protected:
-		virtual void update_event() = 0;
-		virtual void impl_imgui_render() = 0;
+	class D_API_EXPORT ui_object {
+	public:
+		virtual void update_event();
+		virtual void impl_imgui_render();
 	};
 }
 }
