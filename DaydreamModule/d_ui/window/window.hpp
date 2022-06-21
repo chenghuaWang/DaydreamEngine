@@ -20,6 +20,7 @@
 
 #include "ImGuizmo.h"
 
+#include "d_render/core/_gl_head.hpp"
 #include "GLFW/glfw3.h"
 
 namespace daydream {
@@ -39,7 +40,18 @@ namespace ui {
 	void collect_glfw_context();
 	void collect_imgui_context();
 	//void collect_gl_context(); TODO
-	//void pass_glfw_context_to_gl(); TODO
+	void pass_glfw_context_to_gl();
+
+	class D_API_EXPORT gl_context {
+	public:
+		gl_context(GLFWwindow* windowHandle);
+
+		void Init();
+		void SwapBuffers();
+
+	private:
+		GLFWwindow* m_WindowHandle;
+	};
 
 	/*!
 	 * @brief	This class is the basic and necessary class for all render.
@@ -78,6 +90,7 @@ namespace ui {
 		size_t			getH();
 	
 	protected:
+		gl_context*		m_context;
 		size_t			m_H, m_W;
 		GLFWwindow*		m_window_handle = nullptr;
 		std::string		m_window_name;

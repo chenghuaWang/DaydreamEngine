@@ -6,6 +6,8 @@
 using namespace std;
 
 int main() {
-	App main_app;
-	main_app.exec();
+	App *main_app = new App();
+	main_app->delay_init();
+	main_app->exec();
+	delete main_app;
 }

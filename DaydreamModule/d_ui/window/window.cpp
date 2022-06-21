@@ -21,6 +21,13 @@ namespace ui {
         ImGui::DestroyContext();
     }
 
+    void pass_glfw_context_to_gl() {
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            std::cout << "Init opengl failed";
+        }
+        std::cout << glGetString(GL_VERSION);
+    }
+
     /********************************************************************/
     /* under for window_base implementaion */
     window_base::window_base(size_t w, size_t h, const std::string& window_name) :
@@ -46,21 +53,26 @@ namespace ui {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else
         // GL 3.0 + GLSL 330
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
         m_window_handle = glfwCreateWindow(m_W, m_H, m_window_name.c_str(), NULL, NULL);
         if (m_window_handle == NULL) exit(1);
-        glfwMakeContextCurrent(m_window_handle);
+        m_context = new gl_context(m_window_handle);
+        m_context->Init();
+        //glfwMakeContextCurrent(m_window_handle);  TODO-ori
         glfwSwapInterval(1); // Enable vsync
+
+        //pass_glfw_context_to_gl(); TODO-ori
     }
 
     window_base::~window_base() {
         if (m_window_handle) {
             glfwDestroyWindow(m_window_handle);
             collect_glfw_context();
+            delete m_context;
         }
     }
 
@@ -119,6 +131,30 @@ namespace ui {
         // LOGGING basic infomation
         LOG_INFO("Start initialize window with size (w x h)= " + std::to_string(w) + " x " + std::to_string(h));
         LOG_INFO("Loading dynamic libs...done.");
+
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        if (m_window_flags & imgui_window_flags::DOCKING) {
+            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        }
+        if ((m_window_flags >> 1) & imgui_window_flags::MULTI_WINDOW) {
+            io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        }
+
+        this->set_imgui_style(imgui_color_style::CLASSIC_DARK);
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+        ImGui_ImplGlfw_InitForOpenGL(m_window_handle, true);
+        ImGui_ImplOpenGL3_Init("#version 450");
+
+        // For auto dpi
+        this->_imgui_auto_dpi_();
+        glfwSetWindowSizeCallback(m_window_handle, on_window_resize_dpi_aware);
+
+        this->hook_glfw_callback();
     }
 
     imgui_window::~imgui_window() {
@@ -230,29 +266,7 @@ namespace ui {
 
     void imgui_window::exec() {
         LOG_INFO("Starting to execute window.")
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        if (m_window_flags & imgui_window_flags::DOCKING) {
-            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        }
-        if ((m_window_flags >> 1) & imgui_window_flags::MULTI_WINDOW) {
-            io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-        }
-
-        this->set_imgui_style(imgui_color_style::CLASSIC_DARK);
-        ImGuiStyle& style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            style.WindowRounding = 0.0f;
-            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-        }
-        ImGui_ImplGlfw_InitForOpenGL(m_window_handle, true);
-        ImGui_ImplOpenGL3_Init("#version 410");
-
-        // For auto dpi
-        this->_imgui_auto_dpi_();
-        glfwSetWindowSizeCallback(m_window_handle, on_window_resize_dpi_aware);
-
-        this->hook_glfw_callback();
+        
         while (!glfwWindowShouldClose(m_window_handle)) {
             glfwPollEvents();
 
@@ -275,6 +289,22 @@ namespace ui {
     }
 
     void imgui_window::update_event() {
+    }
+
+    gl_context::gl_context(GLFWwindow* windowHandle):m_WindowHandle(windowHandle) {
+    
+    }
+
+    void gl_context::Init() {
+        glfwMakeContextCurrent(m_WindowHandle);
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+            std::cout << "Init opengl failed";
+        }
+        std::cout << glGetString(GL_VERSION);
+    }
+
+    void gl_context::SwapBuffers() {
+        glfwSwapBuffers(m_WindowHandle);
     }
 
 }

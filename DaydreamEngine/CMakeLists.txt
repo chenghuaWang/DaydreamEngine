@@ -10,6 +10,6 @@ file(GLOB_RECURSE engine_file_include *.hpp)
 
 # 将源代码添加到此项目的可执行文件。
 add_executable (DaydreamEngine ${engine_file_include} ${engine_file_src})
-target_link_libraries(DaydreamEngine libdcore libdui)
+target_link_libraries(DaydreamEngine libdcore libdui libdscene libdrender glad opengl32)
 
 # TODO: 如有需要，请添加测试并安装目标。

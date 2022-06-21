@@ -10,6 +10,7 @@ namespace ui {
 
 	obj_layer::~obj_layer() {
 		for (auto item : m_objs) {
+			item->on_detach();
 			delete item;
 		}
 	}
@@ -24,6 +25,7 @@ namespace ui {
 		if (w_open) {
 			ImGui::Begin(m_name.c_str(), &p_open);
 			for (auto item : m_objs) {
+				item->on_update();
 				item->impl_imgui_render();
 			}
 			ImGui::End();
@@ -33,6 +35,7 @@ namespace ui {
 
 	void obj_layer::add_obj(ui_object* o) {
 		m_objs.emplace_back(o);
+		o->on_attach();
 	}
 
 	void obj_layer::set_opened(bool enable) {

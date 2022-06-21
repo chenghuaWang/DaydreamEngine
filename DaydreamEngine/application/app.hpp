@@ -19,6 +19,7 @@ public:
 	~App();
 
 	void flush_frame() override;
+	void delay_init();
 
 private:
 	uis*				m_App_ui;

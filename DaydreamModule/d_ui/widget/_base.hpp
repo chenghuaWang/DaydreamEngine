@@ -15,6 +15,9 @@ namespace daydream {
 namespace ui {
 	class D_API_EXPORT ui_object {
 	public:
+		virtual void on_attach();
+		virtual void on_detach();
+		virtual void on_update();
 		virtual void update_event();
 		virtual void impl_imgui_render();
 	};

@@ -13,4 +13,4 @@ add_library(libdui SHARED
 	${libdui_file_src}
 	${libdui_file_include}
 )
-target_link_libraries(libdui libdcore glfw imgui glad opengl32)
+target_link_libraries(libdui libdcore libdscene libdrender glfw imgui opengl32)
