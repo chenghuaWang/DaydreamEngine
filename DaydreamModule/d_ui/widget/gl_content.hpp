@@ -24,7 +24,7 @@ namespace ui {
 		void update_event() override;
 		void impl_imgui_render() override;
 
-		void set_scene2d();
+		void set_scene2d(REF(scene::scene2d)& sc);
 		// void set_scene3d(REF(scene::scene3d)& sc);
 
 	private:

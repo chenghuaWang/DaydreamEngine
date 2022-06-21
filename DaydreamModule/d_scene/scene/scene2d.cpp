@@ -22,7 +22,7 @@ namespace scene {
 
 	void scene2d::BeginRender() {
 		m_FramBuffer.Bind();
-		renderer::GLCommand::setColor(0.f, 0.f, 0.f, 1.f);
+		renderer::GLCommand::setColor(0.f, 0.5f, 0.f, 1.f);
 		renderer::GLCommand::clear();
 		m_MainShader->Bind();
 	}
@@ -45,7 +45,7 @@ namespace scene {
 		m_MainShader = shader;
 	}
 
-	uint32_t& scene2d::FrameIdx() {
+	uint32_t scene2d::FrameIdx() {
 		return m_FramBuffer.FrameIdx();
 	}
 

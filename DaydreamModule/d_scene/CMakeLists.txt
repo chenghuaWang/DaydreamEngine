@@ -7,7 +7,7 @@ file(GLOB_RECURSE libdscene_file_include *.hpp)
 
 include_directories(${d_module})
 
-add_library(libdscene SHARED
+add_library(libdscene # SHARED
 	${libdscene_file_src}
 	${libdscene_file_include}
 )

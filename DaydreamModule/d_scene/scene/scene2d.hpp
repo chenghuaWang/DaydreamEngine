@@ -26,7 +26,7 @@ namespace scene {
 
 		void setCurShader(REF(renderer::Shader) &shader);
 
-		uint32_t& FrameIdx();
+		uint32_t FrameIdx();
 
 	public:
 		bool					m_LineMode = false;

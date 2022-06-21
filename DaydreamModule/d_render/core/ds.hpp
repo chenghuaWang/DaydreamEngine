@@ -20,7 +20,7 @@ namespace renderer {
 		void UnBind();
 		void Resize(float w, float h);
 
-		uint32_t& FrameIdx();
+		uint32_t FrameIdx();
 
 	private:
 		float	m_w, m_h;

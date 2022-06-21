@@ -55,8 +55,8 @@ namespace renderer {
 		Invalidate();
 	}
 
-	uint32_t& FrameBuffer::FrameIdx() {
-		return m_idx;
+	uint32_t FrameBuffer::FrameIdx() {
+		return m_ColorAttach;
 	}
 
 }
