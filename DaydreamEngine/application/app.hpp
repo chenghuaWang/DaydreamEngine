@@ -19,9 +19,14 @@ public:
 	~App();
 
 	void flush_frame() override;
+	void update_event() override;
 	void delay_init();
 
+public:
+	Signal1<const std::string&>		signal_fps_chaned;
+
 private:
+	float				m_global_fps;
 	uis*				m_App_ui;
 	ui::sub_menu		m_window_view;
 	ui::action			m_action_show_log = ui::action_type::MainTain;

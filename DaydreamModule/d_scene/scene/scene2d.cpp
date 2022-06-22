@@ -45,6 +45,10 @@ namespace scene {
 		m_MainShader = shader;
 	}
 
+	void scene2d::setRunning(bool enable) {
+		m_running = enable;
+	}
+
 	uint32_t scene2d::FrameIdx() {
 		return m_FramBuffer.FrameIdx();
 	}

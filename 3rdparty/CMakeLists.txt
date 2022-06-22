@@ -22,6 +22,13 @@ add_library(glad STATIC ${GLAD_FILES})
 target_include_directories(glad PUBLIC ${GLAD_DIR} ${GLAD_DIR}/include)
 set_property(TARGET glad PROPERTY FOLDER "Extern/")
 
+# stb_image build static
+set(STB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/stb_image")
+set(STB_FILES "${STB_DIR}/stb_image.cpp" "${STB_DIR}/stb_image.h")
+add_library(stb_lib STATIC ${STB_FILES})
+target_include_directories(stb_lib PUBLIC ${STB_DIR})
+set_property(TARGET stb_lib PROPERTY FOLDER "Extern/")
+
 # imgui build static
 include_directories(${GLAD_DIR}/include)
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ImGui")

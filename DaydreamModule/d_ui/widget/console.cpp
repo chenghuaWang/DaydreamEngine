@@ -36,5 +36,10 @@ namespace ui {
 		m_visible = enable;
 	}
 
+	void console::clear() {
+		m_s_buffer.clear();
+		__tmp_a__.clear();
+	}
+
 }
 }

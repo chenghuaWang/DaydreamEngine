@@ -134,6 +134,7 @@ namespace ui {
 
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         if (m_window_flags & imgui_window_flags::DOCKING) {
             io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         }
@@ -272,9 +273,8 @@ namespace ui {
 
             _imgui_start_();
             flush_frame();
-            _imgui_end_();
-
             update_event();
+            _imgui_end_();
 
             glfwSwapBuffers(m_window_handle);
         }

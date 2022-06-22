@@ -25,10 +25,12 @@ namespace scene {
 		bool isLineMode();
 
 		void setCurShader(REF(renderer::Shader) &shader);
+		void setRunning(bool enable);
 
 		uint32_t FrameIdx();
 
 	public:
+		bool					m_running = true;
 		bool					m_LineMode = false;
 		renderer::camera2d		m_MainCamera;
 		renderer::FrameBuffer	m_FramBuffer;

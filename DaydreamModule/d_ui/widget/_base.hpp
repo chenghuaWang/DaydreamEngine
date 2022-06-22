@@ -9,6 +9,12 @@
 #include "d_core/pch.hpp"
 #include "d_event/event.hpp"
 #include "d_event/signal_slots/signal_slots.hpp"
+
+#ifndef __gl_h_
+#include "glad/glad.h"
+#endif // !__gl
+
+#include "stb_image.h"
 // TODO add other stuff
 
 namespace daydream {

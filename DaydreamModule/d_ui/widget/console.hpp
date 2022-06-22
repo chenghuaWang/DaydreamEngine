@@ -21,6 +21,8 @@ namespace ui {
 		void setEnable(bool enable);
 		void setVisible(bool enable);
 
+		void clear();
+
 	private:
 		bool			m_enable;
 		bool			m_visible;
