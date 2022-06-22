@@ -49,7 +49,10 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/imgui_impl_opengl3.h"
     "${IMGUI_DIR}/imgui_impl_opengl3.cpp"
     "${IMGUI_DIR}/ImGuizmo.cpp"
-    "${IMGUI_DIR}/ImGuizmo.h")
+    "${IMGUI_DIR}/ImGuizmo.h"
+    "${IMGUI_DIR}/TextEditor.h"
+    "${IMGUI_DIR}/TextEditor.cpp"
+)
 add_library(imgui STATIC ${IMGUI_FILES})
 target_link_libraries(imgui glfw)
 target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_FILES})

@@ -107,7 +107,7 @@ namespace ui {
 		{
 		case daydream::ui::gl_content_type::TwoD:
 			m_scene2d->m_MainCamera.set_activited(ImGui::IsWindowFocused());
-			if (m_panelsize_cur.x != m_panelsize_pre.x && m_panelsize_cur.y != m_panelsize_pre.y) {
+			if (m_panelsize_cur.x != m_panelsize_pre.x || m_panelsize_cur.y != m_panelsize_pre.y) {
 				m_scene2d->Resize(m_panelsize_cur.x, m_panelsize_cur.y);
 				m_panelsize_pre = m_panelsize_cur;
 			}
