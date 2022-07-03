@@ -16,6 +16,9 @@ namespace ui {
 	}
 
 	void obj_layer::update() {
+		if (m_menu != nullptr) {
+			m_menu->update();
+		}
 		for (auto item : m_objs) {
 			item->update_event();
 		}
@@ -24,6 +27,11 @@ namespace ui {
 	void obj_layer::impl_imgui_render() {
 		if (w_open) {
 			ImGui::Begin(m_name.c_str(), &p_open);
+
+			if (m_menu != nullptr) {
+				m_menu->impl_imgui_render();
+			}
+
 			for (auto item : m_objs) {
 				item->on_update();
 				item->impl_imgui_render();
@@ -36,6 +44,10 @@ namespace ui {
 	void obj_layer::add_obj(ui_object* o) {
 		m_objs.emplace_back(o);
 		o->on_attach();
+	}
+
+	void obj_layer::register_menu(const REF(menu)& rhs) {
+		m_menu = rhs;
 	}
 
 	void obj_layer::set_opened(bool enable) {

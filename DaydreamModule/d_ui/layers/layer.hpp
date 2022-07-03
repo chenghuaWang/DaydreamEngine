@@ -33,11 +33,13 @@ namespace ui {
 		void impl_imgui_render() override;
 
 		void add_obj(ui_object* o);
+		void register_menu(const REF(menu)& rhs);
 
 		virtual void set_opened(bool enable);
 		virtual void set_wopened(bool enable);
 
 	private:
+		REF(menu)				m_menu = nullptr;
 		bool p_open;
 		bool w_open;
 		std::vector<ui_object*>	m_objs;
