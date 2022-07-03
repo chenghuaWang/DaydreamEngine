@@ -37,7 +37,6 @@ void App::delay_init() {
 	m_App_ui->gl_scene->setCurShader(m_App_ui->gl_scene_shader);
 	m_App_ui->gl_graphic->set_scene2d(m_App_ui->gl_scene);
 
-	console_ui_layer->add_obj(m_App_ui->console_clear_button);
 	console_ui_layer->add_obj(m_App_ui->console_1);
 	gl_ui_layer->add_obj(m_App_ui->gl_graphic);
 	gl_ctrl_pannel_ui_layer->add_obj(m_App_ui->pannel_line_container);
