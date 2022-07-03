@@ -64,6 +64,16 @@ namespace ui {
 	void gl_content::on_update() {
 		m_timer.OnUpdate();
 		if (m_running) {
+			if (ImGui::IsWindowFocused) {
+				if (ImGui::IsMouseClicked) {
+					m_cur_mouse_click.x = ImGui::GetMousePos().x - ImGui::GetWindowPos().x;
+					m_cur_mouse_click.y = ImGui::GetMousePos().y - ImGui::GetWindowPos().y;
+				}
+				m_cur_mouse_pos.x = ImGui::GetMousePos().x - ImGui::GetWindowPos().x;
+				m_cur_mouse_pos.y = ImGui::GetMousePos().y - ImGui::GetWindowPos().y;
+			}
+		}
+		if (m_running) {
 			switch (m_type)
 			{
 			case daydream::ui::gl_content_type::TwoD:
@@ -89,15 +99,7 @@ namespace ui {
 	}
 
 	void gl_content::update_event() {
-		if (m_running) {
-			if (ImGui::IsWindowFocused) {
-				if (ImGui::IsMouseClicked) {
-					m_cur_mouse_click = ImGui::GetMousePosOnOpeningCurrentPopup();
-					// m_cur_mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
-				}
-			}
-			// m_cur_mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
-		}
+		
 	}
 
 	void gl_content::impl_imgui_render() {
