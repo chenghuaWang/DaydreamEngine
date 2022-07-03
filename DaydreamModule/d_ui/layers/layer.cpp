@@ -26,7 +26,7 @@ namespace ui {
 
 	void obj_layer::impl_imgui_render() {
 		if (w_open) {
-			ImGui::Begin(m_name.c_str(), &p_open);
+			ImGui::Begin(m_name.c_str(), &p_open, m_flags);
 
 			if (m_menu != nullptr) {
 				m_menu->impl_imgui_render();
@@ -48,6 +48,10 @@ namespace ui {
 
 	void obj_layer::register_menu(const REF(menu)& rhs) {
 		m_menu = rhs;
+	}
+
+	void obj_layer::set_flags(ImGuiWindowFlags a) {
+		m_flags = a;
 	}
 
 	void obj_layer::set_opened(bool enable) {

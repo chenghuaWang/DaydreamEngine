@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include "_base.hpp"
+#include "ImGuiFileDialog.h"
 
 namespace daydream {
 namespace ui {
@@ -24,6 +25,12 @@ namespace ui {
 	private:
 		size_t						tmp_size = 0;
 		std::vector<ui_object*>		m_contained_objs;
+	};
+
+	class D_API_EXPORT file_dialog {
+	public:
+		void show(const std::string &a, const std::string& b, const std::string& c, const std::string& d);
+		bool wait(std::string &file_path);
 	};
 
 }

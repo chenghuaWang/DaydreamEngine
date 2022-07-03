@@ -30,6 +30,24 @@ namespace ui {
 			m_editor.GetLanguageDefinition().mName.c_str(), m_file_buffers[m_cur_text_src_idx].file_path.c_str());
 
 		m_editor.Render("TextEditor");
+		if (m_file_dialog.wait(m_file_dialog_value)) {
+			switch (m_file_dialog_state) {
+			case text_editor_cur_dialog_state::Open:
+				open_file(m_file_dialog_value);
+				break;
+			case text_editor_cur_dialog_state::Save:
+				break;
+			case text_editor_cur_dialog_state::SaveAs:
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void texteditor::signal_open_file() {
+		m_file_dialog_state = text_editor_cur_dialog_state::Open;
+		m_file_dialog.show("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
 	}
 
 	void texteditor::open_file(const std::string& file_path) {
@@ -45,7 +63,7 @@ namespace ui {
 	}
 
 	void texteditor::save_cur_file() {
-
+		
 	}
 
 	void texteditor::backup_cur_file(const std::string& file_path) {
@@ -74,7 +92,7 @@ namespace ui {
 		}
 	}
 
-	void texteditor::set_color(texteditor_color &color) {
+	void texteditor::set_color(texteditor_color color) {
 		switch (color)
 		{
 		case texteditor_color::Light:
@@ -91,7 +109,17 @@ namespace ui {
 		}
 	}
 
+	void texteditor::set_color_black() {
+		set_color(texteditor_color::Dark);
+	}
 
+	void texteditor::set_color_white() {
+		set_color(texteditor_color::Light);
+	}
+
+	void texteditor::set_color_blue() {
+		set_color(texteditor_color::Blue);
+	}
 
 }
 }

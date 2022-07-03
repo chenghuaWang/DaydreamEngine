@@ -40,7 +40,11 @@ void App::delay_init() {
 	console_ui_layer->add_obj(m_App_ui->console_1);
 	gl_ui_layer->add_obj(m_App_ui->gl_graphic);
 	gl_ctrl_pannel_ui_layer->add_obj(m_App_ui->pannel_line_container);
+
+	code_editor_ui_layer->set_flags(ImGuiWindowFlags_MenuBar);
+	code_editor_ui_layer->add_obj(m_App_ui->text_editor_line_container);
 	code_editor_ui_layer->add_obj(m_App_ui->text_editor_widget);
+	code_editor_ui_layer->register_menu(m_App_ui->text_editor_menu);
 
 	m_layers.add_layer(menu_ui_layer);
 	m_layers.add_layer(console_ui_layer);

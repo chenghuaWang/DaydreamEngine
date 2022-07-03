@@ -31,6 +31,36 @@ struct uis {
 
 		// Code Editor
 		text_editor_widget = new ui::texteditor();
+		text_editor_menu = CREATE_REF(ui::menu)();
+		text_editor_theme_black_action.m_name = "Black";
+		text_editor_theme_white_action.m_name = "White";
+		text_editor_theme_blue_action.m_name = "Blue";
+		text_editor_theme_black_action.pressed.Connect(text_editor_widget, &ui::texteditor::set_color_black);
+		text_editor_theme_white_action.pressed.Connect(text_editor_widget, &ui::texteditor::set_color_white);
+		text_editor_theme_blue_action.pressed.Connect(text_editor_widget, &ui::texteditor::set_color_blue);
+		text_editor_theme_submenu.add_action(text_editor_theme_black_action);
+		text_editor_theme_submenu.add_action(text_editor_theme_white_action);
+		text_editor_theme_submenu.add_action(text_editor_theme_blue_action);
+		text_editor_menu->add_sub_menu(text_editor_theme_submenu);
+
+		text_editor_file_close.m_name = "Close";
+		text_editor_file_save.m_name = "Save";
+		text_editor_file_save_as.m_name = "Save As";
+		text_editor_file_open.m_name = "Open";
+
+		text_editor_file_save.pressed.Connect(text_editor_widget, &ui::texteditor::save_cur_file);
+		text_editor_file_open.pressed.Connect(text_editor_widget, &ui::texteditor::signal_open_file);
+		text_editor_file_submenu.add_action(text_editor_file_close);
+		text_editor_file_submenu.add_action(text_editor_file_save);
+		text_editor_file_submenu.add_action(text_editor_file_save_as);
+		text_editor_file_submenu.add_action(text_editor_file_open);
+		text_editor_menu->add_sub_menu(text_editor_file_submenu);
+
+		text_editor_line_container = new ui::line_continer();
+		text_editor_compile_test_button = new ui::button("Compile test");
+		text_editor_link_button = new ui::button("Link");
+		text_editor_line_container->add_obj(text_editor_compile_test_button);
+		text_editor_line_container->add_obj(text_editor_link_button);
 	}
 
 	~uis() {
@@ -41,6 +71,9 @@ struct uis {
 		delete pannel_start_scene_button;
 		delete pannel_line_container;
 		delete text_editor_widget;
+		delete text_editor_line_container;
+		delete text_editor_compile_test_button;
+		delete text_editor_link_button;
 	}
 
 public:
@@ -57,4 +90,18 @@ public:
 	ui::button*				pannel_start_scene_button;
 	// For Code Editor
 	ui::texteditor*			text_editor_widget;
+	REF(ui::menu)			text_editor_menu;
+	ui::sub_menu			text_editor_theme_submenu = ui::sub_menu("Theme");
+	ui::sub_menu			text_editor_file_submenu = ui::sub_menu("File");
+	ui::action				text_editor_file_open;
+	ui::action				text_editor_file_save;
+	ui::action				text_editor_file_save_as;
+	ui::action				text_editor_file_close;
+	ui::action				text_editor_theme_black_action;
+	ui::action				text_editor_theme_white_action;
+	ui::action				text_editor_theme_blue_action;
+	ui::action				text_editor_open_action;
+	ui::line_continer*		text_editor_line_container;
+	ui::button*				text_editor_compile_test_button;
+	ui::button*				text_editor_link_button;
 };

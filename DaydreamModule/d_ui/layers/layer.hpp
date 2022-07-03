@@ -34,6 +34,7 @@ namespace ui {
 
 		void add_obj(ui_object* o);
 		void register_menu(const REF(menu)& rhs);
+		void set_flags(ImGuiWindowFlags a);
 
 		virtual void set_opened(bool enable);
 		virtual void set_wopened(bool enable);
@@ -42,6 +43,7 @@ namespace ui {
 		REF(menu)				m_menu = nullptr;
 		bool p_open;
 		bool w_open;
+		ImGuiWindowFlags		m_flags = 0;
 		std::vector<ui_object*>	m_objs;
 	};
 

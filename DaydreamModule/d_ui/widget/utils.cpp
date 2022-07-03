@@ -3,8 +3,6 @@
 namespace daydream {
 namespace ui {
 
-	
-
 	void line_continer::__same_line__() {
 		ImGui::SameLine();
 	}
@@ -46,6 +44,28 @@ namespace ui {
 			__same_line__();
 		}
 		m_contained_objs[tmp_size - 1]->impl_imgui_render();
+	}
+
+	void file_dialog::show(const std::string& a, const std::string& b, const std::string& c, const std::string& d) {
+		ImGuiFileDialog::Instance()->OpenDialog(a, b, c.c_str(), d);
+	}
+
+	bool file_dialog::wait(std::string& file_path) {
+		bool a = false;
+		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+		{
+			// action if OK
+			if (ImGuiFileDialog::Instance()->IsOk())
+			{
+				file_path = ImGuiFileDialog::Instance()->GetFilePathName();
+				a = true;
+				// action
+			}
+
+			// close
+			ImGuiFileDialog::Instance()->Close();
+			return a;
+		}
 	}
 
 }
