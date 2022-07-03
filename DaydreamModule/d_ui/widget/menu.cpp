@@ -19,11 +19,13 @@ namespace ui {
 				case action_type::Normal:
 					if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str())) {
 						item.click();
+						item.pressed();
 					}
 					break;
 				case action_type::MainTain:
 					if (ImGui::MenuItem(item.m_name.c_str(), item.m_accelerate_key.c_str(), &item.m_enabled)) {
 						item.click();
+						item.pressed();
 					}
 					break;
 				default:

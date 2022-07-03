@@ -28,7 +28,8 @@ namespace ui {
 		std::string		m_accelerate_key;
 
 	public:
-		Signal1<bool> clicked;
+		Signal1<bool>	clicked;
+		Signal0<>		pressed;
 		void click();
 	};
 
