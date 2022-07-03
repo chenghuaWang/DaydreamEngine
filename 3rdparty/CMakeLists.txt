@@ -52,6 +52,10 @@ set(IMGUI_FILES
     "${IMGUI_DIR}/ImGuizmo.h"
     "${IMGUI_DIR}/TextEditor.h"
     "${IMGUI_DIR}/TextEditor.cpp"
+    "${IMGUI_DIR}/ImGuiFileDialog.cpp"
+    "${IMGUI_DIR}/ImGuiFileDialog.h"
+    "${IMGUI_DIR}/ImGuiFileDialogConfig.h"
+    "${IMGUI_DIR}/dirent/dirent.h"
 )
 add_library(imgui STATIC ${IMGUI_FILES})
 target_link_libraries(imgui glfw)
