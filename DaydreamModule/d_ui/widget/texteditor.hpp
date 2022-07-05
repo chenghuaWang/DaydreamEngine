@@ -50,13 +50,17 @@ namespace ui {
 		void impl_imgui_render() override;
 
 		void signal_open_file();
+		void signal_set_lang_lua();
+		void signal_set_lang_glsl();
+		void signal_compile_test();
+		void signal_link_prog();
 
 		void open_file(const std::string &file_path);
 		void save_cur_file();
 		void backup_cur_file(const std::string &file_path);
 		void save_as_cur_file(const std::string& file_path);
 		void close_cur_file();
-		void set_lang(lang &type);
+		void set_lang(lang type);
 		void set_color(texteditor_color color);
 
 		void set_color_black();

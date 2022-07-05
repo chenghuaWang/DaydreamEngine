@@ -1,5 +1,7 @@
 #include "camera.hpp"
 
+#include <glm/gtc/quaternion.hpp>
+
 namespace daydream {
 namespace renderer {
 
@@ -53,6 +55,64 @@ namespace renderer {
 
 	const std::string& camera2d::get_name() const {
 		return m_name;
+	}
+
+	camera3d::camera3d(float w, float h, const std::string& name):camera_obj(w, h), m_name(name), m_idx(0) {
+	}
+
+	int camera3d::getIdx() const {
+		return m_idx;
+	}
+
+	const std::string& camera3d::getName() const {
+		return m_name;
+	}
+
+	void camera3d::UpdateViewMatrix() {
+		glm::vec3 front = glm::vec3(1.0f);
+
+		front.x = cos(glm::radians(m_Pitch)) * cos(glm::radians(m_Yaw));
+		front.y = sin(glm::radians(m_Pitch));
+		front.z = cos(glm::radians(m_Pitch)) * sin(glm::radians(m_Yaw));
+		m_Front = glm::normalize(front);
+
+		// right vector
+		m_Right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
+
+		// up vector
+		m_Up = glm::normalize(glm::cross(m_Right, m_Front));
+
+		m_ViewMatrix = glm::lookAt(m_Position, m_Front + m_Position, m_Up);
+		UpdateViewProjectionMatrix();
+	}
+
+	void camera3d::UpdateProjectionMatrix() {
+		m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), m_aspect, m_ZNear, m_ZFar);
+		UpdateViewProjectionMatrix();
+	}
+
+	void camera3dDispatcher::addCamera3d(camera3d& rhs) {
+		m_data[rhs.getIdx()] = rhs;
+	}
+	
+	camera3d& camera3dDispatcher::getCamera3d(int a) {
+		try {
+			return m_data[a];
+		}
+		catch (char *n) {
+			std::cout << n;
+			return camera3d(0, 0, "wrong");
+		}
+	}
+
+	void camera3dDispatcher::deleteCamera3d(int a) {
+		try {
+			m_data.erase(a);
+		}
+		catch (char* n) {
+			std::cout << n;
+			return;
+		}
 	}
 
 }

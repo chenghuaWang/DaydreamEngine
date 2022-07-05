@@ -56,9 +56,23 @@ struct uis {
 		text_editor_file_submenu.add_action(text_editor_file_open);
 		text_editor_menu->add_sub_menu(text_editor_file_submenu);
 
+		text_editor_lang_set_glsl.m_name = "Set GLSL";
+		text_editor_lang_set_lua.m_name = "Set Lua";
+
+		text_editor_lang_set_glsl.pressed.Connect(text_editor_widget, &ui::texteditor::signal_set_lang_glsl);
+		text_editor_lang_set_lua.pressed.Connect(text_editor_widget, &ui::texteditor::signal_set_lang_lua);
+
+		text_editor_lang_submenu.add_action(text_editor_lang_set_glsl);
+		text_editor_lang_submenu.add_action(text_editor_lang_set_lua);
+		text_editor_menu->add_sub_menu(text_editor_lang_submenu);
+
 		text_editor_line_container = new ui::line_continer();
 		text_editor_compile_test_button = new ui::button("Compile test");
 		text_editor_link_button = new ui::button("Link");
+
+		text_editor_compile_test_button->click.Connect(text_editor_widget, &ui::texteditor::signal_compile_test);
+		text_editor_link_button->click.Connect(text_editor_widget, &ui::texteditor::signal_link_prog);
+
 		text_editor_line_container->add_obj(text_editor_compile_test_button);
 		text_editor_line_container->add_obj(text_editor_link_button);
 	}
@@ -93,6 +107,7 @@ public:
 	REF(ui::menu)			text_editor_menu;
 	ui::sub_menu			text_editor_theme_submenu = ui::sub_menu("Theme");
 	ui::sub_menu			text_editor_file_submenu = ui::sub_menu("File");
+	ui::sub_menu			text_editor_lang_submenu = ui::sub_menu("Lang");
 	ui::action				text_editor_file_open;
 	ui::action				text_editor_file_save;
 	ui::action				text_editor_file_save_as;
@@ -101,7 +116,10 @@ public:
 	ui::action				text_editor_theme_white_action;
 	ui::action				text_editor_theme_blue_action;
 	ui::action				text_editor_open_action;
+	ui::action				text_editor_lang_set_lua;
+	ui::action				text_editor_lang_set_glsl;
 	ui::line_continer*		text_editor_line_container;
 	ui::button*				text_editor_compile_test_button;
 	ui::button*				text_editor_link_button;
+
 };

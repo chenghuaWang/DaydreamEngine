@@ -47,7 +47,23 @@ namespace ui {
 
 	void texteditor::signal_open_file() {
 		m_file_dialog_state = text_editor_cur_dialog_state::Open;
-		m_file_dialog.show("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
+		m_file_dialog.show("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp,.shader,.glsl,.txt,.lua,.python", ".");
+	}
+
+	void texteditor::signal_set_lang_lua() {
+		this->set_lang(lang::Lua);
+	}
+	
+	void texteditor::signal_set_lang_glsl() {
+		this->set_lang(lang::GLSL);
+	}
+
+	void texteditor::signal_compile_test() {
+
+	}
+
+	void texteditor::signal_link_prog() {
+
 	}
 
 	void texteditor::open_file(const std::string& file_path) {
@@ -63,7 +79,12 @@ namespace ui {
 	}
 
 	void texteditor::save_cur_file() {
-		
+		std::string tmp_str = m_editor.GetText();
+		std::ofstream t(m_file_dialog_value);
+		if (t.good()) {
+			t << tmp_str;
+		}
+		t.close();
 	}
 
 	void texteditor::backup_cur_file(const std::string& file_path) {
@@ -78,7 +99,7 @@ namespace ui {
 
 	}
 
-	void texteditor::set_lang(lang& type) {
+	void texteditor::set_lang(lang type) {
 		switch (type)
 		{
 		case lang::GLSL:
