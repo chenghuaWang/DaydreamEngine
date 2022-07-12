@@ -85,16 +85,20 @@ namespace ui {
 		virtual void flush_frame();
 		virtual void update_event();
 
+		GLFWwindow* get_handle()		{ return m_window_handle; };
+		static window_base* get_instance()		{ return m_instance; }
+
 	public:
 		size_t			getW();
 		size_t			getH();
 	
 	protected:
-		gl_context*		m_context;
-		size_t			m_H, m_W;
-		GLFWwindow*		m_window_handle = nullptr;
-		std::string		m_window_name;
-		REF(p_logger)	m_logger;
+		static window_base*	m_instance;
+		gl_context*			m_context;
+		size_t				m_H, m_W;
+		GLFWwindow*			m_window_handle = nullptr;
+		std::string			m_window_name;
+		REF(p_logger)		m_logger;
 	};
 
 	/*!

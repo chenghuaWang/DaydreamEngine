@@ -11,4 +11,4 @@ add_library(libdscene # SHARED
 	${libdscene_file_src}
 	${libdscene_file_include}
 )
-target_link_libraries(libdscene libdcore libdrender opengl32)
+target_link_libraries(libdscene libdcore libdrender libdui opengl32)

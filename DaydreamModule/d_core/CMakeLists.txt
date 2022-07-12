@@ -20,5 +20,5 @@ add_library(libdcore
 	${libcore_file_src}
 	${libcore_file_include}
 )
-target_link_libraries(libdcore spdlog)
+target_link_libraries(libdcore spdlog glad glfw)
 target_precompile_headers(libdcore PRIVATE pch.hpp)
