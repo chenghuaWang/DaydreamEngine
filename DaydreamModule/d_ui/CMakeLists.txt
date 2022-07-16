@@ -9,8 +9,8 @@ message(${libdui_file_src})
 
 include_directories(${d_module})
 
-add_library(libdui # SHARED
+add_library(libdui SHARED
 	${libdui_file_src}
 	${libdui_file_include}
 )
-target_link_libraries(libdui libdcore libdscene libdrender glfw imgui opengl32 stb_lib)
+target_link_libraries(libdui libdcore libdrender glfw imgui opengl32 stb_lib glm)

@@ -7,8 +7,8 @@
 
 #include "_base.hpp"
 #include "d_ui/window/timer.hpp"
-#include "d_scene/scene/scene2d.hpp"
-#include "d_scene/scene/scene3d.hpp"
+#include "d_ui/scene/scene2d.hpp"
+#include "d_ui/scene/scene3d.hpp"
 
 namespace daydream {
 namespace ui {

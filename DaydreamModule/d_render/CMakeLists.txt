@@ -7,7 +7,7 @@ file(GLOB_RECURSE libdrender_file_include *.hpp)
 
 include_directories(${d_module})
 
-add_library(libdrender # SHARED
+add_library(libdrender SHARED
 	${libdrender_file_src}
 	${libdrender_file_include}
 )

@@ -1,7 +1,14 @@
 #include "command.hpp"
 
+#include "GLFW/glfw3.h"
+
 namespace daydream {
 namespace renderer {
+
+	void load_gl_context_from_dll() {
+		gladLoadGL();
+		std::cout << glGetString(GL_VERSION) << std::endl;
+	}
 
 	void GLCommand::init() {
 		glEnable(GL_BLEND);

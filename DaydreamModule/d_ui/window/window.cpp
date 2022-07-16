@@ -32,6 +32,9 @@ namespace ui {
     /* under for window_base implementaion */
 
     window_base* window_base::m_instance = nullptr;
+    window_base* getWindowInstance() {
+        return window_base::m_instance;
+    }
 
     window_base::window_base(size_t w, size_t h, const std::string& window_name) :
         m_W(w), m_H(h), m_window_name(window_name), m_logger(new p_logger("./info.log")) {

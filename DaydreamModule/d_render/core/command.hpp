@@ -18,6 +18,8 @@ namespace renderer {
 		static void setLineMode(bool enable);
 	};
 
+	void D_API_EXPORT load_gl_context_from_dll();
+
 }
 }
 

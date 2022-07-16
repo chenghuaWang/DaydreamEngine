@@ -5,7 +5,7 @@
 namespace daydream {
 	namespace scene {
 		void camera3dController::OnUpdate(float ts) {
-
+			
 		}
 	}
 }

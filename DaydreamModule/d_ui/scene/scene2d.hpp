@@ -5,7 +5,11 @@
 #pragma once
 #endif // _MSC_VER
 
-#include "../sc_base.hpp"
+#include "d_core/pch.hpp"
+#include "d_render/core/ds.hpp"
+#include "d_render/core/shader.hpp"
+#include "d_render/core/command.hpp"
+#include "d_render/utils/camera.hpp"
 
 namespace daydream {
 namespace scene {
