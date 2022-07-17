@@ -3,9 +3,17 @@
 
 #if _MSC_VER > 1000
 #pragma once
+#pragma warnind( disable: 4251 ) // For disable warning of template-class in dll export.
 #endif // _MSC_VER > 1000
 
 #include "_gl_head.hpp"
+
+#define SCREEN_SPACE_SHADER_VERT_SRC "\
+#version 330 core\
+layout(location = 0) in vec3 aPos;\
+void main() {\
+	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\
+}"\
 
 namespace daydream {
 namespace renderer {
@@ -21,6 +29,7 @@ namespace renderer {
 		std::string FragmentSource{};
 	};
 
+	const std::string&	D_API_EXPORT ParseOneShader(const std::string& FilePath);
 	ShaderProgramSource D_API_EXPORT ParseShader(const std::string& FilePath);
 	uint32_t			D_API_EXPORT CompileShader(unsigned int type, const std::string& source);
 	uint32_t			D_API_EXPORT CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
@@ -56,6 +65,12 @@ namespace renderer {
 		uint32_t	m_idx = 0;
 
 		std::string m_name;
+	};
+
+
+	class D_API_EXPORT ScreenSpaceShader :public Shader {
+	public:
+		ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
 	};
 
 }

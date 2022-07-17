@@ -3,6 +3,16 @@
 namespace daydream{
 namespace renderer {
 
+    const std::string& ParseOneShader(const std::string& FilePath) {
+        std::ifstream stream(FilePath);
+        std::string line;
+        std::stringstream ss;
+        while (std::getline(stream, line)) {
+            ss << line << "\n";
+        }
+        return ss.str();
+    }
+
     ShaderProgramSource ParseShader(const std::string& FilePath) {
         std::ifstream stream(FilePath);
         std::string line;
@@ -150,6 +160,11 @@ namespace renderer {
 
     std::shared_ptr<Shader> Shader::create(const std::string& name, const std::string& vertex_src, const std::string& fragment_src) {
         return CREATE_REF(Shader)(name, vertex_src, fragment_src);
+    }
+
+    ScreenSpaceShader::ScreenSpaceShader(const std::string& name, const std::string& fragment_path) :
+        Shader(name, SCREEN_SPACE_SHADER_VERT_SRC, ParseOneShader(fragment_path)) {
+
     }
 
 }
