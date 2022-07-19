@@ -29,7 +29,7 @@ namespace renderer {
 		std::string FragmentSource{};
 	};
 
-	const std::string&	D_API_EXPORT ParseOneShader(const std::string& FilePath);
+	const std::string&	ParseOneShader(const std::string& FilePath);
 	ShaderProgramSource D_API_EXPORT ParseShader(const std::string& FilePath);
 	uint32_t			D_API_EXPORT CompileShader(unsigned int type, const std::string& source);
 	uint32_t			D_API_EXPORT CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
