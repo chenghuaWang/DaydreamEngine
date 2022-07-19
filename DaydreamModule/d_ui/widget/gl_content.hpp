@@ -3,6 +3,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
+#pragma warnind( disable: 4251 )
 #endif // _MSC_VER
 
 #include "_base.hpp"

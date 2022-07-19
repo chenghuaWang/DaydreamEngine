@@ -8,6 +8,8 @@
 
 #include "_gl_head.hpp"
 
+#include "d_render/core/object/drawObj.hpp" ///< will be used in Screen space shader.
+
 #define SCREEN_SPACE_SHADER_VERT_SRC "\
 #version 330 core\
 layout(location = 0) in vec3 aPos;\
@@ -68,18 +70,30 @@ namespace renderer {
 	};
 
 	/*!
-	 *@brief A Screen Space Shader. Mostly for 
+	 *@brief A Screen Space Shader. Mostly for Sky, fog, water, etc.
+	 * This act like a drawable class. Inherent from both Shader and
+	 * drawObj class.
 	 * 
+	 * the draw function here is quite simple, just bind VAO to OpenGl,
+	 * and start to draw 2 triangles.
 	 */
-	class D_API_EXPORT ScreenSpaceShader :public Shader {
+	class D_API_EXPORT ScreenSpaceShader :public Shader, public drawObject {
 	public:
 		ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
 
 		void initializeQuad();
 
+	public:
+		void draw() override;
+		void update() override;
+
+		void drawQuad();
+		static void setDepthTest(bool enable);
+
 	private:
 		static bool m_inited;
-		unsigned int quadVAO, quadVBO;
+		unsigned int quadVAO;
+		unsigned int quadVBO;
 	};
 
 }

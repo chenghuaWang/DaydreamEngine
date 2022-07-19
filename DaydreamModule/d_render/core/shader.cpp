@@ -3,7 +3,7 @@
 namespace daydream{
 namespace renderer {
 
-    bool ScreenSpaceShader::m_inited = fasle;
+    bool ScreenSpaceShader::m_inited = false;
 
     const std::string& ParseOneShader(const std::string& FilePath) {
         std::ifstream stream(FilePath);
@@ -191,6 +191,28 @@ namespace renderer {
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
             glEnableVertexAttribArray(1);
             ScreenSpaceShader::m_inited = true;
+        }
+    }
+
+    void ScreenSpaceShader::draw() {
+        drawQuad();
+    }
+
+    void ScreenSpaceShader::update() {
+        
+    }
+
+    void ScreenSpaceShader::drawQuad() {
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    void ScreenSpaceShader::setDepthTest(bool enable) {
+        if (enable) {
+            glEnable(GL_DEPTH_TEST);
+        }
+        else {
+            glDisable(GL_DEPTH_TEST);
         }
     }
 

@@ -101,6 +101,15 @@ namespace ui {
 		REF(p_logger)		m_logger;
 	};
 
+	/*!
+	 *@brief To get the window handle. Only one window will eixists in the app. To
+	 * remember that in dynamic libraries. The static in a dllexport class is a fo-
+	 * rbidden behaviour, so an extern-out-scope function is used to get the static
+	 * members in one class.
+	 * 
+	 * DLL EXPORT: True
+	 * [Tricky, extern, static]
+	 */
 	extern D_API_EXPORT window_base* getWindowInstance();
 
 	/*!
