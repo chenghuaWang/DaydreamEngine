@@ -67,10 +67,19 @@ namespace renderer {
 		std::string m_name;
 	};
 
-
+	/*!
+	 *@brief A Screen Space Shader. Mostly for 
+	 * 
+	 */
 	class D_API_EXPORT ScreenSpaceShader :public Shader {
 	public:
 		ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
+
+		void initializeQuad();
+
+	private:
+		static bool m_inited;
+		unsigned int quadVAO, quadVBO;
 	};
 
 }

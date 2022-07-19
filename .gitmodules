@@ -10,3 +10,7 @@
 [submodule "3rdparty/tinyobjloader"]
 	path = 3rdparty/tinyobjloader
 	url = https://github.com/tinyobjloader/tinyobjloader
+[submodule "3rdparty/pybind11"]
+	path = 3rdparty/pybind11
+	url = ../../pybind/pybind11
+	branch = stable

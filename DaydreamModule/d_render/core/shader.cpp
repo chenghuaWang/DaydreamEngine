@@ -3,6 +3,8 @@
 namespace daydream{
 namespace renderer {
 
+    bool ScreenSpaceShader::m_inited = fasle;
+
     const std::string& ParseOneShader(const std::string& FilePath) {
         std::ifstream stream(FilePath);
         std::string line;
@@ -164,7 +166,32 @@ namespace renderer {
 
     ScreenSpaceShader::ScreenSpaceShader(const std::string& name, const std::string& fragment_path) :
         Shader(name, SCREEN_SPACE_SHADER_VERT_SRC, ParseOneShader(fragment_path)) {
+        initializeQuad();
 
+    }
+
+    void ScreenSpaceShader::initializeQuad() {
+        if (!m_inited) {
+            float vertices[] = {
+                -1.0f, -1.0f, 0.0, 0.0,
+                1.0f, -1.0f, 1.0, 0.0,
+                -1.0f,  1.0f, 0.0, 1.0,
+                1.0f,  1.0f, 1.0, 1.0,
+                -1.0f,  1.0f, 0.0, 1.0,
+                1.0f, -1.0f, 1.0, 0.0
+            };
+
+            glGenVertexArrays(1, &quadVAO);
+            glGenBuffers(1, &quadVBO);
+            glBindVertexArray(quadVAO);
+            glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+            ScreenSpaceShader::m_inited = true;
+        }
     }
 
 }
