@@ -79,6 +79,7 @@ namespace renderer {
 	 */
 	class D_API_EXPORT ScreenSpaceShader :public Shader, public drawObject {
 	public:
+		ScreenSpaceShader(const std::string& all_src);
 		ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
 
 		void initializeQuad();

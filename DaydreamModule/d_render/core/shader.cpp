@@ -164,6 +164,11 @@ namespace renderer {
         return CREATE_REF(Shader)(name, vertex_src, fragment_src);
     }
 
+    ScreenSpaceShader::ScreenSpaceShader(const std::string& all_src):
+        Shader("no-name", SCREEN_SPACE_SHADER_VERT_SRC, all_src) {
+        initializeQuad();
+    }
+
     ScreenSpaceShader::ScreenSpaceShader(const std::string& name, const std::string& fragment_path) :
         Shader(name, SCREEN_SPACE_SHADER_VERT_SRC, ParseOneShader(fragment_path)) {
         initializeQuad();
@@ -195,6 +200,7 @@ namespace renderer {
     }
 
     void ScreenSpaceShader::draw() {
+        // TODO bind shader ?
         drawQuad();
     }
 
