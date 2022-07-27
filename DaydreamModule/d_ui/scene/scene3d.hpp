@@ -54,6 +54,8 @@ namespace daydream {
 
 			uint32_t FrameIdx();
 
+			camera3dController& getCameraCtrl();
+
 		private:
 			renderer::Crates					m_crates;
 			camera3dController					m_camera_ctrl;

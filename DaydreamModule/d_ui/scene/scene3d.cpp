@@ -49,5 +49,9 @@ Using scene3d::scene3drenderer::Crates& crates) function !");
 			return m_crates.sceneFBO->FrameIdx();
 		}
 
+		camera3dController& scene3d::getCameraCtrl() {
+			return m_camera_ctrl;
+		}
+
 	}
 }

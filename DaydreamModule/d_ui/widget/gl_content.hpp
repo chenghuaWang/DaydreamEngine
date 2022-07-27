@@ -32,7 +32,7 @@ namespace ui {
 		void start_render();
 
 		void set_scene2d(REF(scene::scene2d)& sc);
-		// void set_scene3d(REF(scene::scene3d)& sc);
+		 void set_scene3d(REF(scene::scene3d)& sc);
 
 		Timer m_timer;
 
@@ -45,6 +45,7 @@ namespace ui {
 		ImVec2				m_cur_mouse_click;
 		gl_content_type		m_type = gl_content_type::None;
 		REF(scene::scene2d)	m_scene2d = nullptr;
+		REF(scene::scene3d) m_scene3d = nullptr;
 		// TODO REF(scene::scene3d)	m_scene3d;
 
 	private:

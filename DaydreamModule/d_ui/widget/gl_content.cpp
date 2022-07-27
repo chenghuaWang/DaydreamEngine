@@ -38,7 +38,11 @@ namespace ui {
 			glBindVertexArray(0);
 			break;
 		case daydream::ui::gl_content_type::ThreeD:
-			break;
+			if (m_scene3d == nullptr) {
+				std::cout << "The scene ptr is null. GL content can't ignore it." << std::endl;
+				LOG_ERROR("The scene ptr is null. GL content can't ignore it.");
+			}
+			// Nothing need to do next.
 		default:
 			break;
 		}
@@ -53,6 +57,7 @@ namespace ui {
 			glDeleteBuffers(1, &EBO);
 			break;
 		case daydream::ui::gl_content_type::ThreeD:
+			// Nothing need to do next.
 			break;
 		case daydream::ui::gl_content_type::None:
 			break;
@@ -91,6 +96,9 @@ namespace ui {
 				m_scene2d->EndRender();
 				break;
 			case daydream::ui::gl_content_type::ThreeD:
+				m_scene3d->BeginRender();
+				// The drawable Objects class in m_scene3d will handle the glDrawElements.
+				m_scene3d->EndRender();
 				break;
 			default:
 				break;
@@ -99,7 +107,7 @@ namespace ui {
 	}
 
 	void gl_content::update_event() {
-		
+		// TODO the drawable object in m_scene3d may need it.
 	}
 
 	void gl_content::impl_imgui_render() {
@@ -117,6 +125,13 @@ namespace ui {
 			ImGui::Image((void*)tmp_id, ImVec2(m_panelsize_cur.x, m_panelsize_cur.y), ImVec2(0, 1), ImVec2(1, 0));
 			break;
 		case daydream::ui::gl_content_type::ThreeD:
+			m_scene3d->getCameraCtrl().getCamera().set_activited(ImGui::IsWindowFocused());
+			if (m_panelsize_cur.x != m_panelsize_pre.x || m_panelsize_cur.y != m_panelsize_pre.y) {
+				m_scene2d->Resize(m_panelsize_cur.x, m_panelsize_cur.y);
+				m_panelsize_pre = m_panelsize_cur;
+			}
+			tmp_id = m_scene3d->FrameIdx();
+			ImGui::Image((void*)tmp_id, ImVec2(m_panelsize_cur.x, m_panelsize_cur.y), ImVec2(0, 1), ImVec2(1, 0));
 			break;
 		default:
 			break;
@@ -132,6 +147,7 @@ namespace ui {
 			m_scene2d->setRunning(false);
 			break;
 		case daydream::ui::gl_content_type::ThreeD:
+			m_scene3d->setRunning(false);
 			break;
 		case daydream::ui::gl_content_type::None:
 			break;
@@ -149,6 +165,7 @@ namespace ui {
 			m_scene2d->setRunning(true);
 			break;
 		case daydream::ui::gl_content_type::ThreeD:
+			m_scene3d->setRunning(true);
 			break;
 		case daydream::ui::gl_content_type::None:
 			break;
@@ -160,6 +177,11 @@ namespace ui {
 	void gl_content::set_scene2d(REF(scene::scene2d)& sc) {
 		m_scene2d = sc;
 		m_type = gl_content_type::TwoD;
+	}
+
+	void gl_content::set_scene3d(REF(scene::scene3d)& sc) {
+		m_scene3d = sc;
+		m_type = gl_content_type::ThreeD;
 	}
 
 }
