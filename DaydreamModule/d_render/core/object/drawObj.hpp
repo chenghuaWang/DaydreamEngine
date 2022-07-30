@@ -32,6 +32,8 @@ namespace daydream {
 			virtual void update() {}; ///< If draw() will changed with the time. update() is needed.
 
 		public:
+			bool			m_HasNormal = true;
+			bool			m_HasTexCoord = true;
 			static Crates	*renderPayload;
 		};
 

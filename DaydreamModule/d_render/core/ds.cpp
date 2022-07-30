@@ -59,5 +59,83 @@ namespace renderer {
 		return m_ColorAttach;
 	}
 
+	uint32_t D_API_EXPORT ElementSize(const ElementType& rhs) {
+		switch (rhs)
+		{
+		case ElementType::None:		return 0;
+		case ElementType::Float:
+		case ElementType::Int:		return 4;
+		case ElementType::Vecf2:
+		case ElementType::Veci2:	return 8;
+		case ElementType::Vecf3:
+		case ElementType::Veci3:	return 12;
+		case ElementType::Vecf4:
+		case ElementType::Veci4:	return 16;
+		case ElementType::Mat3:		return 36;
+		case ElementType::Mat4:		return 64;
+		case ElementType::Bool:		return 1;
+		default:
+			return 0;
+			break;
+		}
+		return 0;
+	}
+
+	uint32_t D_API_EXPORT ElementComponentsNum(const ElementType& rhs) {
+		switch (rhs)
+		{
+		case ElementType::None:		return 0;
+		case ElementType::Float:
+		case ElementType::Int:		return 1;
+		case ElementType::Vecf2:
+		case ElementType::Veci2:	return 2;
+		case ElementType::Vecf3:
+		case ElementType::Veci3:	return 3;
+		case ElementType::Vecf4:
+		case ElementType::Veci4:	return 4;
+		case ElementType::Mat3:		return 9;
+		case ElementType::Mat4:		return 16;
+		case ElementType::Bool:		return 1;
+		default:
+			return 0;
+			break;
+		}
+		return 0;
+	}
+
+	VertexBuffer::VertexBuffer(uint32_t size) {
+	}
+
+	VertexBuffer::VertexBuffer(float* v, uint32_t size) {
+	}
+
+	VertexBuffer::~VertexBuffer() {
+
+	}
+
+	void VertexBuffer::Bind() {
+
+	}
+
+	void VertexBuffer::UnBind() {
+
+	}
+
+	void VertexBuffer::setLayout(const BufferLayout& rhs) {
+
+	}
+
+	const BufferLayout& VertexBuffer::getLayout() const {
+		return m_layout;
+	}
+
+	REF(VertexBuffer) VertexBuffer::create(uint32_t size) {
+		return CREATE_REF(VertexBuffer)(size);
+	}
+
+	REF(VertexBuffer) VertexBuffer::create(float *v, uint32_t size) {
+		return CREATE_REF(VertexBuffer)(v, size);
+	}
+
 }
 }

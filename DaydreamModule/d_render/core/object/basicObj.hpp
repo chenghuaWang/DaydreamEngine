@@ -7,6 +7,7 @@
 
 ///< Shader has already include the drawObj.hpp
 #include "d_render/core/shader.hpp"
+#include "d_render/utils/built_in_ds.hpp"
 
 namespace daydream {
 	namespace renderer {
@@ -18,7 +19,7 @@ namespace daydream {
 		 *
 		 * @details This object will shown by default in every 3d scene.
 		 * A speciall shader is working for it.
-		 * Like Screen space shader. The shader is managed by this class it
+		 * Like Screen space shader. The shader is managed by this class it-
 		 * self, and this class will only has one instance in the scene. Note
 		 * that, you are not recommand to use d_resource lib to manage the
 		 * shader belong to this class.
@@ -33,10 +34,16 @@ namespace daydream {
 			static PlaneObject* getInstance();
 
 		private:
-			int					m_GridInternal;
-			// TODO VAO, VBO.
-			REF(Shader)			m_shader;
-			static PlaneObject* m_instance;
+			void					genVertexArray();
+
+			int						m_GridInternal;
+			
+			std::vector<Vertex>		m_vertex;
+			std::vector<Triangle>	m_triangle;
+			std::vector<uint32_t>	m_Index;
+
+			REF(Shader)				m_shader;
+			static PlaneObject*		m_instance;
 		};
 	}
 }
