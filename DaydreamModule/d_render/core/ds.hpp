@@ -90,9 +90,43 @@ namespace renderer {
 
 
 	class D_API_EXPORT IndexBuffer {
+	public:
+		IndexBuffer(uint32_t* indicies, uint32_t count);
+		~IndexBuffer();
+		void Bind();
+		void UnBind();
 
+		uint32_t getCount() const { return m_count; };
+
+		static REF(IndexBuffer) create(uint32_t* indicies, uint32_t count);
+
+	private:
+		uint32_t	m_idx;
+		uint32_t	m_count;
 	};
 
+	/*!
+	 * @brief	An abstrct for VertexArray. Implemented in OpenGL.
+	 */
+	class D_API_EXPORT VertexArray {
+	public:
+		VertexArray();
+		~VertexArray();
+
+		void Bind() const;
+		void UnBind() const;
+
+		void addVertexBuffer(const REF(VertexBuffer)& vb);
+		void addIndexBuffer(const REF(IndexBuffer)& ib);
+
+		const std::vector<REF(VertexBuffer)>& getVBOs() const { return m_VBO; }
+		const REF(IndexBuffer)& getIBO() const { return m_IBO; }
+
+	private:
+		std::vector<REF(VertexBuffer)>	m_VBO;
+		REF(IndexBuffer)				m_IBO;
+		uint32_t						m_idx;
+	};
 
 	class D_API_EXPORT FrameBuffer {
 	public:
@@ -105,6 +139,8 @@ namespace renderer {
 		void Resize(float w, float h);
 
 		uint32_t FrameIdx();
+
+		static REF(FrameBuffer) create(float w, float h);
 
 	private:
 		float	m_w, m_h;

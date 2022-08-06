@@ -2,6 +2,23 @@
 
 namespace daydream {
 namespace renderer {
+
+	static GLenum ShaderDataTypeToOpenGLBaseType(const ElementType& type) {
+		switch (type) {
+		case ElementType::Float:
+		case ElementType::Vecf2:
+		case ElementType::Vecf3:
+		case ElementType::Vecf4:
+		case ElementType::Mat3:
+		case ElementType::Mat4:			return GL_FLOAT;
+		case ElementType::Int:
+		case ElementType::Veci2:
+		case ElementType::Veci3:
+		case ElementType::Veci4:		return GL_INT;
+		case ElementType::Bool:			return GL_BOOL;
+		}
+		return 0;
+	}
 	
 	FrameBuffer::FrameBuffer(float w, float h, float samples, bool swapChain):
 		m_w(w), m_h(h), m_sampels(samples), m_swapChain(swapChain), m_idx(0) {
@@ -59,6 +76,10 @@ namespace renderer {
 		return m_ColorAttach;
 	}
 
+	REF(FrameBuffer) FrameBuffer::create(float w, float h) {
+		return CREATE_REF(FrameBuffer)(w, h);
+	}
+
 	uint32_t D_API_EXPORT ElementSize(const ElementType& rhs) {
 		switch (rhs)
 		{
@@ -104,25 +125,31 @@ namespace renderer {
 	}
 
 	VertexBuffer::VertexBuffer(uint32_t size) {
+		glCreateBuffers(1, &m_idx);
+		glBindBuffer(GL_ARRAY_BUFFER, m_idx);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 
 	VertexBuffer::VertexBuffer(float* v, uint32_t size) {
+		glCreateBuffers(1, &m_idx);
+		glBindBuffer(GL_ARRAY_BUFFER, m_idx);
+		glBufferData(GL_ARRAY_BUFFER, size, v, GL_DYNAMIC_DRAW);
 	}
 
 	VertexBuffer::~VertexBuffer() {
-
+		glDeleteBuffers(1, &m_idx);
 	}
 
 	void VertexBuffer::Bind() {
-
+		glBindBuffer(GL_ARRAY_BUFFER, m_idx);
 	}
 
 	void VertexBuffer::UnBind() {
-
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void VertexBuffer::setLayout(const BufferLayout& rhs) {
-
+		m_layout = rhs;
 	}
 
 	const BufferLayout& VertexBuffer::getLayout() const {
@@ -135,6 +162,73 @@ namespace renderer {
 
 	REF(VertexBuffer) VertexBuffer::create(float *v, uint32_t size) {
 		return CREATE_REF(VertexBuffer)(v, size);
+	}
+
+	IndexBuffer::IndexBuffer(uint32_t* indicies, uint32_t count):
+		m_count(count), m_idx(0) {
+		glCreateBuffers(1, &m_idx);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_idx);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(count), indicies, GL_STATIC_DRAW);
+	}
+
+	IndexBuffer::~IndexBuffer() {
+		glDeleteBuffers(1, &m_idx);
+	}
+
+	void IndexBuffer::Bind() {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_idx);
+	}
+
+	void IndexBuffer::UnBind() {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	REF(IndexBuffer) IndexBuffer::create(uint32_t* indicies, uint32_t count) {
+		return CREATE_REF(IndexBuffer)(indicies, count);
+	}
+
+	VertexArray::VertexArray() {
+		glCreateVertexArrays(1, &m_idx);
+	}
+
+	VertexArray::~VertexArray() {
+		glDeleteVertexArrays(1, &m_idx);
+	}
+
+	void VertexArray::Bind() const {
+		glBindVertexArray(m_idx);
+	}
+
+	void VertexArray::UnBind() const {
+		glBindVertexArray(0);
+	}
+
+	void VertexArray::addVertexBuffer(const REF(VertexBuffer)& vb) {
+		glBindVertexArray(m_idx);
+		vb->Bind();
+		if (vb->getLayout().GetElements().size() == 0) {
+			vb->UnBind();
+			LOG_ERROR("The VerexBuffer don't have correct Layout!");
+			return;
+		}
+		uint32_t _index = 0;
+		for (const auto& element : vb->getLayout()) {
+			glEnableVertexAttribArray(_index);
+			glVertexAttribPointer(_index,
+				ElementComponentsNum(element.Type),
+				ShaderDataTypeToOpenGLBaseType(element.Type),
+				element.Normalized ? GL_TRUE : GL_FALSE,
+				vb->getLayout().GetStride(),
+				(const void*)(element.Offset));
+			_index++;
+		}
+		m_VBO.push_back(vb);
+	}
+
+	void VertexArray::addIndexBuffer(const REF(IndexBuffer)& ib) {
+		glBindVertexArray(m_idx);
+		ib->Bind();
+		m_IBO = ib;
 	}
 
 }

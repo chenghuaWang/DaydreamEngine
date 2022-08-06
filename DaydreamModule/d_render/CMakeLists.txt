@@ -11,4 +11,4 @@ add_library(libdrender SHARED
 	${libdrender_file_src}
 	${libdrender_file_include}
 )
-target_link_libraries(libdrender libdcore glm opengl32 glad)
+target_link_libraries(libdrender libdcore glm opengl32 glad stb_lib)
