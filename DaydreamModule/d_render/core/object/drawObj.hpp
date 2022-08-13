@@ -3,7 +3,6 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#pragma warnind( disable: 4251 ) // For disable warning of template-class in dll export.
 #endif // _MSC_VER > 1000
 
 #include "d_render/core/_gl_head.hpp"
@@ -20,7 +19,7 @@ namespace daydream {
 		 * @details actually draw() and update() function should be made pure
 		 * virtual functions, but for dll export purpose I set it to normal
 		 * virtual functions. But, to rememmber, every class that inherient
-		 * this class hsould implement those two functions.
+		 * this class should implement those two functions.
 		 * 
 		 * @note update() is not must to be implement. Only when draw() function
 		 * will changed with the event or other staff, update() will works. But,

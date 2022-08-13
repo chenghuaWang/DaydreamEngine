@@ -3,7 +3,6 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#pragma warnind( disable: 4251 ) // For disable warning of template-class in dll export.
 #endif // _MSC_VER > 1000
 
 #include "_gl_head.hpp"
