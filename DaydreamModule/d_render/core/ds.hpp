@@ -3,157 +3,157 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "_gl_head.hpp"
 
 namespace daydream {
 namespace renderer {
 
+enum class D_API_EXPORT ElementType : uint8_t {
+  None = 0,
+  Int,
+  Veci2,
+  Veci3,
+  Veci4,
+  Float,
+  Vecf2,
+  Vecf3,
+  Vecf4,
+  Mat3,
+  Mat4,
+  Bool
+};
 
-	enum class D_API_EXPORT ElementType : uint8_t {
-		None = 0,
-		Int, Veci2, Veci3, Veci4,
-		Float, Vecf2, Vecf3, Vecf4,
-		Mat3, Mat4,
-		Bool
-	};
+///< return Bytes
+uint32_t D_API_EXPORT ElementSize(const ElementType& rhs);
+uint32_t D_API_EXPORT ElementComponentsNum(const ElementType& rhs);
 
-	///< return Bytes 
-	uint32_t D_API_EXPORT ElementSize(const ElementType& rhs);
-	uint32_t D_API_EXPORT ElementComponentsNum(const ElementType& rhs);
+struct D_API_EXPORT BufferLayoutElement {
+  BufferLayoutElement(ElementType e, bool n)
+      : Size(ElementSize(e)), Offset(0), Type(e), Normalized(n){};
+  uint32_t Size;
+  uint32_t Offset;
+  ElementType Type;
+  bool Normalized;
+};
 
+class D_API_EXPORT BufferLayout {
+ public:
+  BufferLayout(){};
+  BufferLayout(const std::initializer_list<BufferLayoutElement>& elements) : m_Elements(elements) {
+    CalculateOffsetAndStride();
+  }
 
-	struct D_API_EXPORT BufferLayoutElement {
-		BufferLayoutElement(ElementType e, bool n) :
-			Size(ElementSize(e)), Offset(0), Type(e), Normalized(n) {};
-		uint32_t	Size;
-		uint32_t	Offset;
-		ElementType	Type;
-		bool		Normalized;
-	};
+  inline uint32_t GetStride() const { return m_Stride; }
+  inline const std::vector<BufferLayoutElement>& GetElements() const { return m_Elements; }
 
+  std::vector<BufferLayoutElement>::iterator begin() { return m_Elements.begin(); }
+  std::vector<BufferLayoutElement>::iterator end() { return m_Elements.end(); }
+  std::vector<BufferLayoutElement>::const_iterator begin() const { return m_Elements.begin(); }
+  std::vector<BufferLayoutElement>::const_iterator end() const { return m_Elements.end(); }
 
-	class D_API_EXPORT BufferLayout {
-	public:
-		BufferLayout() {};
-		BufferLayout(const std::initializer_list<BufferLayoutElement>& elements)
-			:m_Elements(elements) {
-			CalculateOffsetAndStride();
-		}
+ private:
+  void CalculateOffsetAndStride() {
+    uint32_t offset = 0;
+    m_Stride = 0;
+    for (auto& element : m_Elements) {
+      element.Offset = offset;
+      offset += element.Size;
+      m_Stride += element.Size;
+    }
+  }
 
-		inline uint32_t GetStride() const { return m_Stride; }
-		inline const std::vector<BufferLayoutElement>& GetElements() const { return m_Elements; }
+ private:
+  std::vector<BufferLayoutElement> m_Elements;
+  uint32_t m_Stride = 0;
+};
 
-		std::vector<BufferLayoutElement>::iterator begin() { return m_Elements.begin(); }
-		std::vector<BufferLayoutElement>::iterator end() { return m_Elements.end(); }
-		std::vector<BufferLayoutElement>::const_iterator begin() const { return m_Elements.begin(); }
-		std::vector<BufferLayoutElement>::const_iterator end() const { return m_Elements.end(); }
+class D_API_EXPORT VertexBuffer {
+ public:
+  VertexBuffer(uint32_t size);
+  VertexBuffer(float* v, uint32_t size);
 
-	private:
-		void CalculateOffsetAndStride() {
-			uint32_t offset = 0;
-			m_Stride = 0;
-			for (auto& element : m_Elements) {
-				element.Offset = offset;
-				offset += element.Size;
-				m_Stride += element.Size;
-			}
-		}
+  ~VertexBuffer();
 
-	private:
-		std::vector<BufferLayoutElement> m_Elements;
-		uint32_t m_Stride = 0;
-	};
+  void Bind();
+  void UnBind();
 
+  void setLayout(const BufferLayout& rhs);
+  const BufferLayout& getLayout() const;
 
-	class D_API_EXPORT VertexBuffer {
-	public:
-		VertexBuffer(uint32_t size);
-		VertexBuffer(float* v, uint32_t size);
+  static REF(VertexBuffer) create(uint32_t size);
+  static REF(VertexBuffer) create(float* v, uint32_t size);
 
-		~VertexBuffer();
+ private:
+  uint32_t m_idx = 0;
+  BufferLayout m_layout;
+};
 
-		void Bind();
-		void UnBind();
+class D_API_EXPORT IndexBuffer {
+ public:
+  IndexBuffer(uint32_t* indicies, uint32_t count);
+  ~IndexBuffer();
+  void Bind();
+  void UnBind();
 
-		void setLayout(const BufferLayout& rhs);
-		const BufferLayout& getLayout() const;
+  uint32_t getCount() const { return m_count; };
 
-		static REF(VertexBuffer) create(uint32_t size);
-		static REF(VertexBuffer) create(float* v, uint32_t size);
+  static REF(IndexBuffer) create(uint32_t* indicies, uint32_t count);
 
-	private:
-		uint32_t		m_idx = 0;
-		BufferLayout	m_layout;
-	};
+ private:
+  uint32_t m_idx;
+  uint32_t m_count;
+};
 
+/*!
+ * @brief	An abstrct for VertexArray. Implemented in OpenGL.
+ */
+class D_API_EXPORT VertexArray {
+ public:
+  VertexArray();
+  ~VertexArray();
 
-	class D_API_EXPORT IndexBuffer {
-	public:
-		IndexBuffer(uint32_t* indicies, uint32_t count);
-		~IndexBuffer();
-		void Bind();
-		void UnBind();
+  void Bind() const;
+  void UnBind() const;
 
-		uint32_t getCount() const { return m_count; };
+  void addVertexBuffer(const REF(VertexBuffer) & vb);
+  void addIndexBuffer(const REF(IndexBuffer) & ib);
 
-		static REF(IndexBuffer) create(uint32_t* indicies, uint32_t count);
+  const std::vector<REF(VertexBuffer)>& getVBOs() const { return m_VBO; }
+  const REF(IndexBuffer) & getIBO() const { return m_IBO; }
 
-	private:
-		uint32_t	m_idx;
-		uint32_t	m_count;
-	};
+ private:
+  std::vector<REF(VertexBuffer)> m_VBO;
+  REF(IndexBuffer) m_IBO;
+  uint32_t m_idx;
+};
 
-	/*!
-	 * @brief	An abstrct for VertexArray. Implemented in OpenGL.
-	 */
-	class D_API_EXPORT VertexArray {
-	public:
-		VertexArray();
-		~VertexArray();
+class D_API_EXPORT FrameBuffer {
+ public:
+  FrameBuffer(float w, float h, float samples = 1, bool swapChain = false);
+  ~FrameBuffer();
 
-		void Bind() const;
-		void UnBind() const;
+  void Invalidate();
+  void Bind();
+  void UnBind();
+  void Resize(float w, float h);
 
-		void addVertexBuffer(const REF(VertexBuffer)& vb);
-		void addIndexBuffer(const REF(IndexBuffer)& ib);
+  uint32_t FrameIdx();
 
-		const std::vector<REF(VertexBuffer)>& getVBOs() const { return m_VBO; }
-		const REF(IndexBuffer)& getIBO() const { return m_IBO; }
+  static REF(FrameBuffer) create(float w, float h);
 
-	private:
-		std::vector<REF(VertexBuffer)>	m_VBO;
-		REF(IndexBuffer)				m_IBO;
-		uint32_t						m_idx;
-	};
+ private:
+  float m_w, m_h;
+  float m_sampels = 1;
+  bool m_swapChain = false;
 
-	class D_API_EXPORT FrameBuffer {
-	public:
-		FrameBuffer(float w, float h, float samples = 1, bool swapChain = false);
-		~FrameBuffer();
+  uint32_t m_idx = 0;
+  uint32_t m_ColorAttach = 0;
+  uint32_t m_DepthAttach = 0;
+};
 
-		void Invalidate();
-		void Bind();
-		void UnBind();
-		void Resize(float w, float h);
+}  // namespace renderer
+}  // namespace daydream
 
-		uint32_t FrameIdx();
-
-		static REF(FrameBuffer) create(float w, float h);
-
-	private:
-		float	m_w, m_h;
-		float	m_sampels = 1;
-		bool	m_swapChain = false;
-
-		uint32_t	m_idx = 0;
-		uint32_t	m_ColorAttach = 0;
-		uint32_t	m_DepthAttach = 0;
-	};
-
-}
-}
-
-
-#endif // !H_DCORE_DS
+#endif  // !H_DCORE_DS

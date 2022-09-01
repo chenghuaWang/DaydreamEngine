@@ -1,7 +1,7 @@
 #ifndef H_RENDER_CORE_OBJECT_BASIC
 #define H_RENDER_CORE_OBJECT_BASIC
 
-#ifdef _MSC_VER > 1000
+#ifdef _MSC_VER> 1000
 #pragma once
 #endif
 
@@ -10,42 +10,42 @@
 #include "d_render/utils/built_in_ds.hpp"
 
 namespace daydream {
-	namespace renderer {
+namespace renderer {
 
-		/*!
-		 *@brie The plane object is just a flat.
-		 *
-		 * DLL EXPORT: True
-		 *
-		 * @details This object will shown by default in every 3d scene.
-		 * A speciall shader is working for it.
-		 * Like Screen space shader. The shader is managed by this class it-
-		 * self, and this class will only has one instance in the scene. Note
-		 * that, you are not recommand to use d_resource lib to manage the
-		 * shader belong to this class.
-		 */
-		class D_API_EXPORT PlaneObject : public drawObject {
-		public:
-			PlaneObject();
+/*!
+ *@brie The plane object is just a flat.
+ *
+ * DLL EXPORT: True
+ *
+ * @details This object will shown by default in every 3d scene.
+ * A speciall shader is working for it.
+ * Like Screen space shader. The shader is managed by this class it-
+ * self, and this class will only has one instance in the scene. Note
+ * that, you are not recommand to use d_resource lib to manage the
+ * shader belong to this class.
+ */
+class D_API_EXPORT PlaneObject : public drawObject {
+ public:
+  PlaneObject();
 
-			void draw() override;
-			void update() override;
+  void draw() override;
+  void update() override;
 
-			static PlaneObject* getInstance();
+  static PlaneObject* getInstance();
 
-		private:
-			void					genVertexArray();
+ private:
+  void genVertexArray();
 
-			int						m_GridInternal;
-			
-			std::vector<Vertex>		m_vertex;
-			std::vector<Triangle>	m_triangle;
-			std::vector<uint32_t>	m_Index;
+  int m_GridInternal;
 
-			REF(Shader)				m_shader;
-			static PlaneObject*		m_instance;
-		};
-	}
-}
+  std::vector<Vertex> m_vertex;
+  std::vector<Triangle> m_triangle;
+  std::vector<uint32_t> m_Index;
 
-#endif // !H_RENDER_CORE_OBJECT_BASIC
+  REF(Shader) m_shader;
+  static PlaneObject* m_instance;
+};
+}  // namespace renderer
+}  // namespace daydream
+
+#endif  // !H_RENDER_CORE_OBJECT_BASIC

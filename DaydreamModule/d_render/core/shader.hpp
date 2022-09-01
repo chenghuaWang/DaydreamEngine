@@ -3,100 +3,102 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "_gl_head.hpp"
 
-#include "d_render/core/object/drawObj.hpp" ///< will be used in Screen space shader.
+#include "d_render/core/object/drawObj.hpp"  ///< will be used in Screen space shader.
 
-#define SCREEN_SPACE_SHADER_VERT_SRC "\
+#define SCREEN_SPACE_SHADER_VERT_SRC \
+"\
 #version 330 core\
 layout(location = 0) in vec3 aPos;\
 void main() {\
 	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\
-}"\
+}"
 
 namespace daydream {
 namespace renderer {
-	
-	enum class D_API_EXPORT ShaderType {
-		None = 0,
-		Vertex = 1,
-		Fragment = 2,
-	};
 
-	struct D_API_EXPORT ShaderProgramSource {
-		std::string VertexSource{};
-		std::string FragmentSource{};
-	};
+enum class D_API_EXPORT ShaderType {
+  None = 0,
+  Vertex = 1,
+  Fragment = 2,
+};
 
-	const std::string&	ParseOneShader(const std::string& FilePath);
-	ShaderProgramSource D_API_EXPORT ParseShader(const std::string& FilePath);
-	uint32_t			D_API_EXPORT CompileShader(unsigned int type, const std::string& source);
-	uint32_t			D_API_EXPORT CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+struct D_API_EXPORT ShaderProgramSource {
+  std::string VertexSource{};
+  std::string FragmentSource{};
+};
 
-	class D_API_EXPORT Shader {
-	public:
-		Shader(const std::string &all_src);
-		Shader(const std::string& name, const std::string& vertex_src, const std::string& fragment_src);
-		~Shader();
+const std::string& ParseOneShader(const std::string& FilePath);
+ShaderProgramSource D_API_EXPORT ParseShader(const std::string& FilePath);
+uint32_t D_API_EXPORT CompileShader(unsigned int type, const std::string& source);
+uint32_t D_API_EXPORT CreateShader(const std::string& vertexShader,
+                                   const std::string& fragmentShader);
 
-		void	Bind() const;
-		void    UnBind() const ;
-		const   std::string& getName() const;
+class D_API_EXPORT Shader {
+ public:
+  Shader(const std::string& all_src);
+  Shader(const std::string& name, const std::string& vertex_src, const std::string& fragment_src);
+  ~Shader();
 
-		void setInt(const std::string& name, int value)                             const;
-		void setFloat(const std::string& name, float value)                         const;
-		void setVec2(const std::string& name, const glm::vec2& value)               const;
-		void setVec2(const std::string& name, float x, float y)                     const;
-		void setVec3(const std::string& name, const glm::vec3& value)               const;
-		void setVec3(const std::string& name, float x, float y, float z)            const;
-		void setVec4(const std::string& name, const glm::vec4& value)               const;
-		void setVec4(const std::string& name, float x, float y, float z, float w)   const;
-		void setMat2(const std::string& name, const glm::mat2& mat)                 const;
-		void setMat3(const std::string& name, const glm::mat3& mat)                 const;
-		void setMat4(const std::string& name, const glm::mat4& mat)                 const;
-		void setBool(const std::string& name, bool value)                           const;
+  void Bind() const;
+  void UnBind() const;
+  const std::string& getName() const;
 
+  void setInt(const std::string& name, int value) const;
+  void setFloat(const std::string& name, float value) const;
+  void setVec2(const std::string& name, const glm::vec2& value) const;
+  void setVec2(const std::string& name, float x, float y) const;
+  void setVec3(const std::string& name, const glm::vec3& value) const;
+  void setVec3(const std::string& name, float x, float y, float z) const;
+  void setVec4(const std::string& name, const glm::vec4& value) const;
+  void setVec4(const std::string& name, float x, float y, float z, float w) const;
+  void setMat2(const std::string& name, const glm::mat2& mat) const;
+  void setMat3(const std::string& name, const glm::mat3& mat) const;
+  void setMat4(const std::string& name, const glm::mat4& mat) const;
+  void setBool(const std::string& name, bool value) const;
 
-		static std::shared_ptr<Shader> create(const std::string& all_src);
-		static std::shared_ptr<Shader> create(const std::string& name, const std::string& vertex_src, const std::string& fragment_src);
+  static std::shared_ptr<Shader> create(const std::string& all_src);
+  static std::shared_ptr<Shader> create(const std::string& name, const std::string& vertex_src,
+                                        const std::string& fragment_src);
 
-	private:
-		uint32_t	m_idx = 0;
+ private:
+  uint32_t m_idx = 0;
 
-		std::string m_name;
-	};
+  std::string m_name;
+};
 
-	/*!
-	 *@brief A Screen Space Shader. Mostly for Sky, fog, water, etc.
-	 * This act like a drawable class. Inherent from both Shader and
-	 * drawObj class.
-	 * 
-	 * the draw function here is quite simple, just bind VAO to OpenGl,
-	 * and start to draw 2 triangles.
-	 */
-	class D_API_EXPORT ScreenSpaceShader :public Shader, public drawObject {
-	public:
-		ScreenSpaceShader(const std::string& all_src);
-		ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
+/*!
+ *@brief A Screen Space Shader. Mostly for Sky, fog, water, etc.
+ * This act like a drawable class. Inherent from both Shader and
+ * drawObj class.
+ *
+ * the draw function here is quite simple, just bind VAO to OpenGl,
+ * and start to draw 2 triangles.
+ */
+class D_API_EXPORT ScreenSpaceShader : public Shader, public drawObject {
+ public:
+  ScreenSpaceShader(const std::string& all_src);
+  ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
 
-		void initializeQuad();
+  void initializeQuad();
 
-	public:
-		void draw() override;
-		void update() override;
+ public:
+  void draw() override;
+  void update() override;
 
-		void drawQuad();
-		static void setDepthTest(bool enable);
+  void drawQuad();
+  static void setDepthTest(bool enable);
 
-	private:
-		static bool m_inited;
-		unsigned int quadVAO;
-		unsigned int quadVBO;
-	};
+ private:
+  static bool m_inited;
+  unsigned int quadVAO;
+  unsigned int quadVBO;
+};
 
-}
-}
+}  // namespace renderer
+}  // namespace daydream
 
-#endif // !H_CORE_SHADER
+#endif  // !H_CORE_SHADER

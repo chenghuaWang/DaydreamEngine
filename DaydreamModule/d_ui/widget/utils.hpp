@@ -3,39 +3,38 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#pragma warnind( disable: 4251 )
-#endif // _MSC_VER > 1000
+#pragma warnind(disable : 4251)
+#endif  // _MSC_VER > 1000
 
 #include "_base.hpp"
 #include "ImGuiFileDialog.h"
 
 namespace daydream {
 namespace ui {
-	
-	class D_API_EXPORT line_continer : public ui_object {
-	public:
-		inline void __same_line__();
-		void add_obj(ui_object* o);
 
-		void on_attach();
-		void on_detach();
-		void on_update();
-		void update_event();
-		void impl_imgui_render();
+class D_API_EXPORT line_continer : public ui_object {
+ public:
+  inline void __same_line__();
+  void add_obj(ui_object* o);
 
-	private:
-		size_t						tmp_size = 0;
-		std::vector<ui_object*>		m_contained_objs;
-	};
+  void on_attach();
+  void on_detach();
+  void on_update();
+  void update_event();
+  void impl_imgui_render();
 
-	class D_API_EXPORT file_dialog {
-	public:
-		void show(const std::string &a, const std::string& b, const std::string& c, const std::string& d);
-		bool wait(std::string &file_path);
-	};
+ private:
+  size_t tmp_size = 0;
+  std::vector<ui_object*> m_contained_objs;
+};
 
-}
-}
+class D_API_EXPORT file_dialog {
+ public:
+  void show(const std::string& a, const std::string& b, const std::string& c, const std::string& d);
+  bool wait(std::string& file_path);
+};
 
+}  // namespace ui
+}  // namespace daydream
 
-#endif // !H_UI_UTILS
+#endif  // !H_UI_UTILS
