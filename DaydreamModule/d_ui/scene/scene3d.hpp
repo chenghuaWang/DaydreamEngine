@@ -17,15 +17,13 @@
 namespace daydream {
 namespace scene {
 
-// TODO Should implement draobjs function, get data from resource_lib.
-
 /*!
  *@brief A scene3d class for user interface to show.
  * You should pass this class to gl_content class in imgui widget.
  *
  * @detials The initialize of this class is quite different from sc-
  * ene2d. You can just init it from [w, h], and Crates. For more, [w,
- * h] actually is useless, you still ne to bind crates. We will not
+ * h] actually is useless, you still ne to bind crates. I will not
  * create a Crates for you accroding to the [w, h]. Also, that is why
  * crates should contains all pointers while not actual instances.
  *
@@ -51,6 +49,13 @@ class D_API_EXPORT scene3d {
   bool isLineMode();
 
   void setRunning(bool enable);
+  bool isRunning();
+
+  void setReferencePlane(bool enable);
+  bool isReferencePlane();
+
+  void RegisterObj(drawObject* o);
+  void UnRegisterObj(drawObject* o);
 
   uint32_t FrameIdx();
 
@@ -61,7 +66,15 @@ class D_API_EXPORT scene3d {
   camera3dController m_camera_ctrl;
   bool m_running = true;
   bool m_LineMode = false;
+  bool m_ReferencePlane = true;
+
+  std::vector<drawObject*> m__DrawableClass__;
 };
+
+bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS,
+                             bool sWireFrame = false, bool sReferencePlane = true);
+
+bool D_API_EXPORT FreeScene3d(scene3d* sS);
 
 }  // namespace scene
 }  // namespace daydream

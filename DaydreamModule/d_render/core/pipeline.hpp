@@ -5,8 +5,15 @@
 #pragma once
 #endif  // _MSC_VER > 1000
 
+#include "d_core/pch.hpp"
+
 namespace daydream {
-namespace renderer {}  // namespace renderer
+namespace renderer {
+
+void D_API_EXPORT StartPipline();
+void D_API_EXPORT ShutdownPipline();
+
+}  // namespace renderer
 }  // namespace daydream
 
 #endif  // !H_RENDER_CORE_PIPELINE

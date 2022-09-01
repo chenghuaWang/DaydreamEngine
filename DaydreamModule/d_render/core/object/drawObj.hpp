@@ -33,7 +33,7 @@ class D_API_EXPORT drawObject {
  public:
   bool m_HasNormal = true;
   bool m_HasTexCoord = true;
-  static Crates* renderPayload;
+  Crates* renderPayload;
 };
 
 }  // namespace renderer
