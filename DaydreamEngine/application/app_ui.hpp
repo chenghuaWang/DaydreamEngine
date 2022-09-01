@@ -14,7 +14,7 @@ struct uis {
     // For gl content
     gl_graphic = new ui::gl_content();
     gl_scene = CREATE_REF(scene::scene2d)(100.f, 100.f);
-    gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/default.glsl");
+    gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/cat.glsl");
 
     // For gl_content pannel
     pannel_line_container = new ui::line_continer();
