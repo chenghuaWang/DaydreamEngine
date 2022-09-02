@@ -12,6 +12,8 @@ void _obj_light::resetColor(glm::vec3& v) { m_color = v; }
 
 void _obj_light::resetIntensity(float v) { m_intensity = v; }
 
+LightType _obj_light::Type() const { return m_type; }
+
 void _obj_light::Bind(const REF(Shader) & shader, const glm::vec3& pos, const uint32_t port) {
   shader->Bind();
   shader->setVec3("d_Light[" + std::to_string(port) + "].Color", m_color);

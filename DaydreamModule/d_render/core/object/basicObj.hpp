@@ -8,9 +8,38 @@
 ///< Shader has already include the drawObj.hpp
 #include "d_render/core/shader.hpp"
 #include "d_render/utils/built_in_ds.hpp"
+#include "d_render/core/object/drawObj.hpp"
 
 namespace daydream {
 namespace renderer {
+
+/*!
+ *@brief A Screen Space Shader. Mostly for Sky, fog, water, etc.
+ * This act like a drawable class. Inherent from both Shader and
+ * drawObj class.
+ *
+ * the draw function here is quite simple, just bind VAO to OpenGl,
+ * and start to draw 2 triangles.
+ */
+class D_API_EXPORT ScreenSpaceShader : public Shader, public drawObject {
+ public:
+  ScreenSpaceShader(const std::string& all_src);
+  ScreenSpaceShader(const std::string& name, const std::string& fragment_path);
+
+  void initializeQuad();
+
+ public:
+  void draw() override;
+  void update() override;
+
+  void drawQuad();
+  static void setDepthTest(bool enable);
+
+ private:
+  static bool m_inited;
+  unsigned int quadVAO;
+  unsigned int quadVBO;
+};
 
 /*!
  *@brie The plane object is just a flat.

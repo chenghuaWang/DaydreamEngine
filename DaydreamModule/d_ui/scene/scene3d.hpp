@@ -10,6 +10,7 @@
 #include "d_core/pch.hpp"
 #include "d_render/utils/crates.hpp"
 #include "d_render/core/shader.hpp"
+#include "d_render/core/light.hpp"
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
 #include "d_render/core/object/drawObj.hpp"
@@ -41,6 +42,9 @@ class D_API_EXPORT scene3d {
   scene3d(float w, float h);
   scene3d(renderer::Crates& crates);
 
+  void OnAttach();
+  void OnDetach();
+
   void Resize(float w, float h);
   void BeginRender();
   void EndRender();
@@ -57,6 +61,9 @@ class D_API_EXPORT scene3d {
   void RegisterObj(drawObject* o);
   void UnRegisterObj(drawObject* o);
 
+  void RegisterLight(_obj_light* ol);
+  void UnRegisterLight(_obj_light* ol);
+
   uint32_t FrameIdx();
 
   camera3dController& getCameraCtrl();
@@ -69,6 +76,10 @@ class D_API_EXPORT scene3d {
   bool m_ReferencePlane = true;
 
   std::vector<drawObject*> m__DrawableClass__;
+  std::vector<_obj_light*> m__lights__;
+
+  std::unordered_map<LightType, uint32_t> m__runtimeLightsPortIndex__;
+  std::unordered_map<LightType, uint32_t> m__lightsPortIndex__;
 };
 
 bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS,

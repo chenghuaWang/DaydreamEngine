@@ -37,6 +37,9 @@ class D_API_EXPORT _obj_material {
   virtual void Bind();  // TODO pass the skybox to this fucntion.
   virtual void UnBind();
 
+  void SetShader(const REF(Shader) & s);
+  REF(Shader) GetShader();
+
  protected:
   void _resetTexture(REF(Texture2D) & t, const std::string& p = std::string());
 

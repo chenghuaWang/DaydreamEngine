@@ -27,6 +27,7 @@ class D_API_EXPORT _obj_light {
 
   void resetColor(glm::vec3& v);
   void resetIntensity(float v);
+  LightType Type() const;
 
   virtual void Bind(const REF(Shader) & shader, const glm::vec3& pos, const uint32_t port);
   virtual void UnBind(const REF(Shader) & shader);

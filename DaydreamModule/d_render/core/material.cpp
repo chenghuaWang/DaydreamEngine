@@ -18,6 +18,10 @@ void _obj_material::Bind() {
 
 void _obj_material::UnBind() { m_shader->UnBind(); }
 
+void _obj_material::SetShader(const REF(Shader) & s) { m_shader = s; }
+
+REF(Shader) _obj_material::GetShader() { return m_shader; }
+
 void _obj_material::_resetTexture(REF(Texture2D) & t, const std::string& p) {
   if (p.empty()) {
     ///< When empty, create a black Texture.

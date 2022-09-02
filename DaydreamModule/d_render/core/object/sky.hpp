@@ -11,8 +11,7 @@
 
 #include "d_core/pch.hpp"
 #include "d_render/core/ds.hpp"
-#include "d_render/core/shader.hpp"
-#include "d_render/core/object/drawObj.hpp"
+#include "d_render/core/object/basicObj.hpp"
 
 namespace daydream {
 namespace renderer {

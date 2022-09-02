@@ -3,8 +3,6 @@
 namespace daydream {
 namespace renderer {
 
-bool ScreenSpaceShader::m_inited = false;
-
 const std::string& ParseOneShader(const std::string& FilePath) {
   std::ifstream stream(FilePath);
   std::string line;
@@ -154,54 +152,5 @@ std::shared_ptr<Shader> Shader::create(const std::string& name, const std::strin
                                        const std::string& fragment_src) {
   return CREATE_REF(Shader)(name, vertex_src, fragment_src);
 }
-
-ScreenSpaceShader::ScreenSpaceShader(const std::string& all_src)
-    : Shader("no-name", SCREEN_SPACE_SHADER_VERT_SRC, all_src) {
-  initializeQuad();
-}
-
-ScreenSpaceShader::ScreenSpaceShader(const std::string& name, const std::string& fragment_path)
-    : Shader(name, SCREEN_SPACE_SHADER_VERT_SRC, ParseOneShader(fragment_path)) {
-  initializeQuad();
-}
-
-void ScreenSpaceShader::initializeQuad() {
-  if (!m_inited) {
-    float vertices[] = {-1.0f, -1.0f, 0.0, 0.0, 1.0f,  -1.0f, 1.0, 0.0, -1.0f, 1.0f,  0.0, 1.0,
-                        1.0f,  1.0f,  1.0, 1.0, -1.0f, 1.0f,  0.0, 1.0, 1.0f,  -1.0f, 1.0, 0.0};
-
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    ScreenSpaceShader::m_inited = true;
-  }
-}
-
-void ScreenSpaceShader::draw() {
-  // TODO bind shader ?
-  drawQuad();
-}
-
-void ScreenSpaceShader::update() {}
-
-void ScreenSpaceShader::drawQuad() {
-  glBindVertexArray(quadVAO);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
-void ScreenSpaceShader::setDepthTest(bool enable) {
-  if (enable) {
-    glEnable(GL_DEPTH_TEST);
-  } else {
-    glDisable(GL_DEPTH_TEST);
-  }
-}
-
 }  // namespace renderer
 }  // namespace daydream

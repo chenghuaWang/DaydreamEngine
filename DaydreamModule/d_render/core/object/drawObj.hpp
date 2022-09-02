@@ -7,9 +7,13 @@
 
 #include "d_render/core/_gl_head.hpp"
 #include "d_render/utils/crates.hpp"
+#include "d_render/core/material.hpp"
 
 namespace daydream {
 namespace renderer {
+
+class D_API_EXPORT drawObject;
+class D_API_EXPORT _obj_material;
 
 /*!
  *@brief The basic object for all object that needed to render.
@@ -34,6 +38,9 @@ class D_API_EXPORT drawObject {
   bool m_HasNormal = true;
   bool m_HasTexCoord = true;
   Crates* renderPayload;
+  REF(_obj_material) m_defualt_material;
+
+  glm::vec3 m_Pos;
 };
 
 }  // namespace renderer

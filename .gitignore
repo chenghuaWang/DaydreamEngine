@@ -365,3 +365,4 @@ FodyWeavers.xsd
 bin/
 
 PyDaydream/build/
+cpp.hint
