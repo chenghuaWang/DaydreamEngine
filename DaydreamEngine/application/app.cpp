@@ -26,8 +26,12 @@ void App::delay_init() {
   auto gl_ctrl_pannel_ui_layer = new ui::obj_layer("ctrl pannel");
   auto code_editor_ui_layer = new ui::obj_layer("Code Editor");
 
+#if TEST2D == true
   m_App_ui->gl_scene->setCurShader(m_App_ui->gl_scene_shader);
   m_App_ui->gl_graphic->set_scene2d(m_App_ui->gl_scene);
+#elif TEST3D == true:
+  m_App_ui->gl_graphic->set_scene3d(m_App_ui->gl_scene);
+#endif
 
   console_ui_layer->add_obj(m_App_ui->console_1);
   gl_ui_layer->add_obj(m_App_ui->gl_graphic);

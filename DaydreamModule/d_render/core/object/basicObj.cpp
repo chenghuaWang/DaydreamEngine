@@ -88,7 +88,6 @@ void PlaneObject::draw() {
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
   DRAW_DATA_INIT
-
   m_shader->UnBind();
 }
 

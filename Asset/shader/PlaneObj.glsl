@@ -1,8 +1,3 @@
-/*!
- * @author	chenghua.wang
- * @brief This shader for plane Object only. This program should be hold
- * in Plane Object class. Shader manager should discare this part.
- */
 ##shader vertex
 #version 330 core
 
@@ -20,13 +15,8 @@ void main() {
 ##shader fragment
 #version 330 core
 
-/*!
- * The render part of rederence will using the most simple Bulin-Phong model.
- * The BRDF and Shadow mapping will coming soon.
- */
-
 layout(location = 0) out vec4 FragColor;
 
 void main() {
-	FragColor = vec4(0.6)
+	FragColor = vec4(0.6);
 }

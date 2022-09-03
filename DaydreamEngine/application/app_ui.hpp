@@ -4,6 +4,9 @@
 #include "d_ui/widget/utils.hpp"
 #include "d_ui/widget/texteditor.hpp"
 
+#define TEST2D false
+#define TEST3D true
+
 using namespace daydream;
 
 struct uis {
@@ -13,9 +16,16 @@ struct uis {
 
     // For gl content
     gl_graphic = new ui::gl_content();
+#if TEST2D == true
     gl_scene = CREATE_REF(scene::scene2d)(100.f, 100.f);
     gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/cat.glsl");
-
+#elif TEST3D == true
+    gl_scene = CREATE_REF(scene::scene3d)(100.f, 100.f);
+    if (!scene::NewScene3D(100, 100, "Scene3D", gl_scene)) {
+      std::cout << "[ Err ] Failed to create scene\n";
+      std::exit(1);
+    }
+#endif
     // For gl_content pannel
     pannel_line_container = new ui::line_continer();
     pannel_fps_label = new ui::label("FPS: ");
@@ -101,8 +111,12 @@ struct uis {
   ui::console* console_1;
   // For gl content
   ui::gl_content* gl_graphic;
+#if TEST2D == true
   REF(scene::scene2d) gl_scene;
   REF(renderer::Shader) gl_scene_shader;
+#elif TEST3D == true
+  REF(scene::scene3d) gl_scene;
+#endif
   // For gl_content pannel
   ui::line_continer* pannel_line_container;
   ui::label* pannel_fps_label;

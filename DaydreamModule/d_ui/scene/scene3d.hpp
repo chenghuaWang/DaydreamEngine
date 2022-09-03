@@ -40,7 +40,7 @@ namespace scene {
 class D_API_EXPORT scene3d {
  public:
   scene3d(float w, float h);
-  scene3d(renderer::Crates& crates);
+  explicit scene3d(renderer::Crates crates);
   ~scene3d();
 
   void OnAttach();
@@ -66,8 +66,13 @@ class D_API_EXPORT scene3d {
   void RegisterLight(_obj_light* ol);
   void UnRegisterLight(_obj_light* ol);
 
+  renderer::Crates* getCratePtr();
+
+  void setCrate(renderer::Crates c);
+
   uint32_t FrameIdx();
 
+  void setCamera2Ctrl(camera3d* c);
   camera3dController& getCameraCtrl();
 
  private:
@@ -85,7 +90,7 @@ class D_API_EXPORT scene3d {
   std::unordered_map<LightType, uint32_t> m__lightsPortIndex__;
 };
 
-bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS,
+bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) & sS,
                              bool sWireFrame = false, bool sReferencePlane = true);
 
 bool D_API_EXPORT FreeScene3D(scene3d* sS);

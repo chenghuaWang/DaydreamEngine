@@ -128,7 +128,7 @@ void gl_content::impl_imgui_render() {
     case daydream::ui::gl_content_type::ThreeD:
       m_scene3d->getCameraCtrl().getCamera().set_activited(ImGui::IsWindowFocused());
       if (m_panelsize_cur.x != m_panelsize_pre.x || m_panelsize_cur.y != m_panelsize_pre.y) {
-        m_scene2d->Resize(m_panelsize_cur.x, m_panelsize_cur.y);
+        m_scene3d->Resize(m_panelsize_cur.x, m_panelsize_cur.y);
         m_panelsize_pre = m_panelsize_cur;
       }
       tmp_id = m_scene3d->FrameIdx();

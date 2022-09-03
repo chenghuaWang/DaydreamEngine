@@ -12,7 +12,7 @@ You should define Crates(in render lib) first, and pass it to this class \n \
 Using scene3d::scene3drenderer::Crates& crates) function !");
 }
 
-scene3d::scene3d(renderer::Crates& crates) : m_crates(crates), m_camera_ctrl(*crates.mainCamera) {
+scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(*crates.mainCamera) {
   std::cout << "[ INFO ] crates registered. " << std::endl;
   LOG_INFO("[ INFO ] crates registered. ");
   m__runtimeLightsPortIndex__[LightType::Basic] = 0;
@@ -42,7 +42,7 @@ void scene3d::Resize(float w, float h) {
 
 void scene3d::BeginRender() {
   m_crates.sceneFBO->Bind();
-  renderer::GLCommand::setColor(0.f, 0.5f, 0.f, 1.f);
+  renderer::GLCommand::setColor(0.59765625, 0.59765625, 1.f, 1.f);
   renderer::GLCommand::clear();
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
@@ -53,6 +53,7 @@ void scene3d::BeginRender() {
     }
   }
   // draw all element.
+  if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }
   for (auto item : m__DrawableClass__) { item->draw(); }
 }
 
@@ -111,12 +112,18 @@ void scene3d::UnRegisterLight(_obj_light* ol) {
   m__lightsPortIndex__[ol->Type()]--;
 }
 
+renderer::Crates* scene3d::getCratePtr() { return &m_crates; }
+
+void scene3d::setCrate(renderer::Crates c) { m_crates = c; }
+
 uint32_t scene3d::FrameIdx() { return m_crates.sceneFBO->FrameIdx(); }
+
+void scene3d::setCamera2Ctrl(camera3d* c) { m_camera_ctrl = camera3dController(*c); }
 
 camera3dController& scene3d::getCameraCtrl() { return m_camera_ctrl; }
 
-bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS, bool sWireFrame,
-                bool sReferencePlane) {
+bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) & sS,
+                bool sWireFrame, bool sReferencePlane) {
   // init the camera
   daydream::renderer::camera3d* __camera3d__ = new daydream::renderer::camera3d(sW, sH, sName);
   // init the framebuffer
@@ -126,13 +133,16 @@ bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS, b
   __crates__.mainCamera = __camera3d__;
   __crates__.sceneFBO = __framebuffer__;
   __crates__.wireframe = sWireFrame;
+  sS->setCrate(__crates__);
+  sS->setCamera2Ctrl(__crates__.mainCamera);
   // init the basic objs. Such as ReferencePlane, Sky, etc.
+  auto __tmp_palne__ = new PlaneObject();
+  __tmp_palne__->renderPayload = sS->getCratePtr();
+  if (sReferencePlane) { sS->setReferencePlaneObj(__tmp_palne__); }
   // pass the scene;
-  sS = new scene3d(__crates__);
-  if (sS != nullptr || __camera3d__ != nullptr || __framebuffer__ != nullptr) { return false; }
+  if (sS == nullptr || __camera3d__ == nullptr || __framebuffer__ == nullptr) { return false; }
   sS->setLineMode(sWireFrame);
   sS->setReferencePlane(sReferencePlane);
-  if (sReferencePlane) { sS->setReferencePlaneObj(new PlaneObject()); }
   return true;
 }
 bool D_API_EXPORT FreeScene3D(scene3d* sS) {
