@@ -23,6 +23,14 @@ scene3d::scene3d(renderer::Crates& crates) : m_crates(crates), m_camera_ctrl(*cr
   m__runtimeLightsPortIndex__[LightType::Spot] = 0;
 }
 
+scene3d::~scene3d() {
+  delete m_crates.mainCamera;
+  delete m_crates.sceneFBO;
+  delete m__ReferencePlaneObj__;
+  for (auto item : m__DrawableClass__) { delete item; }
+  for (auto item : m__lights__) { delete item; }
+}
+
 void scene3d::OnAttach() {}
 
 void scene3d::OnDetach() {}
@@ -70,6 +78,8 @@ bool scene3d::isRunning() { return m_running; }
 void scene3d::setReferencePlane(bool enable) { m_ReferencePlane = enable; }
 
 bool scene3d::isReferencePlane() { return m_ReferencePlane; }
+
+void scene3d::setReferencePlaneObj(PlaneObject* po) { m__ReferencePlaneObj__ = po; }
 
 void scene3d::RegisterObj(drawObject* o) {
   m__DrawableClass__.push_back(o);
@@ -122,8 +132,16 @@ bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS, b
   if (sS != nullptr || __camera3d__ != nullptr || __framebuffer__ != nullptr) { return false; }
   sS->setLineMode(sWireFrame);
   sS->setReferencePlane(sReferencePlane);
+  if (sReferencePlane) { sS->setReferencePlaneObj(new PlaneObject()); }
   return true;
 }
-bool D_API_EXPORT FreeScene3d(scene3d* sS) { return true; }
+bool D_API_EXPORT FreeScene3D(scene3d* sS) {
+  if (sS != nullptr) {
+    delete sS;
+    return true;
+  } else {
+    return false;
+  }
+}
 }  // namespace scene
 }  // namespace daydream

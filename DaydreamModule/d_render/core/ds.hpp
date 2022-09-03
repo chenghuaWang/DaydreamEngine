@@ -30,10 +30,11 @@ uint32_t D_API_EXPORT ElementSize(const ElementType& rhs);
 uint32_t D_API_EXPORT ElementComponentsNum(const ElementType& rhs);
 
 struct D_API_EXPORT BufferLayoutElement {
-  BufferLayoutElement(ElementType e, bool n)
-      : Size(ElementSize(e)), Offset(0), Type(e), Normalized(n){};
+  BufferLayoutElement(ElementType e, const std::string& describe, bool n = false)
+      : Size(ElementSize(e)), Offset(0), Describe(describe), Type(e), Normalized(n){};
   uint32_t Size;
   uint32_t Offset;
+  std::string Describe;
   ElementType Type;
   bool Normalized;
 };

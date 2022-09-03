@@ -12,7 +12,7 @@ void camera3dController::OnEvent() {}
 void camera3dController::OnUpdate(float ts) {
   auto window_handle = ui::getWindowInstance();
   glm::vec3 position = m_camera3d.getPosition();
-  if (isCameraActivated() || isMouseMiddlePress()) {
+  if (isCameraActivated() || isMouseRightPress()) {
     InputSys::SetCursorHidden(window_handle, true);
     if (InputSys::isKeyPressed(window_handle, KeyCode::A)) {
       position -= ts * m_MovingSpeed * m_camera3d.getRightVector();
@@ -46,6 +46,11 @@ bool camera3dController::isCameraActivated() {
 bool camera3dController::isMouseMiddlePress() {
   auto window_handle = ui::getWindowInstance();
   return InputSys::IsMouseButtonPressed(window_handle, MouseCode::ButtonMiddle) && m_Enable;
+}
+
+bool camera3dController::isMouseRightPress() {
+  auto window_handle = ui::getWindowInstance();
+  return InputSys::IsMouseButtonPressed(window_handle, MouseCode::ButtonRight) && m_Enable;
 }
 }  // namespace scene
 }  // namespace daydream

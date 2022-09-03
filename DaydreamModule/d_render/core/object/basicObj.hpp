@@ -7,7 +7,6 @@
 
 ///< Shader has already include the drawObj.hpp
 #include "d_render/core/shader.hpp"
-#include "d_render/utils/built_in_ds.hpp"
 #include "d_render/core/object/drawObj.hpp"
 
 namespace daydream {
@@ -63,13 +62,7 @@ class D_API_EXPORT PlaneObject : public drawObject {
   static PlaneObject* getInstance();
 
  private:
-  void genVertexArray();
-
   int m_GridInternal;
-
-  std::vector<Vertex> m_vertex;
-  std::vector<Triangle> m_triangle;
-  std::vector<uint32_t> m_Index;
 
   REF(Shader) m_shader;
   static PlaneObject* m_instance;

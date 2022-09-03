@@ -13,7 +13,7 @@
 #include "d_render/core/light.hpp"
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
-#include "d_render/core/object/drawObj.hpp"
+#include "d_render/core/object/basicObj.hpp"
 
 namespace daydream {
 namespace scene {
@@ -41,6 +41,7 @@ class D_API_EXPORT scene3d {
  public:
   scene3d(float w, float h);
   scene3d(renderer::Crates& crates);
+  ~scene3d();
 
   void OnAttach();
   void OnDetach();
@@ -57,6 +58,7 @@ class D_API_EXPORT scene3d {
 
   void setReferencePlane(bool enable);
   bool isReferencePlane();
+  void setReferencePlaneObj(PlaneObject* po);
 
   void RegisterObj(drawObject* o);
   void UnRegisterObj(drawObject* o);
@@ -77,6 +79,7 @@ class D_API_EXPORT scene3d {
 
   std::vector<drawObject*> m__DrawableClass__;
   std::vector<_obj_light*> m__lights__;
+  PlaneObject* m__ReferencePlaneObj__ = nullptr;
 
   std::unordered_map<LightType, uint32_t> m__runtimeLightsPortIndex__;
   std::unordered_map<LightType, uint32_t> m__lightsPortIndex__;
@@ -85,7 +88,7 @@ class D_API_EXPORT scene3d {
 bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, scene3d* sS,
                              bool sWireFrame = false, bool sReferencePlane = true);
 
-bool D_API_EXPORT FreeScene3d(scene3d* sS);
+bool D_API_EXPORT FreeScene3D(scene3d* sS);
 
 }  // namespace scene
 }  // namespace daydream

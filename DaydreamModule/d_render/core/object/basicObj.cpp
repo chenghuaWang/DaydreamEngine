@@ -82,16 +82,19 @@ PlaneObject::PlaneObject() {
 }
 
 void PlaneObject::draw() {
+  // bind the shader
   m_shader->Bind();
-  // TODO bind shader and bind data. sent data to shader.
+  // pass the MVP matrix
+  m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
+  m_shader->setMat4("d_Transform", this->Transform());
+  DRAW_DATA_INIT
+
   m_shader->UnBind();
 }
 
 void PlaneObject::update() {}
 
 PlaneObject* PlaneObject::getInstance() { return m_instance; }
-
-void PlaneObject::genVertexArray() {}
 
 }  // namespace renderer
 }  // namespace daydream

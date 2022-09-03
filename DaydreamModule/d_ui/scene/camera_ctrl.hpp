@@ -50,6 +50,7 @@ class D_API_EXPORT camera3dController {
  protected:  // For activate Camera movable.
   bool isCameraActivated();
   bool isMouseMiddlePress();
+  bool isMouseRightPress();
 
  private:
   bool m_Enable = true;
