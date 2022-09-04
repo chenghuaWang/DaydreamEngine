@@ -4,8 +4,8 @@
 #include "d_ui/widget/utils.hpp"
 #include "d_ui/widget/texteditor.hpp"
 
-#define TEST2D true
-#define TEST3D false
+#define TEST2D false
+#define TEST3D true
 
 using namespace daydream;
 
@@ -18,7 +18,7 @@ struct uis {
     gl_graphic = new ui::gl_content();
 #if TEST2D == true
     gl_scene = CREATE_REF(scene::scene2d)(100.f, 100.f);
-    gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/cat.glsl");
+    gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/circle.glsl");
 #elif TEST3D == true
     gl_scene = CREATE_REF(scene::scene3d)(100.f, 100.f);
     if (!scene::NewScene3D(100, 100, "Scene3D", gl_scene)) {

@@ -17,11 +17,11 @@ class D_API_EXPORT line_continer : public ui_object {
   inline void __same_line__();
   void add_obj(ui_object* o);
 
-  void on_attach();
-  void on_detach();
-  void on_update();
-  void update_event();
-  void impl_imgui_render();
+  void on_attach() override;
+  void on_detach() override;
+  void on_update(float ts) override;
+  void update_event() override;
+  void impl_imgui_render() override;
 
  private:
   size_t tmp_size = 0;

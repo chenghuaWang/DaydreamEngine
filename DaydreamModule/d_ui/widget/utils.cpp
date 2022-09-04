@@ -20,8 +20,8 @@ void line_continer::on_detach() {
   for (auto item : m_contained_objs) { item->on_detach(); }
 }
 
-void line_continer::on_update() {
-  for (auto item : m_contained_objs) { item->on_update(); }
+void line_continer::on_update(float ts) {
+  for (auto item : m_contained_objs) { item->on_update(ts); }
 }
 
 void line_continer::update_event() {

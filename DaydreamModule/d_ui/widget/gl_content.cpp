@@ -65,7 +65,7 @@ void gl_content::on_detach() {
   }
 }
 
-void gl_content::on_update() {
+void gl_content::on_update(float ts) {
   m_timer.OnUpdate();
   if (m_running) {
     if (ImGui::IsWindowFocused()) {
@@ -88,9 +88,9 @@ void gl_content::on_update() {
         m_scene2d->m_MainShader->setFloat("iTime", m_timer.getGlobalTime());      // Time; TODO
         m_scene2d->m_MainShader->setFloat("iTimeDelta", m_timer.getTimeDelta());  // Time; TODO
         m_scene2d->m_MainShader->setInt("iFrame", 0);                             // Time; TODO
-        m_scene2d->m_MainShader->setVec4("iMouse", m_cur_mouse_pos.x, m_cur_mouse_pos.y,
-                                         m_cur_mouse_click.x, m_cur_mouse_click.y);
-
+        m_scene2d->m_MainShader->setVec4("iMouse", m_cur_mouse_pos.x,
+                                         m_panelsize_cur.y - m_cur_mouse_pos.y, m_cur_mouse_click.x,
+                                         m_cur_mouse_click.y);
         glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it
                                  // every time, but we'll do so to keep things a bit more organized
         // glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -98,6 +98,7 @@ void gl_content::on_update() {
         m_scene2d->EndRender();
         break;
       case daydream::ui::gl_content_type::ThreeD:
+        m_scene3d->OnUpdate(ts);
         m_scene3d->BeginRender();
         // The drawable Objects class in m_scene3d will handle the glDrawElements.
         m_scene3d->EndRender();

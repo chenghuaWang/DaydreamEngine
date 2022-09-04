@@ -5,7 +5,9 @@ App::App() : imgui_window(), m_window_view("window-view"), m_App_ui(nullptr) {}
 App::~App() { delete m_App_ui; }
 
 void App::flush_frame() {
-  for (auto item : m_layers) { item->impl_imgui_render(); }
+  for (auto item : m_layers) {
+    item->impl_imgui_render(m_App_ui->gl_graphic->m_timer.getTimeDelta());
+  }
 }
 
 void App::update_event() {

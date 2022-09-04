@@ -18,14 +18,14 @@ void obj_layer::update() {
   for (auto item : m_objs) { item->update_event(); }
 }
 
-void obj_layer::impl_imgui_render() {
+void obj_layer::impl_imgui_render(float ts) {
   if (w_open) {
     ImGui::Begin(m_name.c_str(), &p_open, m_flags);
 
     if (m_menu != nullptr) { m_menu->impl_imgui_render(); }
 
     for (auto item : m_objs) {
-      item->on_update();
+      item->on_update(ts);
       item->impl_imgui_render();
     }
     ImGui::End();
@@ -50,7 +50,7 @@ menu_layer::menu_layer(const std::string& name) : base_layer(name) {
   LOG_INFO("Imgui Window Menu layer init...done.")
 }
 
-void menu_layer::impl_imgui_render() { m_menu->impl_imgui_render(); }
+void menu_layer::impl_imgui_render(float ts) { m_menu->impl_imgui_render(); }
 
 void menu_layer::update() { m_menu->update(); }
 

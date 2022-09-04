@@ -16,8 +16,8 @@ class D_API_EXPORT base_layer {
  public:
   base_layer(const std::string& name);
 
-  virtual void update(){};             ///< for event
-  virtual void impl_imgui_render(){};  ///< for imgui frame
+  virtual void update(){};                     ///< for event
+  virtual void impl_imgui_render(float ts){};  ///< for imgui frame
 
  protected:
   unsigned int m_idx;
@@ -30,7 +30,7 @@ class D_API_EXPORT obj_layer : public base_layer {
   ~obj_layer();
 
   void update() override;
-  void impl_imgui_render() override;
+  void impl_imgui_render(float ts) override;
 
   void add_obj(ui_object* o);
   void register_menu(const REF(menu) & rhs);
@@ -52,7 +52,7 @@ class D_API_EXPORT menu_layer : public base_layer {
   menu_layer(const std::string& name = "menu");
 
   void update() override;
-  void impl_imgui_render() override;
+  void impl_imgui_render(float ts) override;
 
   void register_menu(const REF(menu) & rhs);
   REF(menu) & get_menu();

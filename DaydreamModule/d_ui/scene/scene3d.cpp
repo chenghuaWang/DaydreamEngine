@@ -35,6 +35,8 @@ void scene3d::OnAttach() {}
 
 void scene3d::OnDetach() {}
 
+void scene3d::OnUpdate(float ts) { m_camera_ctrl.OnUpdate(ts); }
+
 void scene3d::Resize(float w, float h) {
   m_camera_ctrl.OnResize(w, h);
   m_crates.sceneFBO->Resize(w, h);

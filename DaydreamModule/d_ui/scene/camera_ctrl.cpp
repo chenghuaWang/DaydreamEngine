@@ -10,6 +10,7 @@ namespace scene {
 void camera3dController::OnEvent() {}
 
 void camera3dController::OnUpdate(float ts) {
+  // TODO Bug occaurs here.
   auto window_handle = ui::getWindowInstance();
   glm::vec3 position = m_camera3d.getPosition();
   if (isCameraActivated() || isMouseRightPress()) {

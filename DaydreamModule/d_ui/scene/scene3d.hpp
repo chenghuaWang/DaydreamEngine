@@ -45,6 +45,7 @@ class D_API_EXPORT scene3d {
 
   void OnAttach();
   void OnDetach();
+  void OnUpdate(float ts);
 
   void Resize(float w, float h);
   void BeginRender();

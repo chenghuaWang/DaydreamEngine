@@ -26,7 +26,7 @@ class D_API_EXPORT Timer {
   float m__cur_frame_time = 0.f;
   float m__pre_frame_time = 0.f;
   float m_GlobalTime = 0.f;
-  float m_TimeDelta = 0.f;
+  float m_TimeDelta = 1.f;
 
   float stoppingPoint = 0.f;
   float stopTimeCnt = 0.f;

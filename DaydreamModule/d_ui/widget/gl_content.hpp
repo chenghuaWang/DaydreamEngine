@@ -20,7 +20,7 @@ class D_API_EXPORT gl_content : public ui_object {
  public:
   void on_attach() override;
   void on_detach() override;
-  void on_update() override;
+  void on_update(float ts) override;
   void update_event() override;
   void impl_imgui_render() override;
 
@@ -37,8 +37,8 @@ class D_API_EXPORT gl_content : public ui_object {
 
   ImVec2 m_panelsize_cur{0.f, 0.f};
   ImVec2 m_panelsize_pre{0.f, 0.f};
-  ImVec2 m_cur_mouse_pos;
-  ImVec2 m_cur_mouse_click;
+  ImVec2 m_cur_mouse_pos{0.f, 0.f};
+  ImVec2 m_cur_mouse_click{0.f, 0.f};
   gl_content_type m_type = gl_content_type::None;
   REF(scene::scene2d) m_scene2d = nullptr;
   REF(scene::scene3d) m_scene3d = nullptr;

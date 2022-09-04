@@ -37,7 +37,7 @@ class D_API_EXPORT texteditor : public ui_object {
 
   void on_attach() override;
   void on_detach() override;
-  void on_update() override;
+  void on_update(float ts) override;
   void update_event() override;
   void impl_imgui_render() override;
 

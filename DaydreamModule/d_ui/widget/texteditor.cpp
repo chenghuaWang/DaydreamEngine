@@ -9,7 +9,7 @@ void texteditor::on_attach() {}
 
 void texteditor::on_detach() {}
 
-void texteditor::on_update() {}
+void texteditor::on_update(float ts) {}
 
 void texteditor::update_event() {}
 
