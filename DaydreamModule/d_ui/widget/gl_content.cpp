@@ -98,9 +98,9 @@ void gl_content::on_update(float ts) {
         m_scene2d->EndRender();
         break;
       case daydream::ui::gl_content_type::ThreeD:
-        m_scene3d->OnUpdate(ts);
         m_scene3d->BeginRender();
-        // The drawable Objects class in m_scene3d will handle the glDrawElements.
+        m_scene3d->OnUpdate(ts);
+        //  The drawable Objects class in m_scene3d will handle the glDrawElements.
         m_scene3d->EndRender();
         break;
       default: break;

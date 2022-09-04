@@ -56,8 +56,10 @@ window_base::window_base(size_t w, size_t h, const std::string& window_name)
   // GL 3.0 + GLSL 330
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-                                                                  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+  glfwWindowHint(GLFW_OPENGL_PROFILE,
+                 GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+                                             // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+                                             // // 3.0+ only
 #endif
   m_window_handle = glfwCreateWindow(m_W, m_H, m_window_name.c_str(), NULL, NULL);
   if (m_window_handle == NULL) exit(1);
@@ -259,8 +261,8 @@ void imgui_window::exec() {
     glfwPollEvents();
 
     _imgui_start_();
-    flush_frame();
     update_event();
+    flush_frame();
     _imgui_end_();
 
     glfwSwapBuffers(m_window_handle);

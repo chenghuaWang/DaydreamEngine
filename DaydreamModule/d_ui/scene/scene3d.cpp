@@ -10,6 +10,12 @@ Using scene3d::scene3drenderer::Crates& crates) function !"
   LOG_WARN("[ Warn ]This class init method [float w, float h] is not support anymore.\n \
 You should define Crates(in render lib) first, and pass it to this class \n \
 Using scene3d::scene3drenderer::Crates& crates) function !");
+  m__runtimeLightsPortIndex__[LightType::Basic] = 0;
+  m__runtimeLightsPortIndex__[LightType::Direct] = 0;
+  m__runtimeLightsPortIndex__[LightType::None] = 0;
+  m__runtimeLightsPortIndex__[LightType::Point] = 0;
+  m__runtimeLightsPortIndex__[LightType::Self_defined] = 0;
+  m__runtimeLightsPortIndex__[LightType::Spot] = 0;
 }
 
 scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(*crates.mainCamera) {
