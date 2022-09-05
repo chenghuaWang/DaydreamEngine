@@ -16,28 +16,26 @@ void camera3dController::OnUpdate(float ts) {
   // the glfw's overload and use imgui only.
   auto window_handle = ui::getWindowInstance();
   glm::vec3 position = m_camera3d.getPosition();
-  if (isCameraActivated() || isMouseRightPress()) {
-    /*InputSys::SetCursorHidden(window_handle, true);
-    if (InputSys::isKeyPressed(window_handle, KeyCode::A)) {
+  if (ImGui::IsMouseDown(1)) {
+    ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+    if (ImGui::IsKeyPressed(ImGuiKey_A)) {
       position -= ts * m_MovingSpeed * m_camera3d.getRightVector();
     }
-    if (InputSys::isKeyPressed(window_handle, KeyCode::D)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_D)) {
       position += ts * m_MovingSpeed * m_camera3d.getRightVector();
     }
-    if (InputSys::isKeyPressed(window_handle, KeyCode::W)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_W)) {
       position += ts * m_MovingSpeed * m_camera3d.getFrontVector();
     }
-    if (InputSys::isKeyPressed(window_handle, KeyCode::S)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_S)) {
       position -= ts * m_MovingSpeed * m_camera3d.getFrontVector();
     }
-    if (InputSys::isKeyPressed(window_handle, KeyCode::Q)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
       position += ts * m_MovingSpeed * m_camera3d.getUpVector();
     }
-    if (InputSys::isKeyPressed(window_handle, KeyCode::E)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_E)) {
       position -= ts * m_MovingSpeed * m_camera3d.getUpVector();
-    }*/
-  } else {
-    /*InputSys::SetCursorHidden(window_handle, false);*/
+    }
   }
   m_camera3d.SetPosition(position);
 }
