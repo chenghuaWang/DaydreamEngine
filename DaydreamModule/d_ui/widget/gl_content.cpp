@@ -89,8 +89,8 @@ void gl_content::on_update(float ts) {
         m_scene2d->m_MainShader->setFloat("iTimeDelta", m_timer.getTimeDelta());  // Time; TODO
         m_scene2d->m_MainShader->setInt("iFrame", 0);                             // Time; TODO
         m_scene2d->m_MainShader->setVec4("iMouse", m_cur_mouse_pos.x,
-                                         m_panelsize_cur.y - m_cur_mouse_pos.y, m_cur_mouse_click.x,
-                                         m_cur_mouse_click.y);
+                                         m_panelsize_cur.y - m_cur_mouse_pos.y + 20.f,
+                                         m_cur_mouse_click.x, m_cur_mouse_click.y);
         glBindVertexArray(VAO);  // seeing as we only have a single VAO there's no need to bind it
                                  // every time, but we'll do so to keep things a bit more organized
         // glDrawArrays(GL_TRIANGLES, 0, 6);
