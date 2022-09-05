@@ -43,7 +43,7 @@ void camera3dController::OnUpdate(float ts) {
     // TODO m_MousePos is not updateed yet, or not check.
     float yaw = m_camera3d.getYaw(), pitch = m_camera3d.getPitch();
     yaw += (ImGui::GetMousePos().x - m_MouseLastPosX) * m_Scensity;
-    pitch -= ((m_camera3d.get_w()) - m_MouseLastPosY) * m_Scensity;
+    pitch -= ((m_camera3d.get_w() - ImGui::GetMousePos().y) - m_MouseLastPosY) * m_Scensity;
     if (pitch > 89.0f) {
       pitch = 89.0f;
     } else if (pitch < -89.0f) {
@@ -53,7 +53,11 @@ void camera3dController::OnUpdate(float ts) {
     m_camera3d.SetYaw(yaw);
   } else if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
   }
+  // Set the Position.
   m_camera3d.SetPosition(position);
+  // Update the last Mouse Position in this scope. For next scope-update to use.
+  m_MouseLastPosX = ImGui::GetMousePos().x;
+  m_MouseLastPosY = m_camera3d.get_w() - ImGui::GetMousePos().y;
 }
 
 bool camera3dController::isCameraActivated() {
