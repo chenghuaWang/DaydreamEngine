@@ -16,7 +16,8 @@ void camera3dController::OnUpdate(float ts) {
   // the glfw's overload and use imgui only.
   auto window_handle = ui::getWindowInstance();
   glm::vec3 position = m_camera3d.getPosition();
-  if (ImGui::IsMouseDown(1)) {
+  // Camera Position update.
+  if (ImGui::IsWindowFocused() && ImGui::IsMouseDown(1)) {
     ImGui::SetMouseCursor(ImGuiMouseCursor_None);
     if (ImGui::IsKeyPressed(ImGuiKey_A)) {
       position -= ts * m_MovingSpeed * m_camera3d.getRightVector();
@@ -36,6 +37,21 @@ void camera3dController::OnUpdate(float ts) {
     if (ImGui::IsKeyPressed(ImGuiKey_E)) {
       position -= ts * m_MovingSpeed * m_camera3d.getUpVector();
     }
+  }
+  // Camera Direction update.
+  if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(ImGuiMouseButton_Right)) {
+    // TODO m_MousePos is not updateed yet, or not check.
+    float yaw = m_camera3d.getYaw(), pitch = m_camera3d.getPitch();
+    yaw += (ImGui::GetMousePos().x - m_MouseLastPosX) * m_Scensity;
+    pitch -= ((m_camera3d.get_w()) - m_MouseLastPosY) * m_Scensity;
+    if (pitch > 89.0f) {
+      pitch = 89.0f;
+    } else if (pitch < -89.0f) {
+      pitch = -89.0f;
+    }
+    m_camera3d.SetPitch(pitch);
+    m_camera3d.SetYaw(yaw);
+  } else if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
   }
   m_camera3d.SetPosition(position);
 }
