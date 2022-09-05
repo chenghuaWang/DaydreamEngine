@@ -4,8 +4,8 @@
 #include "d_ui/widget/utils.hpp"
 #include "d_ui/widget/texteditor.hpp"
 
-#define TEST2D true
-#define TEST3D false
+#define TEST2D false
+#define TEST3D true
 
 using namespace daydream;
 

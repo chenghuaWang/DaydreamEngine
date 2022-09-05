@@ -57,7 +57,7 @@ PlaneObject* PlaneObject::m_instance = nullptr;
 
 PlaneObject::PlaneObject() {
   m_shader = Shader::create("../Asset/shader/PlaneObj.glsl");
-  uint32_t sample = 2;
+  uint32_t sample = 256;
   for (uint32_t i = 0; i <= sample; i++) {
     for (uint32_t j = 0; j <= sample; j++) {
       Vertex v;
@@ -84,10 +84,11 @@ PlaneObject::PlaneObject() {
 void PlaneObject::draw() {
   // bind the shader
   m_shader->Bind();
+  // bind the data before shader setup
+  DRAW_DATA_INIT
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
-  DRAW_DATA_INIT
   m_shader->UnBind();
 }
 

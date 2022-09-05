@@ -51,13 +51,14 @@ void camera3dController::OnUpdate(float ts) {
     }
     m_camera3d.SetPitch(pitch);
     m_camera3d.SetYaw(yaw);
+    // Update the last Mouse Position in this scope. For next scope-update to use.
+    // The last position should in the right-click is dragged.
+    m_MouseLastPosX = ImGui::GetMousePos().x;
+    m_MouseLastPosY = m_camera3d.get_w() - ImGui::GetMousePos().y;
   } else if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
   }
   // Set the Position.
   m_camera3d.SetPosition(position);
-  // Update the last Mouse Position in this scope. For next scope-update to use.
-  m_MouseLastPosX = ImGui::GetMousePos().x;
-  m_MouseLastPosY = m_camera3d.get_w() - ImGui::GetMousePos().y;
 }
 
 bool camera3dController::isCameraActivated() {
