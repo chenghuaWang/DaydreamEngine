@@ -69,6 +69,25 @@ class D_API_EXPORT PlaneObject : public drawObject {
   REF(Shader) m_shader;
   static PlaneObject* m_instance;
 };
+
+/*!
+ *@brie The model object can load various files' type.
+ *
+ * DLL EXPORT: True
+ */
+class D_API_EXPORT ModelObject : public drawObject {
+ public:
+  ModelObject(const std::string& file_path);
+
+  void draw() override;
+  void update() override;
+
+  MaterialType m_MaterialType = MaterialType::None;
+
+ private:
+  void __build_TBN__();
+  bool __load_binary_files__(const std::string& file_path);
+};
 }  // namespace renderer
 }  // namespace daydream
 

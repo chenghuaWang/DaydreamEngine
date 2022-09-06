@@ -96,5 +96,15 @@ void PlaneObject::update() {}
 
 PlaneObject* PlaneObject::getInstance() { return m_instance; }
 
+ModelObject::ModelObject(const std::string& file_path) {}
+
+void ModelObject::draw() {}
+
+void ModelObject::update() {}
+
+void ModelObject::__build_TBN__() {}
+
+bool ModelObject::__load_binary_files__(const std::string& file_path) { return false; }
+
 }  // namespace renderer
 }  // namespace daydream
