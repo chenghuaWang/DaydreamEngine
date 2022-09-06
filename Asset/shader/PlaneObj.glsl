@@ -11,15 +11,18 @@ uniform mat4 d_Transform;
 out vec2 TexCoord;
 
 void main() {
-  gl_Position = d_ViewProjection * d_Transform * vec4(a_Position, 1.0);
   TexCoord = a_TexCoord;
+  gl_Position = d_ViewProjection * d_Transform * vec4(a_Position, 1.0);
 }
 
 ##shader fragment
 #version 330 core
-
+#define SCALE 16
     layout(location = 0) out vec4 FragColor;
 in vec2 TexCoord;
-uniform sampler2D ourTexture;
 
-void main() { FragColor = texture(ourTexture, TexCoord); }
+void main() {
+  vec2 uv = floor(SCALE * TexCoord.xy);
+  vec4 color_tmp = vec4(vec3(mod(uv.x + uv.y, 2.)), 1);
+  FragColor = 0.5 * color_tmp + 0.5 * vec4(0.6, 0.6, 0.6, 1.0);
+}

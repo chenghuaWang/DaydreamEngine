@@ -57,7 +57,6 @@ PlaneObject* PlaneObject::m_instance = nullptr;
 
 PlaneObject::PlaneObject() {
   m_shader = Shader::create("../Asset/shader/PlaneObj.glsl");
-  m_Texture = Texture2D::create("../Asset/UV/CustomUVChecker_byValle_8K.png");
   uint32_t sample = 64;
   for (uint32_t i = 0; i <= sample; i++) {
     for (uint32_t j = 0; j <= sample; j++) {
@@ -84,16 +83,13 @@ PlaneObject::PlaneObject() {
 
 void PlaneObject::draw() {
   // bind the shader
-  m_Texture->Bind();
   m_shader->Bind();
   // bind the data before shader setup
   DRAW_DATA_INIT
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
-  m_shader->setInt("ourTexture", m_Texture->getIdx());
   m_shader->UnBind();
-  m_Texture->UnBind();
 }
 
 void PlaneObject::update() {}

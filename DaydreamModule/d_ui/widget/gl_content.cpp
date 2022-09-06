@@ -45,6 +45,7 @@ void gl_content::on_attach() {
         std::cout << "The scene ptr is null. GL content can't ignore it." << std::endl;
         LOG_ERROR("The scene ptr is null. GL content can't ignore it.");
       }
+      glEnable(GL_MULTISAMPLE);
       // Nothing need to do next.
     default: break;
   }

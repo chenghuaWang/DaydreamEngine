@@ -38,6 +38,7 @@ window_base::window_base(size_t w, size_t h, const std::string& window_name)
     LOG_ERROR("Create glfw context error !!!")
     exit(1);
   }
+  glfwWindowHint(GLFW_SAMPLES, 4);
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
   // GL ES 2.0 + GLSL 100
