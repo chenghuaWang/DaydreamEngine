@@ -65,6 +65,7 @@ class D_API_EXPORT PlaneObject : public drawObject {
   int m_GridInternal;
 
   REF(Shader) m_shader;
+  REF(Texture2D) m_Texture;
   static PlaneObject* m_instance;
 };
 }  // namespace renderer

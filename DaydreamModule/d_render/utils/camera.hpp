@@ -125,15 +125,15 @@ class D_API_EXPORT camera3d : public camera_obj {
   int m_idx;
   std::string m_name;
 
-  float m_ZNear;
-  float m_ZFar;
-  float m_Fov;
+  float m_ZNear = 0.1f;
+  float m_ZFar = 100.f;
+  float m_Fov = 23.f;
   float m_Pitch = -30.0f;
   float m_Yaw = -60.0f;
-  glm::vec3 m_Position = {-17.0f, 23.0f, 32.0f};
-  glm::vec3 m_Front = {0.0f, 0.0f, -1.0f};
-  glm::vec3 m_Up = {0.0f, 1.0f, 0.0f};
-  glm::vec3 m_Right = {1.0f, 0.0f, 0.0f};
+  glm::vec3 m_Position{0.f};  //-17.0f, 23.0f, 32.0f
+  glm::vec3 m_Front{0.0f, 0.0f, -1.0f};
+  glm::vec3 m_Up{0.0f, 1.0f, 0.0f};
+  glm::vec3 m_Right{1.0f, 0.0f, 0.0f};
   glm::mat4 m_ViewMatrix;
   glm::mat4 m_ProjectionMatrix;
   glm::mat4 m_ViewProjectionMatrix;

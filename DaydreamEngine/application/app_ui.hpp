@@ -21,7 +21,7 @@ struct uis {
     gl_scene_shader = renderer::Shader::create("../Asset/shader/twoD/circle.glsl");
 #elif TEST3D == true
     gl_scene = CREATE_REF(scene::scene3d)(100.f, 100.f);
-    if (!scene::NewScene3D(100, 100, "Scene3D", gl_scene)) {
+    if (!scene::NewScene3D(100, 100, "Scene3D", gl_scene, false)) {
       std::cout << "[ Err ] Failed to create scene\n";
       std::exit(1);
     }

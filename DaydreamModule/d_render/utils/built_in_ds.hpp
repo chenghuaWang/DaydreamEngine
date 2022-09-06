@@ -12,10 +12,9 @@ namespace daydream {
 namespace renderer {
 
 struct D_API_EXPORT Vertex {
-  glm::vec3 m_Position;
+  glm::vec3 m_Position{0.f};
   glm::vec2 m_TexCoord;
   glm::vec3 m_Normal;
-  glm::vec3 m_Tangent;
 
   bool operator==(const Vertex& v) const {
     return m_Position == v.m_Position && m_TexCoord == v.m_TexCoord && m_Normal == v.m_Normal;

@@ -2,7 +2,7 @@
 
 namespace daydream {
 namespace scene {
-scene3d::scene3d(float w, float h) : m_camera_ctrl(camera3d(w, h, "dropped")) {
+scene3d::scene3d(float w, float h) : m_camera_ctrl(new camera3d(w, h, "dropped")) {
   std::cout << "[ Warn ]This class init method [float w, float h] is not support anymore.\n \
 You should define Crates(in render lib) first, and pass it to this class \n \
 Using scene3d::scene3drenderer::Crates& crates) function !"
@@ -18,7 +18,7 @@ Using scene3d::scene3drenderer::Crates& crates) function !");
   m__runtimeLightsPortIndex__[LightType::Spot] = 0;
 }
 
-scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(*crates.mainCamera) {
+scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(crates.mainCamera) {
   std::cout << "[ INFO ] crates registered. " << std::endl;
   LOG_INFO("[ INFO ] crates registered. ");
   m__runtimeLightsPortIndex__[LightType::Basic] = 0;
@@ -126,7 +126,7 @@ void scene3d::setCrate(renderer::Crates c) { m_crates = c; }
 
 uint32_t scene3d::FrameIdx() { return m_crates.sceneFBO->FrameIdx(); }
 
-void scene3d::setCamera2Ctrl(camera3d* c) { m_camera_ctrl = camera3dController(*c); }
+void scene3d::setCamera2Ctrl(camera3d* c) { m_camera_ctrl = camera3dController(c); }
 
 camera3dController& scene3d::getCameraCtrl() { return m_camera_ctrl; }
 
