@@ -59,6 +59,8 @@ class D_API_EXPORT PlaneObject : public drawObject {
   void draw() override;
   void update() override;
 
+  REF(Shader) & getShader() { return m_shader; }
+
   static PlaneObject* getInstance();
 
  private:

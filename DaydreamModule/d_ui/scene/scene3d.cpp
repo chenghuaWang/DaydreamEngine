@@ -57,8 +57,13 @@ void scene3d::BeginRender() {
   for (auto light_it : m__lights__) {
     for (auto obj_item : m__DrawableClass__) {
       light_it->Bind(obj_item->m_defualt_material->GetShader(), obj_item->m_Pos,
-                     m__runtimeLightsPortIndex__[light_it->Type()]++);
+                     m__runtimeLightsPortIndex__[light_it->Type()]);
     }
+    if (m_ReferencePlane) {
+      light_it->Bind(m__ReferencePlaneObj__->getShader(), m__ReferencePlaneObj__->m_Pos,
+                     m__runtimeLightsPortIndex__[light_it->Type()]);
+    }
+    m__runtimeLightsPortIndex__[light_it->Type()]++;
   }
   // draw all element.
   if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }

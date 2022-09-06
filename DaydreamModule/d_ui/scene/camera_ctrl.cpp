@@ -26,10 +26,10 @@ void camera3dController::OnUpdate(float ts) {
       position += ts * m_MovingSpeed * m_camera3d->getRightVector();
     }
     if (ImGui::IsKeyPressed(ImGuiKey_W)) {
-      position += ts * m_MovingSpeed * 2.f * m_camera3d->getFrontVector();
+      position += ts * m_MovingSpeed * m_camera3d->getFrontVector();
     }
     if (ImGui::IsKeyPressed(ImGuiKey_S)) {
-      position -= ts * m_MovingSpeed * 2.f * m_camera3d->getFrontVector();
+      position -= ts * m_MovingSpeed * m_camera3d->getFrontVector();
     }
     if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
       position += ts * m_MovingSpeed * m_camera3d->getUpVector();
