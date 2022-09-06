@@ -53,7 +53,13 @@ void camera3dController::OnUpdate(float ts) {
     m_camera3d->SetYaw(yaw);
     // Update the last Mouse Position in this scope. For next scope-update to use.
     // The last position should in the right-click is dragged.
-  } else if (ImGui::IsWindowFocused() && ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
+  }
+  if (ImGui::IsWindowFocused() && ImGui::IsMouseDown(1)) {
+    float m_Zoom = m_camera3d->getFov();
+    m_Zoom -= ImGui::GetIO().MouseWheel;
+    if (m_Zoom <= 1.0f) m_Zoom = 1.0f;
+    if (m_Zoom >= 45.0f) m_Zoom = 45.0f;
+    m_camera3d->SetFov(m_Zoom);
   }
   if (ImGui::IsWindowFocused() && ImGui::IsMouseDown(1)) {
     m_MouseLastPosX = ImGui::GetMousePos().x;

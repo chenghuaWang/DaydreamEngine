@@ -91,6 +91,21 @@ struct uis {
 
     text_editor_line_container->add_obj(text_editor_compile_test_button);
     text_editor_line_container->add_obj(text_editor_link_button);
+    // Camera info
+#if TEST3D == true
+    camera_info_Fov_label = new ui::label("Fov: ");
+    camera_info_Aspect_label = new ui::label("Aspect: ");
+    camera_info_w_label = new ui::label("Width: ");
+    camera_info_h_label = new ui::label("Hight: ");
+    camera_info_pitch_label = new ui::label("Pitch: ");
+    camera_info_yaw_label = new ui::label("Yaw: ");
+    camera_info_pos_x = new ui::label("Position X: ");
+    camera_info_pos_y = new ui::label("Position Y: ");
+    camera_info_pos_z = new ui::label("Position Z: ");
+    camera_info_reset_button = new ui::button("Reset Camera");
+    camera_info_reset_button->click.Connect(gl_scene->getCameraCtrl().getCamera(),
+                                            &renderer::camera3d::slots_Reset);
+#endif
   }
 
   ~uis() {
@@ -104,6 +119,18 @@ struct uis {
     delete text_editor_line_container;
     delete text_editor_compile_test_button;
     delete text_editor_link_button;
+#if TEST3D == true
+    delete camera_info_Fov_label;
+    delete camera_info_Aspect_label;
+    delete camera_info_w_label;
+    delete camera_info_h_label;
+    delete camera_info_pitch_label;
+    delete camera_info_yaw_label;
+    delete camera_info_pos_x;
+    delete camera_info_pos_y;
+    delete camera_info_pos_z;
+    delete camera_info_reset_button;
+#endif
   }
 
  public:
@@ -141,4 +168,17 @@ struct uis {
   ui::line_continer* text_editor_line_container;
   ui::button* text_editor_compile_test_button;
   ui::button* text_editor_link_button;
+  // For Camera Attribute.
+#if TEST3D == true
+  ui::label* camera_info_Fov_label;
+  ui::label* camera_info_Aspect_label;
+  ui::label* camera_info_w_label;
+  ui::label* camera_info_h_label;
+  ui::label* camera_info_pitch_label;
+  ui::label* camera_info_yaw_label;
+  ui::label* camera_info_pos_x;
+  ui::label* camera_info_pos_y;
+  ui::label* camera_info_pos_z;
+  ui::button* camera_info_reset_button;
+#endif
 };

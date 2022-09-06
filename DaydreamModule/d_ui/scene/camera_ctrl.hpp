@@ -59,7 +59,7 @@ class D_API_EXPORT camera3dController {
  private:
   bool m_Enable = true;
   camera3d* m_camera3d;
-  float m_MovingSpeed = 0.08f;
+  float m_MovingSpeed = 0.1f;
   float m_MouseLastPosX = 0.f;
   float m_MouseLastPosY = 0.f;
   float m_Scensity = 0.1f;

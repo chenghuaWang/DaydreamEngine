@@ -55,6 +55,20 @@ class D_API_EXPORT camera3d : public camera_obj {
   int getIdx() const;
   const std::string& getName() const;
 
+  void slots_Reset() {
+    m_ZNear = 0.1f;
+    m_ZFar = 100.f;
+    m_Fov = 23.f;
+    m_Pitch = -30.0f;
+    m_Yaw = -60.0f;
+    m_Position = {-0.5f, 0.3f, 0.5f};  //-17.0f, 23.0f, 32.0f
+    m_Front = {0.0f, 0.0f, -1.0f};
+    m_Up = {0.0f, 1.0f, 0.0f};
+    m_Right = {1.0f, 0.0f, 0.0f};
+    UpdateProjectionMatrix();
+    UpdateViewMatrix();
+  }
+
   const float& getPitch() const { return m_Pitch; }
   const float& getYaw() const { return m_Yaw; }
   const float& getFov() const { return m_Fov; }
