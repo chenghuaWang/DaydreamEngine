@@ -13,6 +13,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 set(d_module "${PROJECT_SOURCE_DIR}/DaydreamModule/")
+set(d_3rdparty "${PROJECT_SOURCE_DIR}/3rdparty")
 
 # 包含子项目。
 add_subdirectory("3rdparty")

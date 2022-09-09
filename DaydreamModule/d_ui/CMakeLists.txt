@@ -8,6 +8,7 @@ file(GLOB_RECURSE libdui_file_include *.hpp)
 message(${libdui_file_src})
 
 include_directories(${d_module})
+include_directories(${d_3rdparty}/assimp/include/)
 
 add_library(libdui SHARED
 	${libdui_file_src}

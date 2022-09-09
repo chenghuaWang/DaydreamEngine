@@ -15,6 +15,8 @@ struct D_API_EXPORT Vertex {
   glm::vec3 m_Position{0.f};
   glm::vec2 m_TexCoord;
   glm::vec3 m_Normal;
+  glm::vec2 m_Tangent;
+  glm::vec3 m_Bitangent;
 
   bool operator==(const Vertex& v) const {
     return m_Position == v.m_Position && m_TexCoord == v.m_TexCoord && m_Normal == v.m_Normal;

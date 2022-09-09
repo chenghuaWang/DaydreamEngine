@@ -26,7 +26,9 @@ void drawObject::genVertexArray() {
   // Bind layout to VBO
   BufferLayout __layout__ = {{ElementType::Vecf3, "a_Position"},
                              {ElementType::Vecf2, "a_TexCoord"},
-                             {ElementType::Vecf3, "a_Normal"}};
+                             {ElementType::Vecf3, "a_Normal"},
+                             {ElementType::Vecf2, "a_Tengent"},
+                             {ElementType::Vecf3, "a_Bitangent"}};
   __VBO__->setLayout(__layout__);
 
   // Bind VBO to VAO

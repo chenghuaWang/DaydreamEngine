@@ -102,9 +102,97 @@ void ModelObject::draw() {}
 
 void ModelObject::update() {}
 
-void ModelObject::__build_TBN__() {}
+void ModelObject::__build_TBN__() {
+  // This function is no need any more when using Assimp and CalcTangentSpace flag is open.
+  // But it stil keeped, for tinyobjloader and self phaser class.
+  return;
+}
 
-bool ModelObject::__load_binary_files__(const std::string& file_path) { return false; }
+bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject*>& Meshes) {
+  // Reference from https://assimp-docs.readthedocs.io/en/v5.1.0/usage/use_the_lib.html
+  // Create an instance of the Importer class
+  Assimp::Importer importer;
+
+  // And have it read the given file with some example postprocessing
+  // Usually - if speed is not the most important aspect for you - you'll
+  // probably to request more postprocessing than we do in this example.
+  const aiScene* scene =
+      importer.ReadFile(file_path, aiProcess_CalcTangentSpace | aiProcess_Triangulate
+                                       | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+
+  // If the import failed, report it
+  if (nullptr != scene) {
+    LOG_ERROR(importer.GetErrorString());
+    return false;
+  }
+
+  // Now we can access the file's contents.
+  __process_node__(scene->mRootNode, scene, Meshes);
+
+  // We're done. Everything will be cleaned up by the importer destructor
+  return true;
+}
+
+void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObject*>& Meshes) {
+  // Reference from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/model.h
+  // process each mesh located at the current node
+  for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+    // the node object only contains indices to index the actual objects in the scene.
+    // the scene contains all the data, node is just to keep stuff organized (like relations between
+    // nodes).
+    aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+    Meshes.push_back(__process_mesh__(mesh, scene));
+  }
+  // after we've processed all of the meshes (if any) we then recursively process each of the
+  // children nodes
+  for (unsigned int i = 0; i < node->mNumChildren; i++) {
+    __process_node__(node->mChildren[i], scene, Meshes);
+  }
+}
+
+ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
+  // Reference from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/model.h
+  // data to fill
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
+  // walk through each of the mesh's vertices
+  glm::vec3 vector;
+  for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+    Vertex vertex;
+    // positions
+    vector.x = mesh->mVertices[i].x;
+    vector.y = mesh->mVertices[i].y;
+    vector.z = mesh->mVertices[i].z;
+    vertex.m_Position = vector;
+    // normals
+    if (mesh->HasNormals()) {
+      vector.x = mesh->mNormals[i].x;
+      vector.y = mesh->mNormals[i].y;
+      vector.z = mesh->mNormals[i].z;
+      vertex.m_Normal = vector;
+    }
+    // texture coordinates
+    if (mesh->mTextureCoords[0]) {  // does the mesh contain texture coordinates?
+      glm::vec2 vec;
+      vec.x = mesh->mTextureCoords[0][i].x;
+      vec.y = mesh->mTextureCoords[0][i].y;
+      vertex.m_TexCoord = vec;
+      // tangent
+      vector.x = mesh->mTangents[i].x;
+      vector.y = mesh->mTangents[i].y;
+      vector.z = mesh->mTangents[i].z;
+      vertex.m_Tangent = vector;
+      // bitangent
+      vector.x = mesh->mBitangents[i].x;
+      vector.y = mesh->mBitangents[i].y;
+      vector.z = mesh->mBitangents[i].z;
+      vertex.m_Bitangent = vector;
+    } else {
+      vertex.m_Tangent = glm::vec2(0.0f, 0.0f);
+    }
+  }
+  return nullptr;
+}
 
 }  // namespace renderer
 }  // namespace daydream

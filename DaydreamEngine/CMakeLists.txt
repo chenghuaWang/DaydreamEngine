@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 include_directories(${d_module})
+include_directories(${d_3rdparty}/assimp/include/)
 
 file(GLOB_RECURSE engine_file_src *.cpp)
 file(GLOB_RECURSE engine_file_include *.hpp)

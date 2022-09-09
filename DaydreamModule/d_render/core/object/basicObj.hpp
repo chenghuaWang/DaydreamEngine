@@ -9,6 +9,11 @@
 #include "d_render/core/shader.hpp"
 #include "d_render/core/object/drawObj.hpp"
 
+// Using Assimp to load models
+#include "assimp/Importer.hpp"   // C++ importer interface
+#include "assimp/scene.h"        // Output data structure
+#include "assimp/postprocess.h"  // Post processing flags
+
 namespace daydream {
 namespace renderer {
 
@@ -86,8 +91,12 @@ class D_API_EXPORT ModelObject : public drawObject {
 
  private:
   void __build_TBN__();
-  bool __load_binary_files__(const std::string& file_path);
 };
+
+bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject*>& Meshes);
+void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObject*>& Meshes);
+ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene);
+
 }  // namespace renderer
 }  // namespace daydream
 
