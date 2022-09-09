@@ -10,11 +10,7 @@ _obj_material::_obj_material()
 
 _obj_material::_obj_material(REF(Shader) & shader) : m_shader(shader), m_type(MaterialType::None) {}
 
-void _obj_material::Bind() {
-  m_shader->Bind();
-  // Vertex data should not passed here.
-  // start pass Fragment data
-}
+void _obj_material::Bind() { m_shader->Bind(); }
 
 void _obj_material::UnBind() { m_shader->UnBind(); }
 

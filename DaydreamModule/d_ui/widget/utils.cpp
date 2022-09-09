@@ -57,5 +57,11 @@ bool file_dialog::wait(std::string& file_path) {
   }
 }
 
+void SlideBar::impl_imgui_render() {
+  if (ImGui::SliderFloat(m_Name.c_str(), &m_CurValue, m_MinValue, m_MaxValue)) {
+    Changed.Emit(m_CurValue);
+  }
+}
+
 }  // namespace ui
 }  // namespace daydream

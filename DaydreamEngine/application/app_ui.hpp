@@ -105,6 +105,9 @@ struct uis {
     camera_info_reset_button = new ui::button("Reset Camera");
     camera_info_reset_button->click.Connect(gl_scene->getCameraCtrl().getCamera(),
                                             &renderer::camera3d::slots_Reset);
+    camera_info_speed_bar = new ui::SlideBar("Moving Speed");
+    camera_info_speed_bar->Changed.Connect(&gl_scene->getCameraCtrl(),
+                                           &scene::camera3dController::slots_setMovingSpeed);
 #endif
   }
 
@@ -130,6 +133,7 @@ struct uis {
     delete camera_info_pos_y;
     delete camera_info_pos_z;
     delete camera_info_reset_button;
+    delete camera_info_speed_bar;
 #endif
   }
 
@@ -180,5 +184,6 @@ struct uis {
   ui::label* camera_info_pos_y;
   ui::label* camera_info_pos_z;
   ui::button* camera_info_reset_button;
+  ui::SlideBar* camera_info_speed_bar;
 #endif
 };

@@ -81,6 +81,7 @@ void App::delay_init() {
   camera_info_layer->add_obj(m_App_ui->camera_info_pos_y);
   camera_info_layer->add_obj(m_App_ui->camera_info_pos_z);
   camera_info_layer->add_obj(m_App_ui->camera_info_reset_button);
+  camera_info_layer->add_obj(m_App_ui->camera_info_speed_bar);
 #endif
 
   m_layers.add_layer(menu_ui_layer);

@@ -57,6 +57,7 @@ void scene3d::BeginRender() {
     std::vector<ModelObject*> __meshes__;
     std::cout << "Load " << __tmp_str__ << std::endl;
     __load_binary_files__(__tmp_str__, __meshes__);
+    std::cout << "Found files number=" << __meshes__.size() << std::endl;
     for (auto item : __meshes__) { RegisterObj(item); }
   }
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,

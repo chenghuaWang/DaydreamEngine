@@ -102,6 +102,9 @@ D_API_EXPORT void __process_node__(aiNode* node, const aiScene* scene,
 
 D_API_EXPORT ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene);
 
+D_API_EXPORT std::vector<REF(Texture2D)> __load_texture__(aiMaterial* mat, aiTextureType type,
+                                                          const std::string& typeName);
+
 }  // namespace renderer
 }  // namespace daydream
 

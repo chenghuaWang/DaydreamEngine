@@ -101,13 +101,13 @@ ModelObject::ModelObject(const std::string& file_path) {}
 void ModelObject::draw() {
   auto m_shader = m_defualt_material->GetShader();
   // bind the shader
-  m_shader->Bind();
+  m_defualt_material->Bind();
   // bind the data before shader setup
   DRAW_DATA_INIT
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
-  m_shader->UnBind();
+  m_defualt_material->UnBind();
 }
 
 void ModelObject::update() {}
@@ -210,7 +210,16 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
     }
   }
   __tmp_mesh__->genVertexArray();
+  // Load Texture
+  aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
   return __tmp_mesh__;
+}
+
+D_API_EXPORT std::vector<REF(Texture2D)> __load_texture__(aiMaterial* mat, aiTextureType type,
+                                                          const std::string& typeName) {
+  // TODO
+  std::vector<REF(Texture2D)> a;
+  return a;
 }
 
 }  // namespace renderer
