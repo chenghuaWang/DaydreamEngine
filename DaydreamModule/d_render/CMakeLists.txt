@@ -13,4 +13,4 @@ add_library(libdrender SHARED
 	${libdrender_file_src}
 	${libdrender_file_include}
 )
-target_link_libraries(libdrender libdcore glm opengl32 glad stb_lib assimp-vc142-mt.lib)
+target_link_libraries(libdrender libdcore glm opengl32 glad stb_lib ${d_3rdparty}/assimp/lib/assimp-vc142-mt.lib)

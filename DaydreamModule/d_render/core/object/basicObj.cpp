@@ -121,7 +121,7 @@ bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject
                                        | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
 
   // If the import failed, report it
-  if (nullptr != scene) {
+  if (nullptr == scene) {
     LOG_ERROR(importer.GetErrorString());
     return false;
   }
@@ -153,8 +153,9 @@ void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObjec
 ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
   // Reference from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/model.h
   // data to fill
-  std::vector<Vertex> vertices;
-  std::vector<unsigned int> indices;
+  auto __tmp_mesh__ = new ModelObject();
+  auto __tmp_vertex__ = &__tmp_mesh__->m_vertex;
+  auto __tmp_index__ = &__tmp_mesh__->m_Index;
   // walk through each of the mesh's vertices
   glm::vec3 vector;
   for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
@@ -190,8 +191,15 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
     } else {
       vertex.m_Tangent = glm::vec2(0.0f, 0.0f);
     }
+    __tmp_vertex__->push_back(vertex);
   }
-  return nullptr;
+  for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+    aiFace face = mesh->mFaces[i];
+    for (unsigned int j = 0; j < face.mNumIndices; j++) {
+      __tmp_index__->push_back(face.mIndices[j]);
+    }
+  }
+  return __tmp_mesh__;
 }
 
 }  // namespace renderer

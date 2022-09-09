@@ -82,6 +82,7 @@ class D_API_EXPORT PlaneObject : public drawObject {
  */
 class D_API_EXPORT ModelObject : public drawObject {
  public:
+  ModelObject(){};
   ModelObject(const std::string& file_path);
 
   void draw() override;
