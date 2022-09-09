@@ -143,7 +143,7 @@ void scene3d::setCamera2Ctrl(camera3d* c) { m_camera_ctrl = camera3dController(c
 camera3dController& scene3d::getCameraCtrl() { return m_camera_ctrl; }
 
 void scene3d::slots_LoadFiles() {
-  __tmp_dialog__.show("ChooseFileDlgKey", "Choose File", ".obj,.pmx", ".");
+  __tmp_dialog__.show("ChooseFileDlgKey", "Choose File", ".obj,.pmx,.gltf", ".");
 }
 
 bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) & sS,
