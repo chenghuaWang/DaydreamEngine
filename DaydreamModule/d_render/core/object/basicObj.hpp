@@ -94,9 +94,13 @@ class D_API_EXPORT ModelObject : public drawObject {
   void __build_TBN__();
 };
 
-bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject*>& Meshes);
-void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObject*>& Meshes);
-ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene);
+D_API_EXPORT bool __load_binary_files__(const std::string& file_path,
+                                        std::vector<ModelObject*>& Meshes);
+
+D_API_EXPORT void __process_node__(aiNode* node, const aiScene* scene,
+                                   std::vector<ModelObject*>& Meshes);
+
+D_API_EXPORT ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene);
 
 }  // namespace renderer
 }  // namespace daydream

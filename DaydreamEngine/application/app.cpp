@@ -36,10 +36,14 @@ void App::update_event() {
 }
 
 void App::delay_init() {
+  // Init the widget
   m_App_ui = new uis();
 
+  // Init the sub_menu's action attribute
   m_action_show_log.m_name = "Show log.";
   m_action_show_log.m_accelerate_key = "ctrl+l";
+  m_action_open_model_files.m_name = "Open Modle";
+  m_action_open_model_files.m_accelerate_key = "ctrl+o";
 
   auto menu_ui_layer = new ui::menu_layer();
   auto console_ui_layer = new ui::obj_layer("console");
@@ -90,10 +94,14 @@ void App::delay_init() {
   // signal and slots linking
   // !!! [TODO] bug. The action is not pass by ptr. So connect must before add_action.
   m_action_show_log.clicked.Connect(console_ui_layer, &ui::obj_layer::set_wopened);
+  m_action_open_model_files.pressed.Connect(m_App_ui->gl_scene.get(),
+                                            &scene::scene3d::slots_LoadFiles);
 
   // init the main-menu
   m_window_view.add_action(m_action_show_log);
+  m_window_file.add_action(m_action_open_model_files);
   m_window_menu.add_sub_menu(m_window_view);
+  m_window_menu.add_sub_menu(m_window_file);
   menu_ui_layer->register_menu(CREATE_REF(ui::menu)(m_window_menu));
 
   // Link all ptr based slots and slots

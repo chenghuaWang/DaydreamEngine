@@ -26,11 +26,19 @@ class App : public ui::imgui_window {
   Signal1<const std::string&> signal_fps_chaned;
 
  private:
+  // Record the global FPS.
   float m_global_fps = 0;
+  // Defined all widget that need to be used.
   uis* m_App_ui;
+  // Sub menu. Need to be registered to Main Menu.
   ui::sub_menu m_window_view;
+  ui::sub_menu m_window_file = ui::sub_menu("Files");
+  // The action in each sub menu.
   ui::action m_action_show_log = ui::action_type::MainTain;
+  ui::action m_action_open_model_files = ui::action_type::Normal;
+  // The window main menu.
   ui::menu m_window_menu;
+  // Manage all layers in the application.
   ui::layer_stack m_layers;
 };
 

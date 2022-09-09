@@ -52,6 +52,13 @@ void scene3d::BeginRender() {
   m_crates.sceneFBO->Bind();
   renderer::GLCommand::setColor(0.59765625, 0.59765625, 1.f, 1.f);
   renderer::GLCommand::clear();
+  // Check if files choose window is open.
+  if (__tmp_dialog__.wait(__tmp_str__)) {
+    std::vector<ModelObject*> __meshes__;
+    std::cout << "Load " << __tmp_str__ << std::endl;
+    __load_binary_files__(__tmp_str__, __meshes__);
+    for (auto item : __meshes__) { RegisterObj(item); }
+  }
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
   for (auto light_it : m__lights__) {
@@ -134,6 +141,10 @@ uint32_t scene3d::FrameIdx() { return m_crates.sceneFBO->FrameIdx(); }
 void scene3d::setCamera2Ctrl(camera3d* c) { m_camera_ctrl = camera3dController(c); }
 
 camera3dController& scene3d::getCameraCtrl() { return m_camera_ctrl; }
+
+void scene3d::slots_LoadFiles() {
+  __tmp_dialog__.show("ChooseFileDlgKey", "Choose File", ".obj,.pmx", ".");
+}
 
 bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) & sS,
                 bool sWireFrame, bool sReferencePlane) {

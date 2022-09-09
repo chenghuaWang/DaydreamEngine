@@ -51,7 +51,7 @@ class D_API_EXPORT drawObject {
   bool m_HasNormal = true;
   bool m_HasTexCoord = true;
   Crates* renderPayload;
-  REF(_obj_material) m_defualt_material;
+  REF(_obj_material) m_defualt_material = CREATE_REF(_obj_material)();
 
   // Actual Data in CPU Memory
   std::vector<Vertex> m_vertex;

@@ -14,6 +14,7 @@
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
 #include "d_render/core/object/basicObj.hpp"
+#include "d_ui/widget/utils.hpp"
 
 namespace daydream {
 namespace scene {
@@ -76,7 +77,13 @@ class D_API_EXPORT scene3d {
   void setCamera2Ctrl(camera3d* c);
   camera3dController& getCameraCtrl();
 
+ public:
+  void slots_LoadFiles();
+
  private:
+  std::string __tmp_str__;
+  ::daydream::ui::file_dialog __tmp_dialog__;
+
   renderer::Crates m_crates;
   camera3dController m_camera_ctrl;
   bool m_running = true;
