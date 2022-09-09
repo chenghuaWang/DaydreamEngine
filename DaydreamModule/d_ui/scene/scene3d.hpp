@@ -83,6 +83,7 @@ class D_API_EXPORT scene3d {
  private:
   std::string __tmp_str__;
   ::daydream::ui::file_dialog __tmp_dialog__;
+  bool m__file_dialog_opened__ = false;
 
   renderer::Crates m_crates;
   camera3dController m_camera_ctrl;

@@ -53,12 +53,13 @@ void scene3d::BeginRender() {
   renderer::GLCommand::setColor(0.59765625, 0.59765625, 1.f, 1.f);
   renderer::GLCommand::clear();
   // Check if files choose window is open.
-  if (__tmp_dialog__.wait(__tmp_str__)) {
+  if (m__file_dialog_opened__ && __tmp_dialog__.wait(__tmp_str__)) {
     std::vector<ModelObject*> __meshes__;
     std::cout << "Load " << __tmp_str__ << std::endl;
     __load_binary_files__(__tmp_str__, __meshes__);
     std::cout << "Found files number=" << __meshes__.size() << std::endl;
     for (auto item : __meshes__) { RegisterObj(item); }
+    m__file_dialog_opened__ = false;
   }
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
@@ -145,6 +146,7 @@ camera3dController& scene3d::getCameraCtrl() { return m_camera_ctrl; }
 
 void scene3d::slots_LoadFiles() {
   __tmp_dialog__.show("ChooseFileDlgKey", "Choose File", ".obj,.pmx,.gltf", ".");
+  m__file_dialog_opened__ = true;
 }
 
 bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) & sS,
