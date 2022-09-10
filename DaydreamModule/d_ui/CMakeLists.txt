@@ -5,8 +5,6 @@ project ("libdui" CXX)
 file(GLOB_RECURSE libdui_file_src *.cpp)
 file(GLOB_RECURSE libdui_file_include *.hpp)
 
-message(${libdui_file_src})
-
 include_directories(${d_module})
 include_directories(${d_3rdparty}/assimp/include/)
 
