@@ -1,4 +1,5 @@
 #include "basicObj.hpp"
+#include "d_render/resource/KVBase.hpp"
 
 namespace daydream {
 namespace renderer {
@@ -69,8 +70,8 @@ PlaneObject::PlaneObject() {
   }
   uint32_t indices[6] = {0, sample + 1, sample + 2, 0, sample + 2, 1};
 
-  for (int k = 0; k < (sample + 1) * sample; k++)
-    for (int i = 0; i < 6; i++)
+  for (uint32_t k = 0; k < (sample + 1) * sample; k++)
+    for (uint32_t i = 0; i < 6; i++)
       if ((k + 1) % (sample + 1) > 0) m_Index.push_back(indices[i] + k);
 
   for (size_t i = 0; i < m_Index.size(); i += 3) {
