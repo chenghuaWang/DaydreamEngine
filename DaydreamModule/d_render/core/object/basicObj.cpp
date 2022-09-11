@@ -82,6 +82,8 @@ PlaneObject::PlaneObject() {
 }
 
 void PlaneObject::draw() {
+  // BackGround
+  glDisable(GL_CULL_FACE);
   // bind the shader
   m_shader->Bind();
   // bind the data before shader setup
@@ -99,6 +101,8 @@ PlaneObject* PlaneObject::getInstance() { return m_instance; }
 ModelObject::ModelObject(const std::string& file_path) {}
 
 void ModelObject::draw() {
+  // Enabel Back
+  glEnable(GL_CULL_FACE);
   auto m_shader = m_defualt_material->GetShader();
   // bind the shader
   m_defualt_material->Bind();
