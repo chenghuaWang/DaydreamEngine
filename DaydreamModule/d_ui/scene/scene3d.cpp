@@ -108,7 +108,6 @@ void scene3d::setReferencePlaneObj(PlaneObject* po) { m__ReferencePlaneObj__ = p
 void scene3d::RegisterObj(drawObject* o) {
   m__DrawableClass__.push_back(o);
   o->renderPayload = &m_crates;
-  o->m_defualt_material = m__default_material;
 }
 
 void scene3d::UnRegisterObj(drawObject* o) {

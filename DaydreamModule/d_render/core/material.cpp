@@ -8,7 +8,8 @@ namespace renderer {
 _obj_material::_obj_material()
     : m_shader(Shader::create("../Asset/shader/defaultObj.glsl")), m_type(MaterialType::None) {}
 
-_obj_material::_obj_material(REF(Shader) & shader) : m_shader(shader), m_type(MaterialType::None) {}
+_obj_material::_obj_material(const REF(Shader) & shader)
+    : m_shader(shader), m_type(MaterialType::None) {}
 
 void _obj_material::Bind() { m_shader->Bind(); }
 
@@ -34,7 +35,9 @@ void _obj_material::_resetTexture(REF(Texture2D) & t, const std::string& p) {
 
 // -------------------- BELOW FOR PHONG MATERIAL --------------------------
 
-MaterialPhong::MaterialPhong() { m_type = MaterialType::Phong; }
+MaterialPhong::MaterialPhong() : _obj_material(Shader::create("../Asset/shader/phongObj.glsl")) {
+  m_type = MaterialType::Phong;
+}
 
 MaterialPhong::MaterialPhong(REF(Texture2D) & diffuse, REF(Texture2D) & specular,
                              REF(Texture2D) & Normal, REF(Texture2D) & displacement,
@@ -68,16 +71,18 @@ MaterialPhong::MaterialPhong(const std::string& diffuse_p, const std::string& sp
   m_type = MaterialType::Phong;
 }
 
-MaterialPhong::~MaterialPhong() {
-  // TODO
-}
+MaterialPhong::~MaterialPhong() {}
 
 void MaterialPhong::Bind() {
+  m_shader->Bind();
+  m_DiffuseTexture->Bind(0);
+  m_shader->setInt("d_Material.diffuse", 0);
   // TODO
 }
 
 void MaterialPhong::UnBind() {
   // TODO
+  m_DiffuseTexture->UnBind(0);
   m_shader->UnBind();
 }
 

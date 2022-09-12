@@ -32,7 +32,7 @@ enum class D_API_EXPORT MaterialType {
 class D_API_EXPORT _obj_material {
  public:
   _obj_material();
-  _obj_material(REF(Shader) & shader);
+  _obj_material(const REF(Shader) & shader);
   virtual ~_obj_material() = default;
   virtual void Bind();  // TODO pass the skybox to this fucntion.
   virtual void UnBind();
