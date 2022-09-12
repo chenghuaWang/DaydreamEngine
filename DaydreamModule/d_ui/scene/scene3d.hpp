@@ -14,7 +14,6 @@
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
 #include "d_render/core/object/basicObj.hpp"
-#include "d_render/resource/KVBase.hpp"
 #include "d_ui/widget/utils.hpp"
 
 namespace daydream {
@@ -70,6 +69,7 @@ class D_API_EXPORT scene3d {
   void UnRegisterLight(_obj_light* ol);
 
   renderer::Crates* getCratePtr();
+  ::daydream::renderer::KVBase* getDB();
 
   void setCrate(renderer::Crates c);
 
@@ -85,6 +85,8 @@ class D_API_EXPORT scene3d {
   std::string __tmp_str__;
   ::daydream::ui::file_dialog __tmp_dialog__;
   bool m__file_dialog_opened__ = false;
+
+  ::daydream::renderer::KVBase* m__DataBase = new ::daydream::renderer::KVBase();
 
   renderer::Crates m_crates;
   camera3dController m_camera_ctrl;

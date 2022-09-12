@@ -1,5 +1,4 @@
 #include "basicObj.hpp"
-#include "d_render/resource/KVBase.hpp"
 
 namespace daydream {
 namespace renderer {
@@ -123,7 +122,8 @@ void ModelObject::__build_TBN__() {
   return;
 }
 
-bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject*>& Meshes) {
+bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject*>& Meshes,
+                           KVBase* db) {
   // Reference from https://assimp-docs.readthedocs.io/en/v5.1.0/usage/use_the_lib.html
   // Create an instance of the Importer class
   Assimp::Importer importer;
@@ -141,14 +141,17 @@ bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject
     return false;
   }
 
+  auto directory = file_path.substr(0, file_path.find_last_of('\\'));
+
   // Now we can access the file's contents.
-  __process_node__(scene->mRootNode, scene, Meshes);
+  __process_node__(scene->mRootNode, scene, Meshes, db, directory);
 
   // We're done. Everything will be cleaned up by the importer destructor
   return true;
 }
 
-void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObject*>& Meshes) {
+void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObject*>& Meshes,
+                      KVBase* db, const std::string& dir) {
   // Reference from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/model.h
   // process each mesh located at the current node
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -156,16 +159,17 @@ void __process_node__(aiNode* node, const aiScene* scene, std::vector<ModelObjec
     // the scene contains all the data, node is just to keep stuff organized (like relations between
     // nodes).
     aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-    Meshes.push_back(__process_mesh__(mesh, scene));
+    Meshes.push_back(__process_mesh__(mesh, scene, db, dir));
   }
   // after we've processed all of the meshes (if any) we then recursively process each of the
   // children nodes
   for (unsigned int i = 0; i < node->mNumChildren; i++) {
-    __process_node__(node->mChildren[i], scene, Meshes);
+    __process_node__(node->mChildren[i], scene, Meshes, db, dir);
   }
 }
 
-ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
+ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene, KVBase* db,
+                              const std::string& dir) {
   // Reference from https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/model.h
   // data to fill
   auto __tmp_mesh__ = new ModelObject();
@@ -231,19 +235,19 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
     REF(MaterialPhong) __tmp_material__ = CREATE_REF(MaterialPhong)();
     if (__diffuse_cnt__) {
       __tmp_material__->resetDiffuseTexture(
-          __load_texture__(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::Diffuse));
+          __load_texture__(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::Diffuse, db, dir));
     }
     if (__specular_cnt__) {
       __tmp_material__->resetSpecularTexture(
-          __load_texture__(material, aiTextureType_SPECULAR, TEXTURE_TYPE::Specular));
+          __load_texture__(material, aiTextureType_SPECULAR, TEXTURE_TYPE::Specular, db, dir));
     }
     if (__normal_cnt__) {
       __tmp_material__->resetNormalTexture(
-          __load_texture__(material, aiTextureType_HEIGHT, TEXTURE_TYPE::Normal));
+          __load_texture__(material, aiTextureType_HEIGHT, TEXTURE_TYPE::Normal, db, dir));
     }
     if (__displament_cnt__) {
-      __tmp_material__->resetDisplacementTexture(
-          __load_texture__(material, aiTextureType_DISPLACEMENT, TEXTURE_TYPE::Displacement));
+      __tmp_material__->resetDisplacementTexture(__load_texture__(
+          material, aiTextureType_DISPLACEMENT, TEXTURE_TYPE::Displacement, db, dir));
     }
     __tmp_mesh__->m_defualt_material = __tmp_material__;
   }
@@ -251,11 +255,54 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
 }
 
 D_API_EXPORT REF(Texture2D)
-    __load_texture__(aiMaterial* mat, aiTextureType type, const TEXTURE_TYPE& MyType) {
-  // TODO
-  REF(Texture2D) a;
-  return a;
+    __load_texture__(aiMaterial* mat, aiTextureType type, const TEXTURE_TYPE& MyType, KVBase* db,
+                     const std::string& dir) {
+  aiString str;
+  mat->GetTexture(type, 0,
+                  &str);  // TODO, I suppose there is juts one Texture for one mesh in one kind.
+  auto __tmp_file_path__ = dir + "\\" + str.C_Str();
+  if (db->FindByPath(__tmp_file_path__)) { return db->FindTexture(__tmp_file_path__); }
+  std::cout << " Loading Texture " << __tmp_file_path__ << std::endl;
+  auto __texture_tmp__ = CREATE_REF(Texture2D)(__tmp_file_path__);
+  db->InsertTexture(__texture_tmp__, "No Name", __tmp_file_path__);
+  return __texture_tmp__;
 }
 
+}  // namespace renderer
+}  // namespace daydream
+
+namespace daydream {
+namespace renderer {
+KVBase::~KVBase() {
+  for (auto item : m_data) { delete item.second; }
+}
+
+bool KVBase::FindByPath(const std::string& f) {
+  auto it = m_data.find(Hashing(f));
+  if (it != m_data.end()) { return true; }
+  return false;
+}
+
+void KVBase::InsertTexture(const REF(Texture2D) & a, const std::string& name,
+                           const std::string& f) {
+  if (FindByPath(f)) { return; }
+  uint32_t t = Hashing(f);
+  m_data[t] = new TextureComponent(a, name, f);
+  m_texture_index.push_back(t);
+}
+
+REF(Texture2D) KVBase::FindTexture(const std::string& f) {
+  if (FindByPath(f)) { return static_cast<TextureComponent*>(m_data[Hashing(f)])->Item(); }
+  return nullptr;
+}
+
+REF(Texture2D) KVBase::FindTexture(uint32_t a) {
+  return static_cast<TextureComponent*>(m_data[m_texture_index[a]])->Item();
+}
+
+uint32_t KVBase::Hashing(const std::string& n) {
+  std::hash<std::string> HashString;
+  return HashString(n);
+}
 }  // namespace renderer
 }  // namespace daydream

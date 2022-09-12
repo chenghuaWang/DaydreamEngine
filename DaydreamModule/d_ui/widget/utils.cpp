@@ -63,5 +63,13 @@ void SlideBar::impl_imgui_render() {
   }
 }
 
+void ImageGallary::impl_imgui_render() {
+  for (uint32_t i = 0; i < _data_.size(); ++i) {
+    _data_[i]->Bind(0U);
+    ImGui::Image((void*)(_data_[i]->getIdx()), ImVec2(320.f, 320.f));
+    if ((i + 1) % 6 != 0) ImGui::SameLine();
+  }
+}
+
 }  // namespace ui
 }  // namespace daydream

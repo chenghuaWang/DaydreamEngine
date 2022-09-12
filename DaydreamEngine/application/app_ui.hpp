@@ -7,6 +7,8 @@
 #define TEST2D false
 #define TEST3D true
 
+#define IMGS_PRE_LINE 6
+
 using namespace daydream;
 
 struct uis {
@@ -109,6 +111,17 @@ struct uis {
     camera_info_speed_bar->Changed.Connect(&gl_scene->getCameraCtrl(),
                                            &scene::camera3dController::slots_setMovingSpeed);
 #endif
+    // Texture Pannel
+    texture_pannel_imgae_gallary = new ui::ImageGallary();
+    texture_pannel_imgae_gallary->register_render_func([=](void) -> void {
+      auto DB = gl_scene->getDB();
+      if (DB->TextureNum() != texture_pannel_imgae_gallary->_data_.size()) {
+        texture_pannel_imgae_gallary->_data_.clear();
+        for (uint32_t i = 0; i < DB->TextureNum(); ++i) {
+          texture_pannel_imgae_gallary->_data_.push_back(DB->FindTexture(i));
+        }
+      }
+    });
   }
 
   ~uis() {
@@ -135,6 +148,7 @@ struct uis {
     delete camera_info_reset_button;
     delete camera_info_speed_bar;
 #endif
+    delete texture_pannel_imgae_gallary;
   }
 
  public:
@@ -186,4 +200,6 @@ struct uis {
   ui::button* camera_info_reset_button;
   ui::SlideBar* camera_info_speed_bar;
 #endif
+  // For Texture Pannel
+  ui::ImageGallary* texture_pannel_imgae_gallary;
 };

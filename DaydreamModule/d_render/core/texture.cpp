@@ -50,12 +50,12 @@ Texture2D::Texture2D(const std::string& file_path, bool hdr) {
         break;
       case 3:
         m_type = COLOR_SPACE::RGB;
-        m_format = GL_RGB8;
+        m_format = GL_RGB;
         internalFormat = GL_RGB8;
         break;
       case 4:
         m_type = COLOR_SPACE::RGBA;
-        m_format = GL_RGBA8;
+        m_format = GL_RGBA;
         internalFormat = GL_RGBA8;
         break;
       default:

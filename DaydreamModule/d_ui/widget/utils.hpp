@@ -9,6 +9,10 @@
 #include "_base.hpp"
 #include "ImGuiFileDialog.h"
 
+#include "d_render/core/texture.hpp"
+
+#include <functional>
+
 using namespace kaleidoscope;
 
 namespace daydream {
@@ -51,6 +55,27 @@ class D_API_EXPORT SlideBar : public ui_object {
   float m_MaxValue = 100.f;
   float m_CurValue = 0.1;
   Signal1<float> Changed;
+};
+
+class D_API_EXPORT DynamicWidget : public ui_object {
+  void on_attach() override{};
+  void on_detach() override{};
+  void on_update(float ts) override { func(); };
+  void update_event() override{};
+  void impl_imgui_render() override{};
+
+ public:
+  void register_render_func(const std::function<void(void)>& rhs) { func = rhs; };
+
+ private:
+  std::function<void(void)> func;
+};
+
+class D_API_EXPORT ImageGallary : public DynamicWidget {
+  void impl_imgui_render() override;
+
+ public:
+  std::vector<REF(::daydream::renderer::Texture2D)> _data_;
 };
 
 }  // namespace ui

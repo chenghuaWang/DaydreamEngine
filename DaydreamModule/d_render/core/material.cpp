@@ -34,9 +34,7 @@ void _obj_material::_resetTexture(REF(Texture2D) & t, const std::string& p) {
 
 // -------------------- BELOW FOR PHONG MATERIAL --------------------------
 
-MaterialPhong::MaterialPhong() : _obj_material(Shader::create("../Asset/shader/phongObj.glsl")) {
-  m_type = MaterialType::Phong;
-}
+MaterialPhong::MaterialPhong() { m_type = MaterialType::Phong; }
 
 MaterialPhong::MaterialPhong(REF(Texture2D) & diffuse, REF(Texture2D) & specular,
                              REF(Texture2D) & Normal, REF(Texture2D) & displacement,

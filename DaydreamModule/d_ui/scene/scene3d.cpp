@@ -33,6 +33,7 @@ scene3d::~scene3d() {
   delete m_crates.mainCamera;
   delete m_crates.sceneFBO;
   delete m__ReferencePlaneObj__;
+  delete m__DataBase;
   for (auto item : m__DrawableClass__) { delete item; }
   for (auto item : m__lights__) { delete item; }
 }
@@ -56,7 +57,7 @@ void scene3d::BeginRender() {
   if (m__file_dialog_opened__ && __tmp_dialog__.wait(__tmp_str__)) {
     std::vector<ModelObject*> __meshes__;
     std::cout << "Load " << __tmp_str__ << std::endl;
-    __load_binary_files__(__tmp_str__, __meshes__);
+    __load_binary_files__(__tmp_str__, __meshes__, this->getDB());
     std::cout << "Found files number=" << __meshes__.size() << std::endl;
     for (auto item : __meshes__) { RegisterObj(item); }
     m__file_dialog_opened__ = false;
@@ -138,6 +139,8 @@ void scene3d::UnRegisterLight(_obj_light* ol) {
 renderer::Crates* scene3d::getCratePtr() { return &m_crates; }
 
 void scene3d::setCrate(renderer::Crates c) { m_crates = c; }
+
+::daydream::renderer::KVBase* scene3d::getDB() { return m__DataBase; }
 
 uint32_t scene3d::FrameIdx() { return m_crates.sceneFBO->FrameIdx(); }
 

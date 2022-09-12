@@ -53,6 +53,7 @@ void App::delay_init() {
 #if TEST3D == true
   auto camera_info_layer = new ui::obj_layer("Camera Atribute");
 #endif
+  auto texture_pannel_layer = new ui::obj_layer("Texture Pannel");
 
 #if TEST2D == true
   m_App_ui->gl_scene->setCurShader(m_App_ui->gl_scene_shader);
@@ -84,6 +85,8 @@ void App::delay_init() {
   camera_info_layer->add_obj(m_App_ui->camera_info_speed_bar);
 #endif
 
+  texture_pannel_layer->add_obj(m_App_ui->texture_pannel_imgae_gallary);
+
   m_layers.add_layer(menu_ui_layer);
   m_layers.add_layer(console_ui_layer);
   m_layers.add_layer(gl_ui_layer);
@@ -92,6 +95,7 @@ void App::delay_init() {
 #if TEST3D == true
   m_layers.add_layer(camera_info_layer);
 #endif
+  m_layers.add_layer(texture_pannel_layer);
   // signal and slots linking
   // !!! [TODO] bug. The action is not pass by ptr. So connect must before add_action.
   m_action_show_log.clicked.Connect(console_ui_layer, &ui::obj_layer::set_wopened);
