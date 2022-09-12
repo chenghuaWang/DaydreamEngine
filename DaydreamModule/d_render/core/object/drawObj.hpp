@@ -50,8 +50,8 @@ class D_API_EXPORT drawObject {
   // Basic Material and Flags
   bool m_HasNormal = true;
   bool m_HasTexCoord = true;
-  Crates* renderPayload;
-  REF(_obj_material) m_defualt_material = CREATE_REF(_obj_material)();
+  Crates* renderPayload = nullptr;
+  REF(_obj_material) m_defualt_material = nullptr;
 
   // Actual Data in CPU Memory
   std::vector<Vertex> m_vertex;

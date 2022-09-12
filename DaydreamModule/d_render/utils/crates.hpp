@@ -52,8 +52,8 @@ namespace renderer {
 class D_API_EXPORT Crates {
  public:
   bool wireframe = false;
-  camera3d* mainCamera;
-  FrameBuffer* sceneFBO;
+  camera3d* mainCamera = nullptr;
+  FrameBuffer* sceneFBO = nullptr;
 };
 }  // namespace renderer
 }  // namespace daydream

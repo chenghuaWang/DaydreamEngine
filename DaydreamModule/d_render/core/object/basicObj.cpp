@@ -211,15 +211,45 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene) {
     }
   }
   __tmp_mesh__->genVertexArray();
-  // Load Texture
+  // Load material for texture
   aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+  // Judge if this material is belongs to witted style BRDF Only.
+  auto __diffuse_cnt__ = material->GetTextureCount(aiTextureType_DIFFUSE);
+  auto __specular_cnt__ = material->GetTextureCount(aiTextureType_SPECULAR);
+  auto __normal_cnt__ = material->GetTextureCount(aiTextureType_HEIGHT);
+  auto __ambient_cnt__ = material->GetTextureCount(aiTextureType_AMBIENT);
+  auto __aot_cnt__ = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION);
+  auto __displament_cnt__ = material->GetTextureCount(aiTextureType_DISPLACEMENT);
+  auto __metallic_cnt__ = material->GetTextureCount(aiTextureType_METALNESS);
+  if (__aot_cnt__ != 0) {
+    // Can use brdf
+  } else {
+    REF(MaterialPhong) __tmp_material__ = CREATE_REF(MaterialPhong)();
+    if (__diffuse_cnt__) {
+      __tmp_material__->resetDiffuseTexture(
+          __load_texture__(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::Diffuse));
+    }
+    if (__specular_cnt__) {
+      __tmp_material__->resetSpecularTexture(
+          __load_texture__(material, aiTextureType_SPECULAR, TEXTURE_TYPE::Specular));
+    }
+    if (__normal_cnt__) {
+      __tmp_material__->resetNormalTexture(
+          __load_texture__(material, aiTextureType_HEIGHT, TEXTURE_TYPE::Normal));
+    }
+    if (__displament_cnt__) {
+      __tmp_material__->resetDisplacementTexture(
+          __load_texture__(material, aiTextureType_DISPLACEMENT, TEXTURE_TYPE::Displacement));
+    }
+    __tmp_mesh__->m_defualt_material = __tmp_material__;
+  }
   return __tmp_mesh__;
 }
 
-D_API_EXPORT std::vector<REF(Texture2D)> __load_texture__(aiMaterial* mat, aiTextureType type,
-                                                          const std::string& typeName) {
+D_API_EXPORT REF(Texture2D)
+    __load_texture__(aiMaterial* mat, aiTextureType type, const TEXTURE_TYPE& MyType) {
   // TODO
-  std::vector<REF(Texture2D)> a;
+  REF(Texture2D) a;
   return a;
 }
 

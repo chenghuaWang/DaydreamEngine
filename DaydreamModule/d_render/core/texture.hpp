@@ -13,6 +13,18 @@ namespace renderer {
 
 enum class D_API_EXPORT COLOR_SPACE { RGB = 0, RED, YCRCB, HSV, RGBA, HDR, None };
 
+enum class D_API_EXPORT TEXTURE_TYPE {
+  None = 0,
+  Diffuse,
+  Specular,
+  Ambient,
+  Normal,
+  Metallic,
+  Roughness,
+  AOT,
+  Displacement,
+};
+
 class D_API_EXPORT _obj_texture {
  public:
   _obj_texture() = default;

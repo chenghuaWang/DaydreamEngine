@@ -107,6 +107,7 @@ void scene3d::setReferencePlaneObj(PlaneObject* po) { m__ReferencePlaneObj__ = p
 void scene3d::RegisterObj(drawObject* o) {
   m__DrawableClass__.push_back(o);
   o->renderPayload = &m_crates;
+  o->m_defualt_material = m__default_material;
 }
 
 void scene3d::UnRegisterObj(drawObject* o) {
@@ -160,6 +161,7 @@ bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) &
   __crates__.mainCamera = __camera3d__;
   __crates__.sceneFBO = __framebuffer__;
   __crates__.wireframe = sWireFrame;
+  //__crates__.DataBase = __DataBase__;
   sS->setCrate(__crates__);
   sS->setCamera2Ctrl(__crates__.mainCamera);
   // init the basic objs. Such as ReferencePlane, Sky, etc.
@@ -172,6 +174,7 @@ bool NewScene3D(int32_t sW, int32_t sH, const std::string& sName, REF(scene3d) &
   sS->setReferencePlane(sReferencePlane);
   return true;
 }
+
 bool D_API_EXPORT FreeScene3D(scene3d* sS) {
   if (sS != nullptr) {
     delete sS;

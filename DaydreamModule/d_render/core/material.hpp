@@ -64,15 +64,19 @@ class D_API_EXPORT MaterialPhong : public _obj_material {
 
   void resetDiffuseTexture(const std::string& p);
   void resetDiffuseTexture(void* data, uint32_t size);
+  void resetDiffuseTexture(const REF(Texture2D) & a);
 
   void resetSpecularTexture(const std::string& p);
   void resetSpecularTexture(void* data, uint32_t size);
+  void resetSpecularTexture(const REF(Texture2D) & a);
 
   void resetNormalTexture(const std::string& p);
   void resetNormalTexture(void* data, uint32_t size);
+  void resetNormalTexture(const REF(Texture2D) & a);
 
   void resetDisplacementTexture(const std::string& p);
   void resetDisplacementTexture(void* data, uint32_t size);
+  void resetDisplacementTexture(const REF(Texture2D) & a);
 
   void resetHeightScale(float v);
   void rsetShiness(float v);

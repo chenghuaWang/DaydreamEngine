@@ -92,6 +92,8 @@ void MaterialPhong::resetDiffuseTexture(void* data, uint32_t size) {
   m_DiffuseTexture->resetData(data, size);
 }
 
+void MaterialPhong::resetDiffuseTexture(const REF(Texture2D) & a) { m_DiffuseTexture = a; }
+
 void MaterialPhong::resetSpecularTexture(const std::string& p) {
   this->_resetTexture(m_SpecularTexture, p);
 }
@@ -100,6 +102,8 @@ void MaterialPhong::resetSpecularTexture(void* data, uint32_t size) {
   // TODO The image size shoulf first be set to (1.0, 1.0)
   m_SpecularTexture->resetData(data, size);
 }
+
+void MaterialPhong::resetSpecularTexture(const REF(Texture2D) & a) { m_SpecularTexture = a; }
 
 void MaterialPhong::resetNormalTexture(const std::string& p) {
   this->_resetTexture(m_NormalTexture, p);
@@ -110,6 +114,8 @@ void MaterialPhong::resetNormalTexture(void* data, uint32_t size) {
   m_NormalTexture->resetData(data, size);
 }
 
+void MaterialPhong::resetNormalTexture(const REF(Texture2D) & a) { m_NormalTexture = a; }
+
 void MaterialPhong::resetDisplacementTexture(const std::string& p) {
   this->_resetTexture(m_DisplacementTexture, p);
 }
@@ -117,6 +123,10 @@ void MaterialPhong::resetDisplacementTexture(const std::string& p) {
 void MaterialPhong::resetDisplacementTexture(void* data, uint32_t size) {
   // TODO The image size shoulf first be set to (1.0, 1.0)
   m_DisplacementTexture->resetData(data, size);
+}
+
+void MaterialPhong::resetDisplacementTexture(const REF(Texture2D) & a) {
+  m_DisplacementTexture = a;
 }
 
 void MaterialPhong::resetHeightScale(float v) { m_HeightScale = v; }

@@ -14,6 +14,7 @@
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
 #include "d_render/core/object/basicObj.hpp"
+#include "d_render/resource/KVBase.hpp"
 #include "d_ui/widget/utils.hpp"
 
 namespace daydream {
@@ -90,6 +91,8 @@ class D_API_EXPORT scene3d {
   bool m_running = true;
   bool m_LineMode = false;
   bool m_ReferencePlane = true;
+
+  REF(_obj_material) m__default_material = CREATE_REF(_obj_material)();
 
   std::vector<drawObject*> m__DrawableClass__;
   std::vector<_obj_light*> m__lights__;
