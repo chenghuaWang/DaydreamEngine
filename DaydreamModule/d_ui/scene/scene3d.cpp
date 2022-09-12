@@ -37,7 +37,7 @@ scene3d::~scene3d() {
   for (auto item : m__lights__) { delete item; }
 }
 
-void scene3d::OnAttach() {}
+void scene3d::OnAttach() { std::cout << "Scene3D Attach" << std::endl; }
 
 void scene3d::OnDetach() {}
 
