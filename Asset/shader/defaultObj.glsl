@@ -1,7 +1,7 @@
 ##shader vertex
 #version 330 core
 
-    layout(location = 0) in vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec2 a_TexCoord;
 layout(location = 2) in vec3 a_Normal;
 layout(location = 3) in vec3 a_Tangent;
@@ -22,7 +22,7 @@ void main() {
 #define SCALE 16
 #define MAX_LIGHT_NUM 10
 
-    layout(location = 0) out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 struct Light {
   vec3 Color;
