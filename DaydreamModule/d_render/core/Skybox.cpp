@@ -62,5 +62,13 @@ void ProcedualSkySphare::update() {}
 
 REF(LightDirect) ProcedualSkySphare::getLight() const { return m_WorldLight; }
 
+StandardSkyBox::StandardSkyBox() {
+  // Init the VAO
+}
+
+void StandardSkyBox::draw() {}
+
+void StandardSkyBox::update() {}
+
 }  // namespace renderer
 }  // namespace daydream

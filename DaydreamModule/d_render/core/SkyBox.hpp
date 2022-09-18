@@ -27,6 +27,16 @@ class D_API_EXPORT ProcedualSkySphare : public drawObject {
   REF(Shader) m_shader_pass2 = CREATE_REF(Shader)("../Asset/shader/SkyBox.glsl");
 };
 
+class D_API_EXPORT StandardSkyBox : public drawObject {
+ public:
+  StandardSkyBox();
+
+  void draw() override final;
+  void update() override final;
+
+ private:
+};
+
 }  // namespace renderer
 }  // namespace daydream
 

@@ -64,7 +64,7 @@ void scene3d::BeginRender() {
     m__file_dialog_opened__ = false;
   }
   // Render then Sky Sphare first.
-  // m__sky->draw();
+  m__sky->draw();
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
   for (auto light_it : m__lights__) {
