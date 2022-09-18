@@ -140,7 +140,7 @@ void MaterialPhong::resetColor(const glm::vec3& v) { m_Color = v; }
 
 // -------------------- BELOW FOR BRDF-NAIVE MATERIAL ---------------------
 
-MaterialBRDF::MaterialBRDF() : _obj_material(Shader::create("../Asset/shader/pbrObj.glsl")) {
+MaterialBRDF::MaterialBRDF() : _obj_material(Shader::create("../Asset/shader/StandardObj.glsl")) {
   m_type = MaterialType::BRDF_naive;
 }
 
@@ -183,12 +183,28 @@ MaterialBRDF::~MaterialBRDF() {
 
 void MaterialBRDF::Bind() {
   m_shader->Bind();
-  // TODO pass the value to shader.
+  m_AlbedoTexture->Bind(0);
+  m_NormalTexture->Bind(1);
+  m_MetallicTexture->Bind(2);
+  m_RoughnessTexture->Bind(3);
+  m_DisplacementTexture->Bind(4);
+  m_shader->setBool("d_Material.isMetallic", m_MetallicTexture->isEmpty());
+  m_shader->setBool("d_Material.isNormalMap", m_NormalTexture->isEmpty());
+  m_shader->setBool("d_Material.isAoMap", m_AOTexture->isEmpty());
+  m_shader->setInt("d_Material.baseColorMap", 0);  // m_AlbedoTexture->getIdx()
+  m_shader->setInt("d_Material.normalMap", 1);     // m_NormalTexture->getIdx()
+  m_shader->setInt("d_Material.metallicMap", 2);   // m_MetallicTexture->getIdx()
+  m_shader->setInt("d_Material.roughnessMap", 3);  // m_RoughnessTexture->getIdx()
+  m_shader->setInt("d_Material.aoMap", 4);         // m_AOTexture->getIdx()
 }
 
 void MaterialBRDF::UnBind() {
   m_shader->UnBind();
-  // TODO other clean stuff.
+  m_AlbedoTexture->UnBind(0);
+  m_NormalTexture->UnBind(1);
+  m_MetallicTexture->UnBind(2);
+  m_RoughnessTexture->UnBind(3);
+  m_DisplacementTexture->UnBind(4);
 }
 
 void MaterialBRDF::resetHeightScale(float v) { m_HeightScale = v; }
@@ -208,6 +224,8 @@ void MaterialBRDF::resetAlbedoTexture(void* data, uint32_t size) {
   m_AlbedoTexture->resetData(data, size);
 }
 
+void MaterialBRDF::resetAlbedoTexture(const REF(Texture2D) & a) { m_AlbedoTexture = a; }
+
 void MaterialBRDF::restNormalTexture(const std::string& p) {
   this->_resetTexture(m_NormalTexture, p);
 }
@@ -216,6 +234,8 @@ void MaterialBRDF::resetNormalTexture(void* data, uint32_t size) {
   // TODO make sure image data size is same.
   m_NormalTexture->resetData(data, size);
 }
+
+void MaterialBRDF::resetNormalTexture(const REF(Texture2D) & a) { m_NormalTexture = a; }
 
 void MaterialBRDF::restMetallicTexture(const std::string& p) {
   this->_resetTexture(m_MetallicTexture, p);
@@ -226,6 +246,8 @@ void MaterialBRDF::resetMetallicTexture(void* data, uint32_t size) {
   m_MetallicTexture->resetData(data, size);
 }
 
+void MaterialBRDF::resetMetallicTexture(const REF(Texture2D) & a) { m_MetallicTexture = a; }
+
 void MaterialBRDF::restRoughnessTexture(const std::string& p) {
   this->_resetTexture(m_RoughnessTexture, p);
 }
@@ -235,12 +257,16 @@ void MaterialBRDF::restRoughnessTexture(void* data, uint32_t size) {
   m_RoughnessTexture->resetData(data, size);
 }
 
+void MaterialBRDF::resetRoughnessTexture(const REF(Texture2D) & a) { m_RoughnessTexture = a; }
+
 void MaterialBRDF::restAOTexture(const std::string& p) { this->_resetTexture(m_AOTexture, p); }
 
 void MaterialBRDF::resetAOTexture(void* data, uint32_t size) {
   // TODO make sure image data size is same.
   m_AOTexture->resetData(data, size);
 }
+
+void MaterialBRDF::resetAOTexture(const REF(Texture2D) & a) { m_AOTexture = a; }
 
 void MaterialBRDF::restDisplacementTexture(const std::string& p) {
   this->_resetTexture(m_DisplacementTexture, p);
@@ -250,6 +276,8 @@ void MaterialBRDF::restDisplacementTexture(void* data, uint32_t size) {
   // TODO make sure image data size is same.
   m_DisplacementTexture->resetData(data, size);
 }
+
+void MaterialBRDF::resetDisplacementTexture(const REF(Texture2D) & a) { m_DisplacementTexture = a; }
 
 // -------------------- BELOW FOR SELF DEFINED MATERIAL ---------------------
 

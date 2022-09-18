@@ -13,6 +13,7 @@
 #include "d_render/core/light.hpp"
 #include "d_render/core/command.hpp"
 #include "d_render/utils/camera.hpp"
+#include "d_render/core/SkyBox.hpp"
 #include "d_render/core/object/basicObj.hpp"
 #include "d_ui/widget/utils.hpp"
 
@@ -87,6 +88,7 @@ class D_API_EXPORT scene3d {
   bool m__file_dialog_opened__ = false;
 
   ::daydream::renderer::KVBase* m__DataBase = new ::daydream::renderer::KVBase();
+  ::daydream::renderer::ProcedualSkySphare* m__sky = new ::daydream::renderer::ProcedualSkySphare();
 
   renderer::Crates m_crates;
   camera3dController m_camera_ctrl;

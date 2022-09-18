@@ -98,6 +98,38 @@ void PlaneObject::update() {}
 
 PlaneObject* PlaneObject::getInstance() { return m_instance; }
 
+SphareObject::SphareObject(uint32_t scale, uint32_t sample_step) {
+  uint32_t real = sample_step * 10;
+  for (uint32_t i = 0; i <= real; i++)
+    for (uint32_t j = 0; j <= real; j++) {
+      Vertex v;
+      v.m_Position = {(float)i / (float)real, 0.0f, (float)j / (float)real};
+      v.m_Normal = {0.0f, 1.0f, 0.0f};
+      v.m_TexCoord = {(float)i / (float)real, (float)j / (float)real};
+      m_vertex.push_back(v);
+    }
+  uint32_t indices[6] = {0, real + 1, real + 2, 0, real + 2, 1};
+  for (uint32_t k = 0; k < (real + 1) * real; k++)
+    for (uint32_t i = 0; i < 6; i++)
+      if ((k + 1) % (real + 1) > 0) m_Index.push_back(indices[i] + k);
+  for (size_t i = 0; i < m_Index.size(); i += 3) {
+    Triangle triangle = {m_Index[i], m_Index[i + 1ul], m_Index[i + 2ul]};
+    m_triangle.push_back(triangle);
+  }
+  for (auto& p : m_vertex) {
+    float phi = glm::radians(360.0f * p.m_Position.z);
+    float theta = glm::radians(180.0f * p.m_Position.x - 90.0f);
+    p.m_Position.x = p.m_Normal.x = cos(theta) * cos(phi);
+    p.m_Position.y = p.m_Normal.y = sin(theta);
+    p.m_Position.z = p.m_Normal.z = cos(theta) * sin(phi);
+  }
+  genVertexArray();
+}
+
+void SphareObject::draw() {}
+
+void SphareObject::update() {}
+
 ModelObject::ModelObject(const std::string& file_path) {}
 
 void ModelObject::draw() {
@@ -111,7 +143,7 @@ void ModelObject::draw() {
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
-  m_defualt_material->UnBind();
+  m_shader->setVec3("d_camPos", this->renderPayload->mainCamera->getPosition());
 }
 
 void ModelObject::update() {}
@@ -133,7 +165,9 @@ bool __load_binary_files__(const std::string& file_path, std::vector<ModelObject
   // probably to request more postprocessing than we do in this example.
   const aiScene* scene =
       importer.ReadFile(file_path, aiProcess_CalcTangentSpace | aiProcess_Triangulate
-                                       | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+                                       | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType
+                                       | aiProcess_ImproveCacheLocality | aiProcess_OptimizeMeshes
+                                       | aiProcess_PreTransformVertices);
 
   // If the import failed, report it
   if (nullptr == scene) {
@@ -223,23 +257,22 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene, KVBase* db,
   aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
   // Judge if this material is belongs to witted style BRDF Only.
   auto __diffuse_cnt__ = material->GetTextureCount(aiTextureType_DIFFUSE);
-  auto __specular_cnt__ = material->GetTextureCount(aiTextureType_SPECULAR);
   auto __normal_cnt__ = material->GetTextureCount(aiTextureType_HEIGHT);
-  auto __ambient_cnt__ = material->GetTextureCount(aiTextureType_AMBIENT);
   auto __aot_cnt__ = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION);
   auto __displament_cnt__ = material->GetTextureCount(aiTextureType_DISPLACEMENT);
   auto __metallic_cnt__ = material->GetTextureCount(aiTextureType_METALNESS);
+  auto __basecolor_cnt__ = material->GetTextureCount(aiTextureType_BASE_COLOR);
   if (__aot_cnt__ != 0) {
     // Can use brdf
   } else {
-    REF(MaterialPhong) __tmp_material__ = CREATE_REF(MaterialPhong)();
+    REF(MaterialBRDF) __tmp_material__ = CREATE_REF(MaterialBRDF)();
     if (__diffuse_cnt__) {
-      __tmp_material__->resetDiffuseTexture(
+      __tmp_material__->resetAlbedoTexture(
           __load_texture__(material, aiTextureType_DIFFUSE, TEXTURE_TYPE::Diffuse, db, dir));
     }
-    if (__specular_cnt__) {
-      __tmp_material__->resetSpecularTexture(
-          __load_texture__(material, aiTextureType_SPECULAR, TEXTURE_TYPE::Specular, db, dir));
+    if (__basecolor_cnt__) {
+      __tmp_material__->resetAlbedoTexture(
+          __load_texture__(material, aiTextureType_BASE_COLOR, TEXTURE_TYPE::BaseColor, db, dir));
     }
     if (__normal_cnt__) {
       __tmp_material__->resetNormalTexture(
@@ -248,6 +281,10 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene, KVBase* db,
     if (__displament_cnt__) {
       __tmp_material__->resetDisplacementTexture(__load_texture__(
           material, aiTextureType_DISPLACEMENT, TEXTURE_TYPE::Displacement, db, dir));
+    }
+    if (__metallic_cnt__) {
+      __tmp_material__->resetMetallicTexture(
+          __load_texture__(material, aiTextureType_METALNESS, TEXTURE_TYPE::Metallic, db, dir));
     }
     __tmp_mesh__->m_defualt_material = __tmp_material__;
   }

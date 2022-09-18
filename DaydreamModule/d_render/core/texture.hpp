@@ -15,6 +15,7 @@ enum class D_API_EXPORT COLOR_SPACE { RGB = 0, RED, YCRCB, HSV, RGBA, HDR, None 
 
 enum class D_API_EXPORT TEXTURE_TYPE {
   None = 0,
+  BaseColor,
   Diffuse,
   Specular,
   Ambient,

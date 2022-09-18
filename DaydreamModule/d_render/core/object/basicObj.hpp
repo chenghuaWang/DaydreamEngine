@@ -77,6 +77,19 @@ class D_API_EXPORT PlaneObject : public drawObject {
 };
 
 /*!
+ *@brief The sphare obejct is mostly for procedual SkyBox
+ *
+ * DLL EXPORT: True
+ */
+class D_API_EXPORT SphareObject : public drawObject {
+ public:
+  SphareObject(uint32_t scale = 0, uint32_t sample_step = 0);
+
+  void draw() override;
+  void update() override;
+};
+
+/*!
  *@brie The model object can load various files' type.
  *
  * DLL EXPORT: True

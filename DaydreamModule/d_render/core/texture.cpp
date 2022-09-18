@@ -25,7 +25,7 @@ Texture2D::Texture2D(uint32_t w, uint32_t h) : _obj_texture(w, h, 4, COLOR_SPACE
   glTextureParameteri(m_idx, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTextureParameteri(m_idx, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  m_hasImage = true;
+  m_hasImage = false;
 }
 
 Texture2D::Texture2D(const std::string& file_path, bool hdr) {

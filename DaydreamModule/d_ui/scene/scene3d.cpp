@@ -34,6 +34,7 @@ scene3d::~scene3d() {
   delete m_crates.sceneFBO;
   delete m__ReferencePlaneObj__;
   delete m__DataBase;
+  delete m__sky;
   for (auto item : m__DrawableClass__) { delete item; }
   for (auto item : m__lights__) { delete item; }
 }
@@ -62,6 +63,8 @@ void scene3d::BeginRender() {
     for (auto item : __meshes__) { RegisterObj(item); }
     m__file_dialog_opened__ = false;
   }
+  // Render then Sky Sphare first.
+  m__sky->draw();
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
   for (auto light_it : m__lights__) {
@@ -74,6 +77,16 @@ void scene3d::BeginRender() {
                      m__runtimeLightsPortIndex__[light_it->Type()]);
     }
     m__runtimeLightsPortIndex__[light_it->Type()]++;
+  }
+  for (auto obj_item : m__DrawableClass__) {
+    obj_item->m_defualt_material->GetShader()->setInt(
+        "d_BasicNum", m__runtimeLightsPortIndex__[LightType::Basic]);
+    obj_item->m_defualt_material->GetShader()->setInt(
+        "d_DirLightNum", m__runtimeLightsPortIndex__[LightType::Direct]);
+    obj_item->m_defualt_material->GetShader()->setInt(
+        "d_PointLightNum", m__runtimeLightsPortIndex__[LightType::Point]);
+    obj_item->m_defualt_material->GetShader()->setInt("d_SpotLightNum",
+                                                      m__runtimeLightsPortIndex__[LightType::Spot]);
   }
   // draw all element.
   if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }

@@ -115,33 +115,39 @@ class D_API_EXPORT MaterialBRDF : public _obj_material {
 
   void restAlbedoTexture(const std::string& p);
   void resetAlbedoTexture(void* data, uint32_t size);
+  void resetAlbedoTexture(const REF(Texture2D) & a);
 
   void restNormalTexture(const std::string& p);
   void resetNormalTexture(void* data, uint32_t size);
+  void resetNormalTexture(const REF(Texture2D) & a);
 
   void restMetallicTexture(const std::string& p);
   void resetMetallicTexture(void* data, uint32_t size);
+  void resetMetallicTexture(const REF(Texture2D) & a);
 
   void restRoughnessTexture(const std::string& p);
   void restRoughnessTexture(void* data, uint32_t size);
+  void resetRoughnessTexture(const REF(Texture2D) & a);
 
   void restAOTexture(const std::string& p);
   void resetAOTexture(void* data, uint32_t size);
+  void resetAOTexture(const REF(Texture2D) & a);
 
   void restDisplacementTexture(const std::string& p);
   void restDisplacementTexture(void* data, uint32_t size);
+  void resetDisplacementTexture(const REF(Texture2D) & a);
 
  private:
   float m_HeightScale = 0.0f;
   float m_Metallic = 1.0f;
   float m_Roughness = 1.0f;
   glm::vec3 m_Color{1.0f};
-  REF(Texture2D) m_AlbedoTexture = nullptr;
-  REF(Texture2D) m_NormalTexture = nullptr;
-  REF(Texture2D) m_MetallicTexture = nullptr;
-  REF(Texture2D) m_RoughnessTexture = nullptr;
-  REF(Texture2D) m_AOTexture = nullptr;  ///< Ambient Occlusion
-  REF(Texture2D) m_DisplacementTexture = nullptr;
+  REF(Texture2D) m_AlbedoTexture = CREATE_REF(Texture2D)(1.f, 1.f);
+  REF(Texture2D) m_NormalTexture = CREATE_REF(Texture2D)(1.f, 1.f);
+  REF(Texture2D) m_MetallicTexture = CREATE_REF(Texture2D)(1.f, 1.f);
+  REF(Texture2D) m_RoughnessTexture = CREATE_REF(Texture2D)(1.f, 1.f);
+  REF(Texture2D) m_AOTexture = CREATE_REF(Texture2D)(1.f, 1.f);  ///< Ambient Occlusion
+  REF(Texture2D) m_DisplacementTexture = CREATE_REF(Texture2D)(1.f, 1.f);
 };
 
 class D_API_EXPORT MaterialSelfDefined : public _obj_material {
