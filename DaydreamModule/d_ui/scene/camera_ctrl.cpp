@@ -58,7 +58,7 @@ void camera3dController::OnUpdate(float ts) {
     float m_Zoom = m_camera3d->getFov();
     m_Zoom -= ImGui::GetIO().MouseWheel;
     if (m_Zoom <= 1.0f) m_Zoom = 1.0f;
-    if (m_Zoom >= 45.0f) m_Zoom = 45.0f;
+    if (m_Zoom >= 256.0f) m_Zoom = 256.0f;
     m_camera3d->SetFov(m_Zoom);
   }
   if (ImGui::IsWindowFocused() && ImGui::IsMouseDown(1)) {

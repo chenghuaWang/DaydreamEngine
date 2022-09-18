@@ -19,10 +19,12 @@ class D_API_EXPORT ProcedualSkySphare : public drawObject {
   void draw() override final;
   void update() override final;
 
+  REF(LightDirect) getLight() const;
+
  private:
-  float m_r = 1000.f;  ///< the r of sphare. You should include all objects in the SkySphare.
+  float m_r = 100.f;  ///< the r of sphare. You should include all objects in the SkySphare.
   REF(LightDirect) m_WorldLight;
-  REF(SphareObject) m__mesh__;
+  REF(Shader) m_shader_pass2 = CREATE_REF(Shader)("../Asset/shader/SkyBox.glsl");
 };
 
 }  // namespace renderer

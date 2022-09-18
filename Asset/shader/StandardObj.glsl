@@ -52,6 +52,7 @@ struct Light {
 struct DirLight {
   vec3 Color;
   vec3 Direction;
+  vec3 Position;
   float Intensity;
 };
 
@@ -176,11 +177,11 @@ void main() {
   vec3 Lo = vec3(0.0);
 
   // Render Basic Lights
-  for (int i = 0; i < d_BasicNum; ++i) {
+  for (int i = 0; i < d_DirLightNum; ++i) {
     // get Lights radience
-    vec3 L = normalize(d_Light[i].Position - WorldPos);
+    vec3 L = normalize(d_Light_direct[i].Position - WorldPos);
     vec3 H = normalize(V + L);
-    float distance = length(d_Light[i].Position - WorldPos);
+    float distance = length(d_Light_direct[i].Position - WorldPos);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = d_Light[i].Position * attenuation * d_Light[i].Intensity;
 
@@ -206,14 +207,14 @@ void main() {
   // Redner Point Lights
   // Render Spot Lights
 
-  vec3 ambient = vec3(0.03) * baseColor * ao;
+  vec4 ambient = vec4(0.03, 0.03, 0.03, 1.0) * vec4(baseColor, texture(d_Material.baseColorMap, TexCoord.xy).a) * ao;
 
-  vec3 color = ambient + Lo;
+  vec4 color = ambient + vec4(Lo, 1.0);
 
   // HDR tonemapping
-  color = color / (color + vec3(1.0));
+  color.xyz = color.xyz / (color.xyz + vec3(1.0));
   // gamma correct
-  color = pow(color, vec3(1.0 / 2.2));
+  color.xyz = pow(color.xyz, vec3(1.0/2.2));
 
-  FragColor = vec4(color, 1.0);
+  FragColor = color;
 }

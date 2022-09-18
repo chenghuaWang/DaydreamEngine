@@ -64,29 +64,26 @@ void scene3d::BeginRender() {
     m__file_dialog_opened__ = false;
   }
   // Render then Sky Sphare first.
-  m__sky->draw();
+  // m__sky->draw();
   // pass light to all objs. include normal object(usr defined) and basic object(reference plane,
   // etc)
   for (auto light_it : m__lights__) {
     for (auto obj_item : m__DrawableClass__) {
-      light_it->Bind(obj_item->m_defualt_material->GetShader(), obj_item->m_Pos,
+      light_it->Bind(obj_item->m_defualt_material->GetShader(), light_it->m_pos,
                      m__runtimeLightsPortIndex__[light_it->Type()]);
     }
     if (m_ReferencePlane) {
-      light_it->Bind(m__ReferencePlaneObj__->getShader(), m__ReferencePlaneObj__->m_Pos,
+      light_it->Bind(m__ReferencePlaneObj__->getShader(), light_it->m_pos,
                      m__runtimeLightsPortIndex__[light_it->Type()]);
     }
     m__runtimeLightsPortIndex__[light_it->Type()]++;
   }
   for (auto obj_item : m__DrawableClass__) {
-    obj_item->m_defualt_material->GetShader()->setInt(
-        "d_BasicNum", m__runtimeLightsPortIndex__[LightType::Basic]);
-    obj_item->m_defualt_material->GetShader()->setInt(
-        "d_DirLightNum", m__runtimeLightsPortIndex__[LightType::Direct]);
-    obj_item->m_defualt_material->GetShader()->setInt(
-        "d_PointLightNum", m__runtimeLightsPortIndex__[LightType::Point]);
-    obj_item->m_defualt_material->GetShader()->setInt("d_SpotLightNum",
-                                                      m__runtimeLightsPortIndex__[LightType::Spot]);
+    auto __shader__ = obj_item->m_defualt_material->GetShader();
+    __shader__->setInt("d_BasicNum", m__runtimeLightsPortIndex__[LightType::Basic]);
+    __shader__->setInt("d_DirLightNum", m__runtimeLightsPortIndex__[LightType::Direct]);
+    __shader__->setInt("d_PointLightNum", m__runtimeLightsPortIndex__[LightType::Point]);
+    __shader__->setInt("d_SpotLightNum", m__runtimeLightsPortIndex__[LightType::Spot]);
   }
   // draw all element.
   if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }
@@ -150,7 +147,10 @@ void scene3d::UnRegisterLight(_obj_light* ol) {
 
 renderer::Crates* scene3d::getCratePtr() { return &m_crates; }
 
-void scene3d::setCrate(renderer::Crates c) { m_crates = c; }
+void scene3d::setCrate(renderer::Crates c) {
+  m_crates = c;
+  m__sky->renderPayload = &m_crates;
+}
 
 ::daydream::renderer::KVBase* scene3d::getDB() { return m__DataBase; }
 

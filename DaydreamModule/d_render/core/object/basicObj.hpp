@@ -83,7 +83,7 @@ class D_API_EXPORT PlaneObject : public drawObject {
  */
 class D_API_EXPORT SphareObject : public drawObject {
  public:
-  SphareObject(uint32_t scale = 0, uint32_t sample_step = 0);
+  SphareObject(uint32_t scale = 0, uint32_t sample_step = 32);
 
   void draw() override;
   void update() override;

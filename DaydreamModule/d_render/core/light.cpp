@@ -38,6 +38,7 @@ void LightDirect::Bind(const REF(Shader) & shader, const glm::vec3& pos, const u
   shader->setVec3("d_Light_direct[" + std::to_string(port) + "].Color", m_color);
   shader->setVec3("d_Light_direct[" + std::to_string(port) + "].Direction", m_direction);
   shader->setFloat("d_Light_direct[" + std::to_string(port) + "].Intensity", m_intensity);
+  shader->setVec3("d_Light_direct[" + std::to_string(port) + "].Position", pos);
 }
 
 // -------------------------- Light Point type ------------------------------

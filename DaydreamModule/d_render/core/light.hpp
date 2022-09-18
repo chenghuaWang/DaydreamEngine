@@ -18,7 +18,7 @@ enum class D_API_EXPORT LightType { None = 0, Direct, Point, Spot, Basic, Self_d
 /*!
  * @brief light is an attribute of a Drawable Model.
  * So, light don't need to contain the position info-
- * mation.
+ * mation in the most of time.
  */
 class D_API_EXPORT _obj_light {
  public:
@@ -31,6 +31,8 @@ class D_API_EXPORT _obj_light {
 
   virtual void Bind(const REF(Shader) & shader, const glm::vec3& pos, const uint32_t port);
   virtual void UnBind(const REF(Shader) & shader);
+
+  glm::vec3 m_pos{0.f};
 
  protected:
   float m_intensity = 1.f;
@@ -48,7 +50,7 @@ class LightDirect : public _obj_light {
   void Bind(const REF(Shader) & shader, const glm::vec3& pos, const uint32_t port) override;
 
  private:
-  glm::vec3 m_direction{0.f, 0.f, 1.f};
+  glm::vec3 m_direction{0.f, -1.f, 0.f};
 };
 
 class LightPoint : public _obj_light {
