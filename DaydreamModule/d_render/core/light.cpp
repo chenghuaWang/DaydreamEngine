@@ -19,6 +19,7 @@ void _obj_light::Bind(const REF(Shader) & shader, const glm::vec3& pos, const ui
   shader->setVec3("d_Light[" + std::to_string(port) + "].Color", m_color);
   shader->setVec3("d_Light[" + std::to_string(port) + "].Position", pos);
   shader->setFloat("d_Light[" + std::to_string(port) + "].Intensity", m_intensity);
+  shader->UnBind();
 }
 
 void _obj_light::UnBind(const REF(Shader) & shader) { shader->UnBind(); }
@@ -39,6 +40,7 @@ void LightDirect::Bind(const REF(Shader) & shader, const glm::vec3& pos, const u
   shader->setVec3("d_Light_direct[" + std::to_string(port) + "].Direction", m_direction);
   shader->setFloat("d_Light_direct[" + std::to_string(port) + "].Intensity", m_intensity);
   shader->setVec3("d_Light_direct[" + std::to_string(port) + "].Position", pos);
+  shader->UnBind();
 }
 
 // -------------------------- Light Point type ------------------------------
@@ -58,6 +60,7 @@ void LightPoint::Bind(const REF(Shader) & shader, const glm::vec3& pos, const ui
   shader->setFloat("d_Light_point[" + std::to_string(port) + "].Constant", m_constant);
   shader->setFloat("d_Light_point[" + std::to_string(port) + "].Linear", m_linear);
   shader->setFloat("d_Light_point[" + std::to_string(port) + "].Quadratic", m_quadratic);
+  shader->UnBind();
 }
 
 void LightPoint::resetConstant(float v) { m_constant = v; }
@@ -83,6 +86,7 @@ void LightSpot::Bind(const REF(Shader) & shader, const glm::vec3& pos, const uin
   shader->setFloat("d_Light_spot[" + std::to_string(port) + "].Intensity", m_intensity);
   shader->setFloat("d_Light_spot[" + std::to_string(port) + "].CutOff", m_cutoff);
   shader->setFloat("d_Light_spot[" + std::to_string(port) + "].OutCutOff", m_outCutoff);
+  shader->UnBind();
 }
 
 void LightSpot::resetCutOff(float v) { m_cutoff = v; }

@@ -82,7 +82,7 @@ class D_API_EXPORT MaterialPhong : public _obj_material {
   void rsetShiness(float v);
   void resetColor(const glm::vec3& v);
 
- private:
+ public:
   float m_HeightScale = 0;
   float m_Shininess = 32;
   glm::vec3 m_Color{1.0f};
@@ -137,7 +137,7 @@ class D_API_EXPORT MaterialBRDF : public _obj_material {
   void restDisplacementTexture(void* data, uint32_t size);
   void resetDisplacementTexture(const REF(Texture2D) & a);
 
- private:
+ public:
   float m_HeightScale = 0.0f;
   float m_Metallic = 1.0f;
   float m_Roughness = 1.0f;
@@ -170,7 +170,7 @@ class D_API_EXPORT MaterialSelfDefined : public _obj_material {
   void resetShader(const std::string& key, REF(Shader) & value);
   void resetTexture(const std::string& key, REF(Texture2D) & value);
 
- private:
+ public:
   std::unordered_map<std::string, float> m_values;
   std::unordered_map<std::string, REF(Shader)> m_shaders;
   std::unordered_map<std::string, REF(Texture2D)> m_textures;

@@ -88,7 +88,7 @@ class D_API_EXPORT scene3d {
   bool m__file_dialog_opened__ = false;
 
   ::daydream::renderer::KVBase* m__DataBase = new ::daydream::renderer::KVBase();
-  ::daydream::renderer::ProcedualSkySphare* m__sky = new ::daydream::renderer::ProcedualSkySphare();
+  ::daydream::renderer::StandardSkyBox* m__sky = new ::daydream::renderer::StandardSkyBox();
 
   renderer::Crates m_crates;
   camera3dController m_camera_ctrl;

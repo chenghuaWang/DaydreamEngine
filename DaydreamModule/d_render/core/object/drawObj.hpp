@@ -9,6 +9,7 @@
 #include "d_render/utils/crates.hpp"
 #include "d_render/core/material.hpp"
 #include "d_render/core/ds.hpp"
+#include "d_render/core/light.hpp"
 #include "d_render/utils/built_in_ds.hpp"
 
 #define DRAW_DATA_INIT                                                                 \
@@ -68,7 +69,6 @@ class D_API_EXPORT drawObject {
   glm::vec3 m_Rotate{0.f};
   glm::mat4 m_Trasnform{1.f};  // The M matrix in MVP transform.
 };
-
 }  // namespace renderer
 }  // namespace daydream
 

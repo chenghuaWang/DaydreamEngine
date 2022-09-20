@@ -16,6 +16,7 @@ Using scene3d::scene3drenderer::Crates& crates) function !");
   m__runtimeLightsPortIndex__[LightType::Point] = 0;
   m__runtimeLightsPortIndex__[LightType::Self_defined] = 0;
   m__runtimeLightsPortIndex__[LightType::Spot] = 0;
+  m__sky->Init(m__DataBase, "..\\Asset\\SkyBox\\anime_starry_night\\scene.gltf");
 }
 
 scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(crates.mainCamera) {
@@ -27,6 +28,7 @@ scene3d::scene3d(renderer::Crates crates) : m_crates(crates), m_camera_ctrl(crat
   m__runtimeLightsPortIndex__[LightType::Point] = 0;
   m__runtimeLightsPortIndex__[LightType::Self_defined] = 0;
   m__runtimeLightsPortIndex__[LightType::Spot] = 0;
+  m__sky->Init(m__DataBase, "..\\Asset\\SkyBox\\anime_starry_night\\scene.gltf");
 }
 
 scene3d::~scene3d() {
@@ -78,16 +80,24 @@ void scene3d::BeginRender() {
     }
     m__runtimeLightsPortIndex__[light_it->Type()]++;
   }
+  auto __world_light__ = m__sky->getLight();
+  m__runtimeLightsPortIndex__[__world_light__->Type()]++;
   for (auto obj_item : m__DrawableClass__) {
     auto __shader__ = obj_item->m_defualt_material->GetShader();
+    __shader__->Bind();
     __shader__->setInt("d_BasicNum", m__runtimeLightsPortIndex__[LightType::Basic]);
     __shader__->setInt("d_DirLightNum", m__runtimeLightsPortIndex__[LightType::Direct]);
     __shader__->setInt("d_PointLightNum", m__runtimeLightsPortIndex__[LightType::Point]);
     __shader__->setInt("d_SpotLightNum", m__runtimeLightsPortIndex__[LightType::Spot]);
+    __world_light__->Bind(__shader__, __world_light__->m_pos,
+                          m__runtimeLightsPortIndex__[__world_light__->Type()]);
+    m__sky->Bind(__shader__);
+    __shader__->UnBind();
   }
   // draw all element.
   if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }
   for (auto item : m__DrawableClass__) { item->draw(); }
+  // Back process. Text and Light's Object.
 }
 
 void scene3d::EndRender() {

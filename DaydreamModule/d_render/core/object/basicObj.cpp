@@ -78,6 +78,7 @@ PlaneObject::PlaneObject() {
     m_triangle.push_back(triangle);
   }
   genVertexArray();
+  m_Scale = {100.f, 100.f, 100.f};
   m_instance = this;
 }
 
@@ -86,11 +87,12 @@ void PlaneObject::draw() {
   glDisable(GL_CULL_FACE);
   // bind the shader
   m_shader->Bind();
-  // bind the data before shader setup
-  DRAW_DATA_INIT
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
+  m_shader->setInt("d_scale", 32);
+  // bind the data after shader setup
+  DRAW_DATA_INIT
   m_shader->UnBind();
 }
 
@@ -138,12 +140,13 @@ void ModelObject::draw() {
   auto m_shader = m_defualt_material->GetShader();
   // bind the shader
   m_defualt_material->Bind();
-  // bind the data before shader setup
-  DRAW_DATA_INIT
   // pass the MVP matrix
   m_shader->setMat4("d_ViewProjection", renderPayload->mainCamera->getViewProjectionMatrix());
   m_shader->setMat4("d_Transform", this->Transform());
   m_shader->setVec3("d_camPos", this->renderPayload->mainCamera->getPosition());
+  // bind the data after shader setup
+  DRAW_DATA_INIT;
+  m_defualt_material->UnBind();
 }
 
 void ModelObject::update() {}
@@ -255,7 +258,16 @@ ModelObject* __process_mesh__(aiMesh* mesh, const aiScene* scene, KVBase* db,
   __tmp_mesh__->genVertexArray();
   // Load material for texture
   aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+  // Some Payload need for material.
+  aiString ai_mat_name;
+  aiBlendMode ai_mat_blend_mode;
+  // A new way to load materials The original method below is dropped but also contained
+  if (AI_SUCCESS != material->Get(AI_MATKEY_NAME, ai_mat_name)) {}
+  if (AI_SUCCESS != material->Get(AI_MATKEY_BLEND_FUNC, ai_mat_blend_mode)) {
+    std::cout << "No Blend Mode Found\n";
+  }
   // Judge if this material is belongs to witted style BRDF Only.
+
   auto __diffuse_cnt__ = material->GetTextureCount(aiTextureType_DIFFUSE);
   auto __normal_cnt__ = material->GetTextureCount(aiTextureType_HEIGHT);
   auto __aot_cnt__ = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION);

@@ -17,7 +17,6 @@ void main() {
 
 ##shader fragment
 #version 330 core
-#define SCALE 16
 #define MAX_LIGHT_NUM 10
 
     layout(location = 0) out vec4 FragColor;
@@ -62,10 +61,12 @@ uniform int DirLightNum;
 uniform int PointLightNum;
 uniform int SpotLightNum;
 
+uniform int d_scale;
+
 in vec2 TexCoord;
 
 void main() {
-  vec2 uv = floor(SCALE * TexCoord.xy);
+  vec2 uv = floor(d_scale * TexCoord.xy);
   vec4 color_tmp = vec4(vec3(mod(uv.x + uv.y, 2.)), 1);
   FragColor = 0.5 * color_tmp + 0.5 * vec4(0.6, 0.6, 0.6, 1.0);
 }

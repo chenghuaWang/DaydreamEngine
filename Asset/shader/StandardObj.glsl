@@ -97,6 +97,7 @@ uniform int d_SpotLightNum;
 
 uniform Material d_Material;
 uniform vec3 d_camPos;
+uniform sampler2D d_EnvMap;
 
 // ********************************** PBR Impl ************************************
 // 1. Normal transform to TBN Space.
@@ -161,7 +162,12 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
 
 void main() {
   // Read Basci parameters from Textures.
+  float Alpha_channel = texture(d_Material.baseColorMap, TexCoord.xy).a;
   vec3 baseColor = pow(texture(d_Material.baseColorMap, TexCoord.xy).rgb, vec3(2.2));
+  
+  if(Alpha_channel < 0.5)
+        discard;
+  
   float metallic = texture(d_Material.metallicMap, TexCoord.xy).r;
   float roughness = texture(d_Material.roughnessMap, TexCoord.xy).r;
   float ao = 1.0;
@@ -209,7 +215,7 @@ void main() {
 
   vec4 ambient = vec4(0.03, 0.03, 0.03, 1.0) * vec4(baseColor, texture(d_Material.baseColorMap, TexCoord.xy).a) * ao;
 
-  vec4 color = ambient + vec4(Lo, 1.0);
+  vec4 color = ambient + vec4(Lo, Alpha_channel);
 
   // HDR tonemapping
   color.xyz = color.xyz / (color.xyz + vec3(1.0));

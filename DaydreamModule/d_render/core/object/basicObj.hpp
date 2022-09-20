@@ -76,6 +76,30 @@ class D_API_EXPORT PlaneObject : public drawObject {
   static PlaneObject* m_instance;
 };
 
+class D_API_EXPORT LightsDrawObject : public drawObject {
+ public:
+  void draw() override final{};
+  void update() override final{};
+
+  void setCurLight(const _obj_light* lights){};
+
+ private:
+  _obj_light* m__lights;
+  REF(Shader) m__shader;
+};
+
+class D_API_EXPORT LineDrawObject : public drawObject {
+ public:
+  void draw() override final{};
+  void update() override final{};
+
+  void setCurLine(float x1, float y1, float x2, float y2){};
+
+ private:
+  float x1, y1, x2, y2;
+  REF(Shader) m__shader;
+};
+
 /*!
  *@brief The sphare obejct is mostly for procedual SkyBox
  *
