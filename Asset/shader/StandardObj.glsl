@@ -207,6 +207,7 @@ void main() {
     float NdotL = max(dot(N, L), 0.0);
 
     Lo += (kD * baseColor / PI + specular) * radiance * NdotL;
+    Lo += baseColor; // TODO remove this line In release mode.
   }
 
   // Render Direct Lights
