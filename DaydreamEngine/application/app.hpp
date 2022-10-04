@@ -36,6 +36,7 @@ class App : public ui::imgui_window {
   // The action in each sub menu.
   ui::action m_action_show_log = ui::action_type::MainTain;
   ui::action m_action_open_model_files = ui::action_type::Normal;
+  ui::action m_action_show_ref_plane = ui::action_type::MainTain;
   // The window main menu.
   ui::menu m_window_menu;
   // Manage all layers in the application.

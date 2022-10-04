@@ -317,6 +317,77 @@ D_API_EXPORT REF(Texture2D)
   return __texture_tmp__;
 }
 
+LineDrawObject::LineDrawObject() : m__shader(CREATE_REF(Shader)("../Asset/shader/Lines.glsl")) {}
+
+LineDrawObject::~LineDrawObject() {
+  // free all opengl buffers.
+  // Delete VAO
+  glDeleteVertexArrays(1, &m__vao);
+  // Delete VBO
+  glDeleteBuffers(1, &m__vbo);
+  // Delete IBO
+  glDeleteBuffers(1, &m__ibo);
+}
+
+void LineDrawObject::draw() {
+  glm::vec4 s = {m__data[0], m__data[1], m__data[2], 1.0};
+  glm::vec4 e = {m__data[3], m__data[4], m__data[5], 1.0};
+  s = renderPayload->mainCamera->getViewProjectionMatrix() * s;
+  e = renderPayload->mainCamera->getViewProjectionMatrix() * e;
+}
+
+void LineDrawObject::update() {}
+
+void LineDrawObject::pushPoints(float sx, float sy, float sz, float ex, float ey, float ez, float r,
+                                float g, float b) {
+  m__data[0] = sx;
+  m__data[1] = sy;
+  m__data[2] = sz;
+  m__data[3] = ex;
+  m__data[4] = ey;
+  m__data[5] = ez;
+  m__data[6] = r;
+  m__data[7] = g;
+  m__data[8] = b;
+  reBindData();
+}
+
+void LineDrawObject::reBindData() {
+  // ReProcess VAO
+  glCreateVertexArrays(1, &m__vao);
+  // ReProcess VBO
+  glCreateBuffers(1, &m__vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, m__vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 6, m__data, GL_DYNAMIC_DRAW);
+  // ReProcess IBO
+  BufferLayout __layout__ = {
+      {ElementType::Vecf3, "a_Position"},
+  };
+  // Bind VBO to VAO
+  glBindVertexArray(m__vao);
+  glBindBuffer(GL_ARRAY_BUFFER, m__vbo);
+  if (__layout__.GetElements().size() == 0) {
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    LOG_ERROR("The VerexBuffer don't have correct Layout!");
+    return;
+  }
+  uint32_t _index = 0;
+  for (const auto& element : __layout__) {
+    glEnableVertexAttribArray(_index);
+    glVertexAttribPointer(_index, 3, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE,
+                          __layout__.GetStride(), (const void*)(element.Offset));
+    _index++;
+  }
+  // Create IDO
+  glCreateBuffers(1, &m__ibo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m__ibo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(uint32_t), m__index, GL_STATIC_DRAW);
+  // Bind IDO to VAO
+  glBindVertexArray(m__vao);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m__ibo);
+}
+
 }  // namespace renderer
 }  // namespace daydream
 

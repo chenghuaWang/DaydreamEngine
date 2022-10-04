@@ -44,6 +44,7 @@ void App::delay_init() {
   m_action_show_log.m_accelerate_key = "ctrl+l";
   m_action_open_model_files.m_name = "Open Modle";
   m_action_open_model_files.m_accelerate_key = "ctrl+o";
+  m_action_show_ref_plane.m_name = "Show reference plane";
 
   auto menu_ui_layer = new ui::menu_layer();
   auto console_ui_layer = new ui::obj_layer("console");
@@ -54,6 +55,8 @@ void App::delay_init() {
   auto camera_info_layer = new ui::obj_layer("Camera Atribute");
 #endif
   auto texture_pannel_layer = new ui::obj_layer("Texture Pannel");
+  auto component_layer = new ui::obj_layer("Component Layer");
+  auto inspector_layer = new ui::obj_layer("Inspector Layer");
 
 #if TEST2D == true
   m_App_ui->gl_scene->setCurShader(m_App_ui->gl_scene_shader);
@@ -96,14 +99,18 @@ void App::delay_init() {
   m_layers.add_layer(camera_info_layer);
 #endif
   m_layers.add_layer(texture_pannel_layer);
+  m_layers.add_layer(component_layer);
+  m_layers.add_layer(inspector_layer);
   // signal and slots linking
   // !!! [TODO] bug. The action is not pass by ptr. So connect must before add_action.
   m_action_show_log.clicked.Connect(console_ui_layer, &ui::obj_layer::set_wopened);
   m_action_open_model_files.pressed.Connect(m_App_ui->gl_scene.get(),
                                             &scene::scene3d::slots_LoadFiles);
-
+  m_action_show_ref_plane.clicked.Connect(m_App_ui->gl_scene.get(),
+                                          &scene::scene3d::setReferencePlane);
   // init the main-menu
   m_window_view.add_action(m_action_show_log);
+  m_window_view.add_action(m_action_show_ref_plane);
   m_window_file.add_action(m_action_open_model_files);
   m_window_menu.add_sub_menu(m_window_view);
   m_window_menu.add_sub_menu(m_window_file);

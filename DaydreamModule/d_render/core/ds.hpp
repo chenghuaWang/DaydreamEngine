@@ -139,6 +139,8 @@ class D_API_EXPORT FrameBuffer {
   void Bind();
   void UnBind();
   void Resize(float w, float h);
+  float W() { return m_w; }
+  float H() { return m_h; }
 
   uint32_t FrameIdx();
 

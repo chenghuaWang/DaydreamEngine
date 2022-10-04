@@ -202,4 +202,5 @@ struct uis {
 #endif
   // For Texture Pannel
   ui::ImageGallary* texture_pannel_imgae_gallary;
+  // For component pannel
 };

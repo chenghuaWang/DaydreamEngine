@@ -17,6 +17,16 @@
   glDrawElements(GL_TRIANGLES, m_VAO->getIBO()->getCount(), GL_UNSIGNED_INT, nullptr); \
   glBindTexture(GL_TEXTURE_2D, 0);
 
+// For lines drawing. You can find more at:
+// https://zhuanlan.zhihu.com/p/343705540
+// But the drawline class is inheriented from the baseObj class
+// You should not use this macro to draw element. VAO is not actually
+// in the draw lines class. !!!
+#define DRAW_DATA_INIT_LINE                                                        \
+  m_VAO->Bind();                                                                   \
+  glDrawElements(GL_LINES, m_VAO->getIBO()->getCount(), GL_UNSIGNED_INT, nullptr); \
+  glBindTexture(GL_TEXTURE_2D, 0);
+
 namespace daydream {
 namespace renderer {
 

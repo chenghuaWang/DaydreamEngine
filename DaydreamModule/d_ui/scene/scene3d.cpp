@@ -39,6 +39,7 @@ scene3d::~scene3d() {
   delete m__sky;
   for (auto item : m__DrawableClass__) { delete item; }
   for (auto item : m__lights__) { delete item; }
+  for (auto item : m__DrawableLines__) { delete item; }
 }
 
 void scene3d::OnAttach() { std::cout << "Scene3D Attach" << std::endl; }
@@ -94,10 +95,13 @@ void scene3d::BeginRender() {
     m__sky->Bind(__shader__);
     __shader__->UnBind();
   }
+  m_GuizmoFunc({m_crates.sceneFBO->H(), m_crates.sceneFBO->W()});
   // draw all element.
   if (m_ReferencePlane) { m__ReferencePlaneObj__->draw(); }
   for (auto item : m__DrawableClass__) { item->draw(); }
-  // Back process. Text and Light's Object.
+  for (auto item : m__DrawableLines__) { item->draw(); }
+  // Back process. Text and Light's Object. Also Lines, such as Directions.
+  // Bounding box. Fov/Aspect.
 }
 
 void scene3d::EndRender() {
@@ -123,7 +127,10 @@ void scene3d::setReferencePlane(bool enable) { m_ReferencePlane = enable; }
 
 bool scene3d::isReferencePlane() { return m_ReferencePlane; }
 
-void scene3d::setReferencePlaneObj(PlaneObject* po) { m__ReferencePlaneObj__ = po; }
+void scene3d::setReferencePlaneObj(PlaneObject* po) {
+  m__ReferencePlaneObj__ = po;
+  m_ChoosedObj = po;
+}
 
 void scene3d::RegisterObj(drawObject* o) {
   m__DrawableClass__.push_back(o);
@@ -160,6 +167,7 @@ renderer::Crates* scene3d::getCratePtr() { return &m_crates; }
 void scene3d::setCrate(renderer::Crates c) {
   m_crates = c;
   m__sky->renderPayload = &m_crates;
+  for (auto item : m__DrawableLines__) { item->renderPayload = &m_crates; }
 }
 
 ::daydream::renderer::KVBase* scene3d::getDB() { return m__DataBase; }

@@ -17,6 +17,9 @@
 #include "d_render/core/object/basicObj.hpp"
 #include "d_ui/widget/utils.hpp"
 
+#include "ImGuizmo.h"
+#include <glm/gtc/type_ptr.hpp>
+
 namespace daydream {
 namespace scene {
 
@@ -69,6 +72,9 @@ class D_API_EXPORT scene3d {
   void RegisterLight(_obj_light* ol);
   void UnRegisterLight(_obj_light* ol);
 
+  void setChoosedObj(uint32_t index) { m_ChoosedObj = m__DrawableClass__[index]; }
+  std::vector<drawObject*> getAllDrawableObj() { return m__DrawableClass__; }
+
   renderer::Crates* getCratePtr();
   ::daydream::renderer::KVBase* getDB();
 
@@ -80,9 +86,23 @@ class D_API_EXPORT scene3d {
   camera3dController& getCameraCtrl();
 
  public:
+  std::function<void(glm::vec2)> m_GuizmoFunc = [&](glm::vec2 viewportSize) {
+    ImVec2 size = ImGui::GetContentRegionAvail();
+    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+    ImGuizmo::SetRect(cursorPos.x, cursorPos.y, size.x, size.y);
+    ImGuizmo::Manipulate(
+        glm::value_ptr(m_ChoosedObj->renderPayload->mainCamera->getViewMatrix()),
+        glm::value_ptr(m_ChoosedObj->renderPayload->mainCamera->getProjectionMatrix()),
+        ImGuizmo::OPERATION::ROTATE, ImGuizmo::MODE::WORLD, &m_ChoosedObj->m_Trasnform[0][0]);
+    ImGuizmo::DecomposeMatrixToComponents(&m_ChoosedObj->m_Trasnform[0][0], &m_ChoosedObj->m_Pos[0],
+                                          &m_ChoosedObj->m_Rotate[0], &m_ChoosedObj->m_Scale[0]);
+  };
+
+ public:
   void slots_LoadFiles();
 
  private:
+  drawObject* m_ChoosedObj = nullptr;
   std::string __tmp_str__;
   ::daydream::ui::file_dialog __tmp_dialog__;
   bool m__file_dialog_opened__ = false;
@@ -99,6 +119,7 @@ class D_API_EXPORT scene3d {
   REF(_obj_material) m__default_material = CREATE_REF(_obj_material)();
 
   std::vector<drawObject*> m__DrawableClass__;
+  std::vector<drawObject*> m__DrawableLines__;
   std::vector<_obj_light*> m__lights__;
   PlaneObject* m__ReferencePlaneObj__ = nullptr;
 
@@ -112,6 +133,32 @@ bool D_API_EXPORT NewScene3D(int32_t sW, int32_t sH, const std::string& sName, R
 bool D_API_EXPORT FreeScene3D(scene3d* sS);
 
 }  // namespace scene
+
+namespace ui {
+
+class D_API_EXPORT PopItems : public ui_object {
+ public:
+  void on_attach() override{};
+  void on_detach() override{};
+  void on_update(float ts) override{};
+  void update_event() override{};
+  void impl_imgui_render() override {
+    for (uint32_t i = 0; i < m__data->getAllDrawableObj().size(); ++i) {
+      ImGui::LabelText("New Object", nullptr);
+      ImGui::SameLine();
+      if (ImGui::Button("Choose")) {
+        item_cur = i;
+        m__data->setChoosedObj(i);
+      }
+    }
+  };
+
+ public:
+  uint32_t item_cur = 0;
+  scene::scene3d* m__data;
+};
+
+}  // namespace ui
 }  // namespace daydream
 
 #endif  // H_SCENE_SCENE3D

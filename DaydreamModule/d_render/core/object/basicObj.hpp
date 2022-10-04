@@ -88,18 +88,6 @@ class D_API_EXPORT LightsDrawObject : public drawObject {
   REF(Shader) m__shader;
 };
 
-class D_API_EXPORT LineDrawObject : public drawObject {
- public:
-  void draw() override final{};
-  void update() override final{};
-
-  void setCurLine(float x1, float y1, float x2, float y2){};
-
- private:
-  float x1, y1, x2, y2;
-  REF(Shader) m__shader;
-};
-
 /*!
  *@brief The sphare obejct is mostly for procedual SkyBox
  *
@@ -130,6 +118,27 @@ class D_API_EXPORT ModelObject : public drawObject {
 
  private:
   void __build_TBN__();
+};
+
+class D_API_EXPORT LineDrawObject : public drawObject {
+ public:
+  LineDrawObject();
+  ~LineDrawObject();
+
+  void draw() override;
+  void update() override;
+
+  void pushPoints(float sx, float sy, float sz, float ex, float ey, float ez, float r, float g,
+                  float b);
+
+ private:
+  uint32_t m__vao = 0;
+  uint32_t m__vbo = 0;
+  uint32_t m__ibo = 0;
+  REF(Shader) m__shader;
+  void reBindData();
+  float m__data[9] = {0};
+  float m__index[2] = {0, 1};
 };
 
 D_API_EXPORT bool __load_binary_files__(const std::string& file_path,

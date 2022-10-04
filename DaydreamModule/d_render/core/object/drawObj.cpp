@@ -4,6 +4,7 @@
 
 namespace daydream {
 namespace renderer {
+
 void drawObject::__TransformUpdate__() {
   glm::mat4 translation = glm::translate(glm::mat4(1.0f), m_Pos + m_RelatePos);
   glm::mat4 rotation = glm::mat4_cast(glm::qua<float>(glm::radians(m_Rotate)));
@@ -14,6 +15,7 @@ glm::mat4& drawObject::Transform() {
   __TransformUpdate__();
   return m_Trasnform;
 }
+
 void drawObject::genVertexArray() {
   // Create VAO
   m_VAO = CREATE_REF(VertexArray)();
